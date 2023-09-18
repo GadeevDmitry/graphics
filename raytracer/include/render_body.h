@@ -9,10 +9,8 @@
 
 class render_body_t
 {
-private:
-    material_t material;
-
 public:
+    material_t material;
 
     explicit render_body_t(const material_t &material_ = material_t()):
     material(material_)
@@ -20,7 +18,6 @@ public:
 
     virtual ~render_body_t() {}
 
-    material_t    get_material    () const { return material; }
     virtual bool  get_intersection(const ray_t &ray, vec3d &intersect_pt) const = 0;
     virtual vec3d get_normal      (const vec3d &pt) const = 0;
 };

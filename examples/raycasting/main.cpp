@@ -15,13 +15,13 @@
 //==================================================================================================
 
 static void raytracer_init(raytracer_t &raytracer);
-static void render(sf::RenderWindow &wnd, const raytracer_t &raytracer);
+static void render(sf::RenderWindow &wnd, raytracer_t &raytracer);
 
 //==================================================================================================
 
 int main()
 {
-    raytracer_t raytracer(color_t(0.1, 0.1, 0.1), vec3d(0, 0, 300));
+    raytracer_t raytracer(color_t(0.16, 0.29, 0.30));
     raytracer_init(raytracer);
 
     sf::RenderWindow wnd(sf::VideoMode(WND_WIDTH, WND_HEIGHT), WND_TITLE);
@@ -46,13 +46,15 @@ static void raytracer_init(raytracer_t &raytracer)
     static render_sphere_t sphere_1(material_t(material_t::Plastic, color_t::Red   ), vec3d(-300, 0, -300), 200);
     static render_sphere_t sphere_2(material_t(material_t::Plastic, color_t::Orange), vec3d(-100, 0, -100), 100);
     static render_sphere_t sphere_3(material_t(material_t::Plastic, color_t::Green ), vec3d( 200, 0, -600), 400);
-    static render_sphere_t sphere_4(material_t(material_t::Plastic, color_t::Blue  ), vec3d( 200, 0,    0), 100);
+    static render_sphere_t sphere_4(material_t(material_t::Mirror                  ), vec3d( 200, 0,    0), 100);
 
-    static lighter_t lighter_1(color_t::White, vec3d( 200, 100, 50));
-    static lighter_t lighter_2(color_t::White, vec3d(-300,   0,  0));
+    static lighter_t lighter_1(color_t::White, vec3d( 200,  100,  50));
+    static lighter_t lighter_2(color_t::White, vec3d(-300,    0,   0));
+    static lighter_t lighter_3(color_t::White, vec3d(   0, -200, 150));
 
     raytracer.scene.add_lighter(&lighter_1);
     raytracer.scene.add_lighter(&lighter_2);
+    raytracer.scene.add_lighter(&lighter_3);
 
     raytracer.scene.add_render_body(&sphere_1);
     raytracer.scene.add_render_body(&sphere_2);
@@ -62,12 +64,13 @@ static void raytracer_init(raytracer_t &raytracer)
 
 //--------------------------------------------------------------------------------------------------
 
-static void render(sf::RenderWindow &wnd, const raytracer_t &raytracer)
+static void render(sf::RenderWindow &wnd, raytracer_t &raytracer)
 {
     for (int wnd_x = 0; wnd_x < (int) WND_WIDTH ; ++wnd_x) {
     for (int wnd_y = 0; wnd_y < (int) WND_HEIGHT; ++wnd_y)
         {
-            color_t pixel_color = raytracer.raytrace(WND_BEGIN_PT + vec3d(wnd_x, -wnd_y, 0), 1);
+            ray_t ray(vec3d(0, 0, 300) , WND_BEGIN_PT + vec3d(wnd_x, -wnd_y) - vec3d(0, 0, 300));
+            color_t pixel_color = raytracer.raytrace(ray, 4);
 
             sf::Uint8 real_r = (sf::Uint8) ((pixel_color.r > 1) ? 255 : pixel_color.r * 255);
             sf::Uint8 real_g = (sf::Uint8) ((pixel_color.g > 1) ? 255 : pixel_color.g * 255);
