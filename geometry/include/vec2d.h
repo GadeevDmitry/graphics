@@ -2,7 +2,8 @@
 #define VEC2D_H
 
 #include <math.h>
-#include <algorithm/algorithm.h>
+#include "num2d.h"
+#include "algorithm/algorithm.h"
 
 //==================================================================================================
 
@@ -15,6 +16,11 @@ public:
     explicit vec2d(double x_ = 0, double y_ = 0):
     x(x_),
     y(y_)
+    {}
+
+    explicit vec2d(const num2d &num):
+    x(num.x),
+    y(num.y)
     {}
 
     ~vec2d() {x = NAN; y = NAN; }
