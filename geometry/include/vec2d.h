@@ -55,6 +55,9 @@ public:
 
     vec2d  get_normal() const { return vec2d(-y, x); }
     vec2d &set_normal() { return *this = (*this).get_normal(); }
+
+    vec2d  get_reflection(const vec2d &norm) const;
+    vec2d &reflect       (const vec2d &norm) { return *this = (*this).get_reflection(norm); }
 };
 
 #endif // VEC2D_H

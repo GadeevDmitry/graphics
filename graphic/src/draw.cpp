@@ -1,4 +1,6 @@
+#include <ratio>
 #include <stdio.h>
+
 #include "draw.h"
 
 //==================================================================================================
@@ -22,6 +24,49 @@ void draw_coord_sys(const coord_system &sys, sf::RenderWindow &wnd, const sf::Co
 
     for (double pix_y = sys.center.y; pix_y > 0    ; pix_y -= sys.unit.y) draw_point(vec2d(sys.center.x, pix_y), wnd, col);
     for (double pix_y = sys.center.y; pix_y < wnd_y; pix_y += sys.unit.y) draw_point(vec2d(sys.center.x, pix_y), wnd, col);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void draw_hollow_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd, const sf::Color &outline_col)
+{
+    sf::Vertex lines[] = {sf::Vertex(sf::Vector2f(pix_rect.ld_corner.x, pix_rect.ld_corner.y), outline_col),
+                          sf::Vertex(sf::Vector2f(pix_rect.ru_corner.x, pix_rect.ld_corner.y), outline_col),
+                          sf::Vertex(sf::Vector2f(pix_rect.ru_corner.x, pix_rect.ru_corner.y), outline_col),
+                          sf::Vertex(sf::Vector2f(pix_rect.ld_corner.x, pix_rect.ru_corner.y), outline_col),
+                          sf::Vertex(sf::Vector2f(pix_rect.ld_corner.x, pix_rect.ld_corner.y), outline_col)};
+
+    wnd.draw(lines, 5, sf::LineStrip);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void draw_filled_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd,
+                           const sf::Color &outline_col, const sf::Color &fill_col)
+{
+    vec2d size = pix_rect.ru_corner - pix_rect.ld_corner;
+
+    sf::RectangleShape rect(sf::Vector2f(size.x, size.y));
+    rect.setPosition(pix_rect.ld_corner.x, pix_rect.ld_corner.y);
+
+    rect.setOutlineColor(outline_col);
+    rect.setFillColor(fill_col);
+
+    wnd.draw(rect);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void draw_filled_circle(const circle_t &pix_circle, sf::RenderWindow &wnd,
+                        const sf::Color &outline_col, const sf::Color &fill_col)
+{
+    sf::CircleShape circle(pix_circle.radius);
+    circle.setPosition(pix_circle.center.x - pix_circle.radius, pix_circle.center.y - pix_circle.radius);
+
+    circle.setOutlineColor(outline_col);
+    circle.setFillColor(fill_col);
+
+    wnd.draw(circle);
 }
 
 //--------------------------------------------------------------------------------------------------

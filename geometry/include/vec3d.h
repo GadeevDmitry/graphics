@@ -47,6 +47,9 @@ public:
 
     vec3d  get_normalization(const double new_len = 1) const { return (new_len / len()) * (*this); }
     vec3d &normalize        (const double new_len = 1) { return *this = (*this).get_normalization(new_len); }
+
+    vec3d  get_reflection(const vec3d &norm) const;
+    vec3d &reflect       (const vec3d &norm) const;
 };
 
 #endif // VEC3D_H

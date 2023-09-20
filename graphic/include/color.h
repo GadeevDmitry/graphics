@@ -25,7 +25,7 @@ public:
     static const color_t Blue;
     static const color_t Orange;
 
-    ~color_t() { r = NAN; }
+    ~color_t() { r = NAN; g = NAN; b = NAN; }
 
     color_t operator +(const color_t &add) const { return color_t(r + add.r, g + add.g, b + add.b); }
     color_t operator -(const color_t &sub) const { return color_t(r - sub.r, g - sub.g, b - sub.g); }
