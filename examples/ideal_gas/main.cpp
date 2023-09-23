@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "scene.h"
 #include "config.h"
-#include "molecule.h"
-#include "segment.h"
-#include "gas_scene.h"
-#include "material_point.h"
+#include "distance.h"
 
 //==================================================================================================
 
@@ -16,9 +14,9 @@ static double get_frame_time();
 
 int main()
 {
-    rectangle_t vessel(vec2d(5, 5), vec2d(400, 795));
-    piston_t    piston(material_point_t(vec2d(200, 0), vec2d(0, 0)), segment_t(vec2d(5, 5), vec2d(400, 5)));
-    gas_scene_t scene (piston, vessel);
+    rectangle_t walls(vec2d(5, 5), vec2d(400, 795));
+    segment_t  piston(vec2d(5, 5), vec2d(400, 5));
+    scene_t     scene(walls, 8, 50, piston, vec2d(0, 50));
 
     sf::RenderWindow wnd(sf::VideoMode(WND_WIDTH, WND_HEIGHT), WND_TITLE);
     while (wnd.isOpen())
@@ -33,7 +31,7 @@ int main()
         wnd.clear();
 
         scene.refresh(get_frame_time());
-        scene.draw(wnd);
+        scene.draw   (wnd);
 
         wnd.display();
     }

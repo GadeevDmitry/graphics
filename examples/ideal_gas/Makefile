@@ -5,7 +5,7 @@ CFLAGS_RELEASE := -D NDEBUG -std=c++20 -O2
 
 ROOT_DIR      := ../..
 INCLUDE_PATHS := geometry graphic
-INCLUDE_PATHS := $(foreach PATH, $(INCLUDE_PATHS), -I$(ROOT_DIR)/$(PATH)/include) -I$(ROOT_DIR)/common -Iclasses/include
+INCLUDE_PATHS := $(foreach PATH, $(INCLUDE_PATHS), -I$(ROOT_DIR)/$(PATH)/include) -I$(ROOT_DIR)/common -Isimulation/include
 
 SFML_FLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 
@@ -26,7 +26,7 @@ export CC CFLAGS GEOMETRY_PREFIX GRAPHIC_PREFIX COMMON_PREFIX
 
 #==================================================================================================
 
-GEOMETRY_OBJS := vec2d
+GEOMETRY_OBJS := vec2d distance
 GEOMETRY_OBJS := $(foreach OBJ, $(GEOMETRY_OBJS), build/geometry/$(OBJ).o)
 
 GRAPHIC_OBJS := color draw
@@ -35,10 +35,10 @@ GRAPHIC_OBJS := $(foreach OBJ, $(GRAPHIC_OBJS), build/graphic/$(OBJ).o)
 COMMON_OBJS := algorithm logs trace stack list array
 COMMON_OBJS := $(foreach OBJ, $(COMMON_OBJS), build/common/$(OBJ).o)
 
-CLASSES_OBJS := gas_scene molecule
-CLASSES_OBJS := $(foreach OBJ, $(CLASSES_OBJS), build/classes/$(OBJ).o)
+SIMULATION_OBJS := molecule scene
+SIMULATION_OBJS := $(foreach OBJ, $(SIMULATION_OBJS), build/simulation/$(OBJ).o)
 
-OBJS := $(GEOMETRY_OBJS) $(GRAPHIC_OBJS) $(COMMON_OBJS) $(CLASSES_OBJS)
+OBJS := $(GEOMETRY_OBJS) $(GRAPHIC_OBJS) $(COMMON_OBJS) $(SIMULATION_OBJS)
 
 #==================================================================================================
 
@@ -47,8 +47,8 @@ all: | build
 	$(MAKE) -f $(GEOMETRY_PREFIX)/Makefile
 	$(MAKE) -f $(GRAPHIC_PREFIX)/Makefile
 	$(MAKE) -f $(COMMON_PREFIX)/Makefile
-	$(MAKE) -f classes/Makefile
-	$(CC) $(CFLAGS) main.cpp $(SFML_FLAGS) $(OBJS) -o build/main
+	$(MAKE) -f simulation/Makefile
+	$(CC) $(CFLAGS) main.cpp $(OBJS) $(SFML_FLAGS) -o build/main
 
 .PHONY: compilation_database
 compilation_database:

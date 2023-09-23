@@ -17,5 +17,9 @@ build/geometry/vec3d.o: $(GEOMETRY_PREFIX)/src/vec3d.cpp | build/geometry
 	$(CC) -c $(CFLAGS) $< -o $@
 all: build/geometry/vec3d.o
 
+build/geometry/distance.o: $(GEOMETRY_PREFIX)/src/distance.cpp | build/geometry
+	$(CC) -c $(CFLAGS) $< -o $@
+all: build/geometry/distance.o
+
 build/geometry:
 	mkdir -p $@

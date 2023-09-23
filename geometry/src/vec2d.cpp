@@ -14,11 +14,15 @@ vec2d vec2d::get_rotation(const double degree) const
                  x * sin_ + y * cos_);
 }
 
+//--------------------------------------------------------------------------------------------------
+
 vec2d vec2d::get_reflection(const vec2d &norm) const
 {
     vec2d norm_ = norm.get_normalization();
     vec2d this_ = get_normalization();
     double len_ = len();
+
+    if ((norm_, this_) > 0) norm_ = -norm_;
 
     vec2d reflected = this_ - 2*(norm_, this_)*norm_;
     reflected.normalize(len_);
