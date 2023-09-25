@@ -8,40 +8,48 @@
 
 //==================================================================================================
 
+static const vec2d REACTOR_LD_OFF(5, 5);
+static const vec2d REACTOR_RU_OFF(5, 5);
+
+//==================================================================================================
+
 molecule_manager_t::molecule_manager_t(const double molecule_size_,
                                        const size_t molecules_num_,
 
-                                       const vec2d &area_size_):
+                                       const vec2d &reactor_size_):
 molecule_size(molecule_size_),
-molecules_tex()
+molecules_tex(),
+
+reactor(REACTOR_LD_OFF, reactor_size_ - REACTOR_RU_OFF),
+piston (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF.y))
 {
-    log_verify(molecule_size_ > 0, ;);
-    log_verify(area_size_.x   > 0, ;);
-    log_verify(area_size_.y   > 0, ;);
+    log_verify(molecule_size_  > 0, ;);
+    log_verify(reactor_size_.x > 0, ;);
+    log_verify(reactor_size_.y > 0, ;);
 
     vector_ctor(&molecules, sizeof(molecule_t *), nullptr, delete_molecule);
 
-    light_molecule_t *molecule = new light_molecule_t(circle_t(vec2d(200, 200), 5), vec2d(50, 0));
-    vector_push_back(&molecules, &molecule);
-/*
+//  light_molecule_t *molecule = new light_molecule_t(circle_t(vec2d(200, 200), 5), vec2d(50, 0));
+//  vector_push_back(&molecules, &molecule);
+
     for (size_t ind = 0; ind < molecules_num_; ++ind)
     {
-        vec2d molecule_area_ld =              vec2d(molecule_size_, molecule_size_) / 2;
-        vec2d molecule_area_ru = area_size_ - vec2d(molecule_size_, molecule_size_) / 2;
+        vec2d molecule_ld = reactor.ld_corner + vec2d(molecule_size_, molecule_size_);
+        vec2d molecule_ru = reactor.ru_corner - vec2d(molecule_size_, molecule_size_);
 
-        int area_width  = (int) (molecule_area_ru.x - molecule_area_ld.x);
-        int area_height = (int) (molecule_area_ru.y - molecule_area_ld.y);
+        int molecule_width  = (int) (molecule_ru.x - molecule_ld.x);
+        int molecule_height = (int) (molecule_ru.y - molecule_ld.y);
 
-        vec2d center(molecule_area_ld.x + abs(rand()) % area_width,
-                     molecule_area_ld.y + abs(rand()) % area_height);
+        vec2d center(molecule_ld.x + abs(rand()) % molecule_width,
+                     molecule_ld.y + abs(rand()) % molecule_height);
 
         vec2d speed(rand() % 50, rand() % 50);
 
         light_molecule_t *molecule = new light_molecule_t(circle_t(center, molecule_size_ / 2), speed);
         vector_push_back(&molecules, &molecule);
     }
-*/
-    molecules_tex.create((unsigned) area_size_.x, (unsigned) area_size_.y);
+
+    molecules_tex.create((unsigned) reactor_size_.x, (unsigned) reactor_size_.y);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -51,6 +59,9 @@ void molecule_manager_t::draw()
     if (molecules.size == 0) return;
 
     molecules_tex.clear();
+
+    draw_hollow_rectangle(reactor, molecules_tex, sf::Color::Green);
+    draw_segment         (piston , molecules_tex, sf::Color::Magenta);
 
     for (molecule_t **molecule = (molecule_t **) vector_begin(&molecules);
                       molecule != vector_end(&molecules);
@@ -64,7 +75,7 @@ void molecule_manager_t::draw()
 
 //--------------------------------------------------------------------------------------------------
 
-void molecule_manager_t::refresh(const double frame_time, const scene_t &scene)
+void molecule_manager_t::refresh(const double frame_time)
 {
     size_t initial_size = molecules.size;
     array  molecules_refresh_status = {};
@@ -74,7 +85,7 @@ void molecule_manager_t::refresh(const double frame_time, const scene_t &scene)
     array_init(&molecules_refresh_status, &unchanged_);
 
     refresh_by_molecule_collisions(frame_time, initial_size, &molecules_refresh_status);
-    refresh_by_wall_collisions    (frame_time, initial_size, &molecules_refresh_status, scene);
+    refresh_by_wall_collisions    (frame_time, initial_size, &molecules_refresh_status);
 
     for (int ind = (int) initial_size - 1; ind >= 0; --ind)
     {
@@ -124,7 +135,7 @@ void molecule_manager_t::refresh_by_molecule_collisions(const double frame_time,
 //--------------------------------------------------------------------------------------------------
 
 void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, const size_t initial_size,
-                                                    array *const molecules_refresh_status, const scene_t &scene)
+                                                    array *const molecules_refresh_status)
 {
     MOLECULE_REFRESH_STATUS_TYPE updated_   = MOLECULE_UPDATED;
     MOLECULE_REFRESH_STATUS_TYPE unchanged_ = MOLECULE_UNCHANGED;
@@ -136,8 +147,8 @@ void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, con
 
         molecule_t &cur = **(molecule_t **) vector_get(&molecules, ind);
 
-        vec2d walls_lu_corner(scene.walls.ld_corner.x, scene.walls.ru_corner.y);
-        vec2d walls_rd_corner(scene.walls.ru_corner.x, scene.walls.ld_corner.y);
+        vec2d reactor_lu_corner(reactor.ld_corner.x, reactor.ru_corner.y);
+        vec2d reactor_rd_corner(reactor.ru_corner.x, reactor.ld_corner.y);
 /*
         printf("walls:  (%lg, %lg) -> (%lg, %lg)\n", scene.walls.ld_corner.x, scene.walls.ld_corner.y,
                                                     scene.walls.ru_corner.x, scene.walls.ru_corner.y);
@@ -146,11 +157,11 @@ void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, con
 */
         array_set(molecules_refresh_status, ind, &updated_);
 
-        if (cur.try_hit_segment(frame_time, scene.piston)) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(scene.walls.ld_corner, walls_lu_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(walls_lu_corner, scene.walls.ru_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(scene.walls.ru_corner, walls_rd_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(walls_rd_corner, scene.walls.ld_corner))) continue;
+        if (cur.try_hit_segment(frame_time, piston)) continue;
+        if (cur.try_hit_segment(frame_time, segment_t(reactor.ld_corner, reactor_lu_corner))) continue;
+        if (cur.try_hit_segment(frame_time, segment_t(reactor_lu_corner, reactor.ru_corner))) continue;
+        if (cur.try_hit_segment(frame_time, segment_t(reactor.ru_corner, reactor_rd_corner))) continue;
+        if (cur.try_hit_segment(frame_time, segment_t(reactor_rd_corner, reactor.ld_corner))) continue;
 
         array_set(molecules_refresh_status, ind, &unchanged_);
     }
@@ -167,7 +178,7 @@ void molecule_manager_t::molecule_interaction(const double hit_time, molecule_t 
 
     static molecule_interaction_type_type interaction_table[MOLECULE_TYPE_MAX][MOLECULE_TYPE_MAX] =
         {{&molecule_manager_t::molecule_interaction_heavy_heavy, &molecule_manager_t::molecule_interaction_heavy_light},
-         {&molecule_manager_t::molecule_interaction_heavy_light, &molecule_manager_t::molecule_interaction_light_light}};
+         {&molecule_manager_t::molecule_interaction_light_heavy, &molecule_manager_t::molecule_interaction_light_light}};
 
     (this->*interaction_table[m1.type][m2.type])(hit_time, m1, status_1, m2, status_2);
 }
@@ -208,7 +219,15 @@ void molecule_manager_t::molecule_interaction_heavy_light(const double hit_time,
     heavy.shape.center = hit_point;
 
     status_heavy = MOLECULE_UPDATED;
-    status_light = MOLECULE_UNCHANGED;
+    status_light = MOLECULE_DESTROYED;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void molecule_manager_t::molecule_interaction_light_heavy(const double hit_time, molecule_t &light, MOLECULE_REFRESH_STATUS_TYPE &status_light,
+                                                                                 molecule_t &heavy, MOLECULE_REFRESH_STATUS_TYPE &status_heavy)
+{
+    molecule_interaction_heavy_light(hit_time, heavy, status_heavy, light, status_light);
 }
 
 //--------------------------------------------------------------------------------------------------
