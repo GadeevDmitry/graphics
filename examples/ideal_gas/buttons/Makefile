@@ -7,13 +7,13 @@ CFLAGS ?= -D NDEBUG -std=c++20 -O2
 all:
 
 
-build/simulation/molecule.o: simulation/src/molecule.cpp | build/simulation
+build/buttons/button.o: buttons/src/button.cpp | build/buttons
 	$(CC) -c $(CFLAGS) $< -o $@
-all: build/simulation/molecule.o
+all: build/buttons/button.o
 
-build/simulation/scene.o: simulation/src/scene.cpp | build/simulation
+build/buttons/button_manager.o: buttons/src/button_manager.cpp | build/buttons
 	$(CC) -c $(CFLAGS) $< -o $@
-all: build/simulation/scene.o
+all: build/buttons/button_manager.o
 
-build/simulation:
+build/buttons:
 	mkdir -p $@

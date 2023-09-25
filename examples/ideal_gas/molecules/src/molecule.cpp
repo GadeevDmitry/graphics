@@ -4,6 +4,7 @@
 
 #include "distance.h"
 #include "molecule.h"
+
 #include "algorithm/algorithm.h"
 
 //==================================================================================================
@@ -19,18 +20,13 @@ inline double get_approcach_speed(const vec2d &distance_direct, const double dis
 
 //--------------------------------------------------------------------------------------------------
 
-bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target, const vec2d &target_speed)
+bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target)
 {
     vec2d  distance_direct = distance_circle_segment(shape, target);
     double distance_len    = distance_direct.len();
-    assert(dblcmp(distance_len, shape.radius) >= 0);
+    log_assert(dblcmp(distance_len, shape.radius) >= 0);
 
-//  printf("segment  = {(%lg, %lg), (%lg, %lg)}\n", target.endpoint_1.x, target.endpoint_1.y, target.endpoint_2.x, target.endpoint_2.y);
-//  printf("center   =  {%lg, %lg}\n", shape.center.x, shape.center.y);
-
-//  printf("distance = %lg\n", distance_len);
-
-    double approcach_speed   = get_approcach_speed(distance_direct, distance_len, speed, target_speed);
+    double approcach_speed   = get_approcach_speed(distance_direct, distance_len, speed, vec2d(0, 0));
     double real_distance_len = distance_len - shape.radius;
 
     if (approcach_speed * frame_time < real_distance_len) return false;
@@ -38,11 +34,7 @@ bool molecule_t::try_hit_segment(const double frame_time, const segment_t &targe
     double hit_time = real_distance_len / approcach_speed;
 
     shape.center += hit_time * speed;
-
-    vec2d molecule_rel_speed = speed - target_speed;
-    molecule_rel_speed.reflect(target.get_normal());
-    speed = molecule_rel_speed + target_speed;
-
+    speed.reflect(target.get_normal());
     shape.center += (frame_time - hit_time) * speed;
 
     return true;

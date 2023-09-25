@@ -4,7 +4,6 @@
 
 #include "scene.h"
 #include "config.h"
-#include "distance.h"
 
 //==================================================================================================
 
@@ -14,11 +13,9 @@ static double get_frame_time();
 
 int main()
 {
-    rectangle_t walls(vec2d(5, 5), vec2d(400, 795));
-    segment_t  piston(vec2d(5, 5), vec2d(400, 5));
-    scene_t     scene(walls, 8, 50, piston, vec2d(0, 50));
-
     sf::RenderWindow wnd(sf::VideoMode(WND_WIDTH, WND_HEIGHT), WND_TITLE);
+    scene_t scene(vec2d(WND_WIDTH, WND_HEIGHT));
+
     while (wnd.isOpen())
     {
         sf::Event event;

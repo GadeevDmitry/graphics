@@ -8,7 +8,7 @@ static const unsigned POINT_RADIUS  = 3;
 
 //==================================================================================================
 
-void draw_coord_sys(const coord_system &sys, sf::RenderWindow &wnd, const sf::Color &col)
+void draw_coord_sys(const coord_system &sys, sf::RenderTarget &wnd, const sf::Color &col)
 {
     sf::Vector2u wnd_size = wnd.getSize();
     double wnd_x = wnd_size.x;
@@ -26,7 +26,7 @@ void draw_coord_sys(const coord_system &sys, sf::RenderWindow &wnd, const sf::Co
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_hollow_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd, const sf::Color &outline_col)
+void draw_hollow_rectangle(const rectangle_t &pix_rect, sf::RenderTarget &wnd, const sf::Color &outline_col)
 {
     sf::Vertex lines[] = {sf::Vertex(sf::Vector2f(pix_rect.ld_corner.x, pix_rect.ld_corner.y), outline_col),
                           sf::Vertex(sf::Vector2f(pix_rect.ru_corner.x, pix_rect.ld_corner.y), outline_col),
@@ -39,7 +39,7 @@ void draw_hollow_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd, c
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_filled_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd,
+void draw_filled_rectangle(const rectangle_t &pix_rect, sf::RenderTarget &wnd,
                            const sf::Color &outline_col, const sf::Color &fill_col)
 {
     vec2d size = pix_rect.ru_corner - pix_rect.ld_corner;
@@ -55,7 +55,7 @@ void draw_filled_rectangle(const rectangle_t &pix_rect, sf::RenderWindow &wnd,
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_filled_circle(const circle_t &pix_circle, sf::RenderWindow &wnd,
+void draw_filled_circle(const circle_t &pix_circle, sf::RenderTarget &wnd,
                         const sf::Color &outline_col, const sf::Color &fill_col)
 {
     sf::CircleShape circle(pix_circle.radius);
@@ -69,7 +69,7 @@ void draw_filled_circle(const circle_t &pix_circle, sf::RenderWindow &wnd,
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_vec2d(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderWindow &wnd, const sf::Color &col)
+void draw_vec2d(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderTarget &wnd, const sf::Color &col)
 {
     vec2d pix_end     = pix_beg + pix_main;
     vec2d pix_reverse = -pix_main;
@@ -85,7 +85,7 @@ void draw_vec2d(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderWindow &w
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_line(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderWindow &wnd, const sf::Color &col)
+void draw_line(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderTarget &wnd, const sf::Color &col)
 {
     vec2d pix_end = pix_beg + pix_main;
     sf::Vertex line[] = {sf::Vertex(sf::Vector2f(pix_beg.x, pix_beg.y), col),
@@ -96,7 +96,7 @@ void draw_line(const vec2d &pix_beg, const vec2d &pix_main, sf::RenderWindow &wn
 
 //--------------------------------------------------------------------------------------------------
 
-void draw_point(const vec2d &pix_point, sf::RenderWindow &wnd, const sf::Color &col)
+void draw_point(const vec2d &pix_point, sf::RenderTarget &wnd, const sf::Color &col)
 {
     sf::CircleShape point;
     point.setRadius(POINT_RADIUS);
