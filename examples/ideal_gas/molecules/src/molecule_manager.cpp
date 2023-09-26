@@ -54,8 +54,8 @@ molecule_t *molecule_manager_t::create_light_molecule()
     vec2d center(molecule_ld.x + abs(rand()) % molecule_width,
                  molecule_ld.y + abs(rand()) % molecule_height);
 
-    vec2d speed(rand() % (unsigned) MOLECULE_INITAL_MAX_SPEED.x,
-                rand() % (unsigned) MOLECULE_INITAL_MAX_SPEED.y);
+    vec2d speed(rand() % (int) MOLECULE_INITAL_MAX_SPEED.x,
+                rand() % (int) MOLECULE_INITAL_MAX_SPEED.y);
 
     return new light_molecule_t(circle_t(center, molecule_size / 2), speed);
 }

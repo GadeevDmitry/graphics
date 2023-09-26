@@ -8,10 +8,6 @@
 
 //==================================================================================================
 
-typedef class button_t button_t;
-
-//--------------------------------------------------------------------------------------------------
-
 class molecule_manager_t
 {
 private:
@@ -65,10 +61,12 @@ public:
     void draw();
     void refresh(const double frame_time);
 
-    friend void increase_molecules_act(const button_t &button, molecule_manager_t &manager);
-    friend void decrease_molecules_act(const button_t &button, molecule_manager_t &manager);
-    friend void raise_piston_act      (const button_t &button, molecule_manager_t &manager);
-    friend void lower_piston_act      (const button_t &button, molecule_manager_t &manager);
+    friend void increase_molecules_act(molecule_manager_t &manager);
+    friend void decrease_molecules_act(molecule_manager_t &manager);
+
+    friend void raise_piston_act      (molecule_manager_t &manager);
+    friend void lower_piston_act      (molecule_manager_t &manager);
+    friend void  stop_piston_act      (molecule_manager_t &manager);
 };
 
 #endif // MOLECULE_MANAGER_H
