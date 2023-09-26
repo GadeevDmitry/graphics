@@ -13,7 +13,7 @@ static double get_frame_time();
 
 int main()
 {
-    sf::RenderWindow wnd(sf::VideoMode(WND_WIDTH, WND_HEIGHT), WND_TITLE);
+    sf::RenderWindow  wnd(sf::VideoMode(WND_WIDTH, WND_HEIGHT), WND_TITLE);
     scene_t scene(vec2d(WND_WIDTH, WND_HEIGHT));
 
     while (wnd.isOpen())
@@ -25,11 +25,12 @@ int main()
                 wnd.close();
         }
 
+        sf::Vector2i mouse_pos = sf::Mouse::getPosition(wnd);
+        bool        is_clicked = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+
         wnd.clear();
-
-        scene.refresh(get_frame_time());
-        scene.draw   (wnd);
-
+        scene.refresh(get_frame_time(), vec2d(mouse_pos.x, mouse_pos.y), is_clicked);
+        scene.draw(wnd);
         wnd.display();
     }
 }

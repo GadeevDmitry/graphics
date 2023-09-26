@@ -1,10 +1,10 @@
 #ifndef BUTTON_MANAGER_H
-#define BUTTOM_MANAGER_H
+#define BUTTON_MANAGER_H
 
 #include "button.h"
 
 #include "logs/log.h"
-#include "vector/vector.h"
+#include "array/array.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -13,35 +13,22 @@
 class button_manager_t
 {
 private:
-    vector buttons;
+    array             buttons;
+    sf::RenderTexture buttons_tex;
+
+    static void delete_button(void *const button)
+    {
+        delete *(button_t **) button;
+    }
 
 public:
-    button_manager_t()
-    {
-        vector_ctor(&buttons, sizeof(button_t));
-    }
+    explicit button_manager_t(const vec2d &board_size_);
+    ~button_manager_t() { array_dtor(&buttons); }
 
-    ~button_manager_t()
-    {
-        vector_dtor(&buttons);
-    }
+    const sf::Texture &get_texture() const { return buttons_tex.getTexture(); }
 
-    bool add_button(const button_t &button)
-    {
-        vector_push_back(&buttons, &button);
-    }
-
-    void draw(sf::RenderWindow &wnd)
-    {
-        for (size_t ind = 0; ind < buttons.size; ++ind)
-            ((button_t *) vector_get(&buttons, ind))->draw(wnd);
-    }
-
-    void refresh(const vec2d &mouse_pos, const bool is_clicked)
-    {
-        for (size_t ind = 0; ind < buttons.size; ++ind)
-            ((button_t *) vector_get(&buttons, ind))->refresh(mouse_pos, is_clicked);
-    }
+    void draw();
+    void refresh(const vec2d &mouse_pos, const bool is_clicked);
 };
 
 #endif // BUTTON_MANAGER_H

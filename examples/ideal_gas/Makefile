@@ -45,10 +45,13 @@ COMMON_OBJS := $(foreach OBJ, $(COMMON_OBJS), build/common/$(OBJ).o)
 MOLECULE_OBJS := molecule molecule_manager
 MOLECULE_OBJS := $(foreach OBJ, $(MOLECULE_OBJS), build/molecules/$(OBJ).o)
 
+BUTTON_OBJS := button button_manager
+BUTTON_OBJS := $(foreach OBJ, $(BUTTON_OBJS), build/buttons/$(OBJ).o)
+
 SCENE_OBJS := scene
 SCENE_OBJS := $(foreach OBJ, $(SCENE_OBJS), build/scene/$(OBJ).o)
 
-OBJS := $(GEOMETRY_OBJS) $(GRAPHIC_OBJS) $(COMMON_OBJS) $(MOLECULE_OBJS) $(SCENE_OBJS)
+OBJS := $(GEOMETRY_OBJS) $(GRAPHIC_OBJS) $(COMMON_OBJS) $(MOLECULE_OBJS) $(BUTTON_OBJS) $(SCENE_OBJS)
 
 #==================================================================================================
 
@@ -58,6 +61,7 @@ all: | build
 	$(MAKE) -f $(GRAPHIC_PREFIX)/Makefile
 	$(MAKE) -f $(COMMON_PREFIX)/Makefile
 	$(MAKE) -f molecules/Makefile
+	$(MAKE) -f buttons/Makefile
 	$(MAKE) -f scene/Makefile
 	$(CC) $(CFLAGS) main.cpp $(OBJS) $(SFML_LIBS) -o build/main
 

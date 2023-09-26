@@ -17,13 +17,13 @@ molecule_manager_t::molecule_manager_t(const double molecule_size_,
                                        const size_t molecules_num_,
 
                                        const vec2d &reactor_size_):
-molecule_size(molecule_size_),
 molecules_tex(),
+molecule_size(molecule_size_),
 
 reactor(REACTOR_LD_OFF, reactor_size_ - REACTOR_RU_OFF),
 piston (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF.y))
 {
-    log_verify(molecule_size_  > 0, ;);
+    log_verify(molecule_size   > 0, ;);
     log_verify(reactor_size_.x > 0, ;);
     log_verify(reactor_size_.y > 0, ;);
 
@@ -56,12 +56,12 @@ piston (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF
 
 void molecule_manager_t::draw()
 {
-    if (molecules.size == 0) return;
-
     molecules_tex.clear();
 
     draw_hollow_rectangle(reactor, molecules_tex, sf::Color::Green);
     draw_segment         (piston , molecules_tex, sf::Color::Magenta);
+
+    if (molecules.size == 0) return;
 
     for (molecule_t **molecule = (molecule_t **) vector_begin(&molecules);
                       molecule != vector_end(&molecules);
@@ -98,7 +98,7 @@ void molecule_manager_t::refresh(const double frame_time)
             case MOLECULE_UNCHANGED: molecule.refresh(frame_time); break;
             case MOLECULE_DESTROYED: vector_erase(&molecules, (size_t) ind); break;
 
-            default: log_assert(false && "undefined MOLECULE_REFRESH_STATUS_TYPE]\n");
+            default: log_assert(false && "undefined MOLECULE_REFRESH_STATUS_TYPE\n");
         }
     }
 
