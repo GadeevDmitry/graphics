@@ -20,21 +20,28 @@ inline double get_approcach_speed(const vec2d &distance_direct, const double dis
 
 //--------------------------------------------------------------------------------------------------
 
-bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target)
+bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target, const vec2d &target_speed /* = vec2d(0, 0) */)
 {
     vec2d  distance_direct = distance_circle_segment(shape, target);
     double distance_len    = distance_direct.len();
-    log_assert(dblcmp(distance_len, shape.radius) >= 0);
+    log_assert(dblcmp(distance_len, 0) != 0);
 
-    double approcach_speed   = get_approcach_speed(distance_direct, distance_len, speed, vec2d(0, 0));
+    double approcach_speed = get_approcach_speed(distance_direct, distance_len, speed, target_speed);
+    if (approcach_speed < 0) return false;
+
     double real_distance_len = distance_len - shape.radius;
+    real_distance_len = real_distance_len < 0 ? 0 : real_distance_len;
 
     if (approcach_speed * frame_time < real_distance_len) return false;
 
-    double hit_time = real_distance_len / approcach_speed;
+    double hit_time = (dblcmp(real_distance_len, 0) == 0) ? 0 : real_distance_len / approcach_speed;
 
     shape.center += hit_time * speed;
+
+    speed -= target_speed;
     speed.reflect(target.get_normal());
+    speed += target_speed;
+
     shape.center += (frame_time - hit_time) * speed;
 
     return true;

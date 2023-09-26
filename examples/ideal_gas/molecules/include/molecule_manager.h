@@ -8,6 +8,10 @@
 
 //==================================================================================================
 
+typedef class button_t button_t;
+
+//--------------------------------------------------------------------------------------------------
+
 class molecule_manager_t
 {
 private:
@@ -24,12 +28,14 @@ private:
 
     rectangle_t reactor;
     segment_t   piston;
+    vec2d       piston_speed;
 
     static void delete_molecule(void *const molecule)
     {
         delete *(molecule_t **) molecule;
     }
 
+    void refresh_piston                (const double frame_time);
     void refresh_by_molecule_collisions(const double frame_time, const size_t initial_size, array *const molecules_refresh_status);
     void refresh_by_wall_collisions    (const double frame_time, const size_t initial_size, array *const molecules_refresh_status);
 
@@ -59,8 +65,10 @@ public:
     void draw();
     void refresh(const double frame_time);
 
-    friend void increase_molecules_num(molecule_manager_t &manager);
-    friend void decrease_molecules_num(molecule_manager_t &manager);
+    friend void increase_molecules_act(const button_t &button, molecule_manager_t &manager);
+    friend void decrease_molecules_act(const button_t &button, molecule_manager_t &manager);
+    friend void raise_piston_act      (const button_t &button, molecule_manager_t &manager);
+    friend void lower_piston_act      (const button_t &button, molecule_manager_t &manager);
 };
 
 #endif // MOLECULE_MANAGER_H

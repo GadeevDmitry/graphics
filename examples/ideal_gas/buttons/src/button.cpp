@@ -51,9 +51,10 @@ void button_t::draw(sf::RenderTarget &wnd) const
     const sf::Texture button_t::*cur_tex;
     switch (state)
     {
-        case BUTTON_ON  :
-        case BUTTON_HOLD: cur_tex = &button_t::tex_on;  break;
-        case BUTTON_OFF : cur_tex = &button_t::tex_off; break;
+        case BUTTON_ON     :
+        case BUTTON_HOLD   : cur_tex = &button_t::tex_on; break;
+        case BUTTON_OFF    :
+        case BUTTON_RELEASE: cur_tex = &button_t::tex_off; break;
 
         default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
     }
@@ -71,18 +72,25 @@ void button_t::refresh(const vec2d &mouse_pos, const bool is_clicked)
 {
     if (!is_clicked)
     {
-        state = BUTTON_OFF;
+        switch (state)
+        {
+            case BUTTON_ON     :
+            case BUTTON_HOLD   : state = BUTTON_RELEASE; break;
+            case BUTTON_OFF    :
+            case BUTTON_RELEASE: state = BUTTON_OFF; break;
+
+            default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
+        }
         return;
     }
 
-    if (is_clicked && (state == BUTTON_ON || state == BUTTON_HOLD))
+    switch (state)
     {
-        state = BUTTON_HOLD;
-        return;
-    }
+        case BUTTON_ON     :
+        case BUTTON_HOLD   : state = BUTTON_HOLD; break;
+        case BUTTON_OFF    :
+        case BUTTON_RELEASE: state = is_intersection_rectangle_point(area, mouse_pos) ? BUTTON_ON : BUTTON_OFF; break;
 
-    if (is_intersection_rectangle_point(area, mouse_pos))
-        state = BUTTON_ON;
-    else
-        state = BUTTON_OFF;
+        default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
+    }
 }

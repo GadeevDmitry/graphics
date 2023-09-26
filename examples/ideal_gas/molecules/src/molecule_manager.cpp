@@ -11,6 +11,8 @@
 static const vec2d REACTOR_LD_OFF(5, 5);
 static const vec2d REACTOR_RU_OFF(5, 5);
 
+static const vec2d MOLECULE_INITAL_MAX_SPEED(100, 100);
+
 //==================================================================================================
 
 molecule_manager_t::molecule_manager_t(const double molecule_size_,
@@ -20,17 +22,15 @@ molecule_manager_t::molecule_manager_t(const double molecule_size_,
 molecules_tex(),
 molecule_size(molecule_size_),
 
-reactor(REACTOR_LD_OFF, reactor_size_ - REACTOR_RU_OFF),
-piston (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF.y))
+reactor     (REACTOR_LD_OFF, reactor_size_ - REACTOR_RU_OFF),
+piston      (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF.y)),
+piston_speed(0, 0)
 {
     log_verify(molecule_size   > 0, ;);
     log_verify(reactor_size_.x > 0, ;);
     log_verify(reactor_size_.y > 0, ;);
 
     vector_ctor(&molecules, sizeof(molecule_t *), nullptr, delete_molecule);
-
-//  light_molecule_t *molecule = new light_molecule_t(circle_t(vec2d(200, 200), 5), vec2d(50, 0));
-//  vector_push_back(&molecules, &molecule);
 
     for (size_t ind = 0; ind < molecules_num_; ++ind)
     {
@@ -54,7 +54,8 @@ molecule_t *molecule_manager_t::create_light_molecule()
     vec2d center(molecule_ld.x + abs(rand()) % molecule_width,
                  molecule_ld.y + abs(rand()) % molecule_height);
 
-    vec2d speed(rand() % 50, rand() % 50);
+    vec2d speed(rand() % (unsigned) MOLECULE_INITAL_MAX_SPEED.x,
+                rand() % (unsigned) MOLECULE_INITAL_MAX_SPEED.y);
 
     return new light_molecule_t(circle_t(center, molecule_size / 2), speed);
 }
@@ -109,6 +110,8 @@ void molecule_manager_t::refresh(const double frame_time)
         }
     }
 
+    refresh_piston(frame_time);
+
     array_dtor(&molecules_refresh_status);
 }
 
@@ -156,15 +159,10 @@ void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, con
 
         vec2d reactor_lu_corner(reactor.ld_corner.x, reactor.ru_corner.y);
         vec2d reactor_rd_corner(reactor.ru_corner.x, reactor.ld_corner.y);
-/*
-        printf("walls:  (%lg, %lg) -> (%lg, %lg)\n", scene.walls.ld_corner.x, scene.walls.ld_corner.y,
-                                                    scene.walls.ru_corner.x, scene.walls.ru_corner.y);
 
-        printf("center: (%lg, %lg)\n", cur.shape.center.x, cur.shape.center.y);
-*/
         array_set(molecules_refresh_status, ind, &updated_);
 
-        if (cur.try_hit_segment(frame_time, piston)) continue;
+        if (cur.try_hit_segment(frame_time, piston, piston_speed)) continue;
         if (cur.try_hit_segment(frame_time, segment_t(reactor.ld_corner, reactor_lu_corner))) continue;
         if (cur.try_hit_segment(frame_time, segment_t(reactor_lu_corner, reactor.ru_corner))) continue;
         if (cur.try_hit_segment(frame_time, segment_t(reactor.ru_corner, reactor_rd_corner))) continue;
@@ -172,6 +170,27 @@ void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, con
 
         array_set(molecules_refresh_status, ind, &unchanged_);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void molecule_manager_t::refresh_piston(const double frame_time)
+{
+    segment_t new_piston = piston + frame_time * piston_speed;
+
+    if (new_piston.endpoint_1.y < reactor.ld_corner.y)
+    {
+        piston = segment_t(reactor.ld_corner, vec2d(reactor.ru_corner.x, reactor.ld_corner.y));
+        piston_speed = vec2d(0, 0);
+    }
+    else if (new_piston.endpoint_1.y > reactor.ru_corner.y - molecule_size)
+    {
+        piston  = segment_t(vec2d(reactor.ld_corner.x, reactor.ru_corner.y), reactor.ru_corner);
+        piston -= vec2d(0, molecule_size);
+        piston_speed = vec2d(0, 0);
+    }
+    else
+        piston = new_piston;
 }
 
 //--------------------------------------------------------------------------------------------------

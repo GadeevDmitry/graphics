@@ -46,7 +46,7 @@ public:
 
     void refresh(const double frame_time) { shape.center += frame_time * speed; }
 
-    bool try_hit_segment(const double frame_time, const segment_t &target);
+    bool try_hit_segment(const double frame_time, const segment_t &target, const vec2d &target_speed = vec2d(0, 0));
     bool try_hit_circle (const double frame_time, const circle_t  &target, const vec2d &target_speed, double &hit_time) const;
 };
 
