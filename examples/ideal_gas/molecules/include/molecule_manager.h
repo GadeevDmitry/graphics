@@ -26,11 +26,15 @@ private:
     segment_t   piston;
     vec2d       piston_speed;
 
+    double pressure;
+    double energy;
+
     static void delete_molecule(void *const molecule)
     {
         delete *(molecule_t **) molecule;
     }
 
+    void refresh_energy                ();
     void refresh_piston                (const double frame_time);
     void refresh_by_molecule_collisions(const double frame_time, const size_t initial_size, array *const molecules_refresh_status);
     void refresh_by_wall_collisions    (const double frame_time, const size_t initial_size, array *const molecules_refresh_status);
@@ -49,7 +53,6 @@ private:
 
     void molecule_interaction_light_light(const double hit_time, molecule_t &light_1, MOLECULE_REFRESH_STATUS_TYPE &status_1,
                                                                  molecule_t &light_2, MOLECULE_REFRESH_STATUS_TYPE &status_2);
-
     molecule_t *create_light_molecule();
 
 public:

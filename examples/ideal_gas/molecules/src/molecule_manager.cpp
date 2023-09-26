@@ -24,7 +24,10 @@ molecule_size(molecule_size_),
 
 reactor     (REACTOR_LD_OFF, reactor_size_ - REACTOR_RU_OFF),
 piston      (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF.y)),
-piston_speed(0, 0)
+piston_speed(0, 0),
+
+pressure(0),
+energy  (0)
 {
     log_verify(molecule_size   > 0, ;);
     log_verify(reactor_size_.x > 0, ;);
@@ -79,6 +82,9 @@ void molecule_manager_t::draw()
     }
 
     molecules_tex.display();
+
+    printf("pressure = %lg\n"
+           "energy   = %lg\n\n", pressure, energy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,6 +97,8 @@ void molecule_manager_t::refresh(const double frame_time)
     MOLECULE_REFRESH_STATUS_TYPE unchanged_ = MOLECULE_UNCHANGED;
     array_ctor(&molecules_refresh_status, initial_size, sizeof(MOLECULE_REFRESH_STATUS_TYPE));
     array_init(&molecules_refresh_status, &unchanged_);
+
+    pressure = 0;
 
     refresh_by_molecule_collisions(frame_time, initial_size, &molecules_refresh_status);
     refresh_by_wall_collisions    (frame_time, initial_size, &molecules_refresh_status);
@@ -111,6 +119,9 @@ void molecule_manager_t::refresh(const double frame_time)
     }
 
     refresh_piston(frame_time);
+    refresh_energy();
+
+    pressure /= frame_time;
 
     array_dtor(&molecules_refresh_status);
 }
@@ -162,11 +173,14 @@ void molecule_manager_t::refresh_by_wall_collisions(const double frame_time, con
 
         array_set(molecules_refresh_status, ind, &updated_);
 
-        if (cur.try_hit_segment(frame_time, piston, piston_speed)) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(reactor.ld_corner, reactor_lu_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(reactor_lu_corner, reactor.ru_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(reactor.ru_corner, reactor_rd_corner))) continue;
-        if (cur.try_hit_segment(frame_time, segment_t(reactor_rd_corner, reactor.ld_corner))) continue;
+        double hit_impulse = 0;
+        #define hit_success_actions { pressure += hit_impulse; continue; }
+        if (cur.try_hit_segment(frame_time, piston, piston_speed, hit_impulse)) hit_success_actions
+        if (cur.try_hit_segment(frame_time, segment_t(reactor.ld_corner, reactor_lu_corner), vec2d(0, 0), hit_impulse)) hit_success_actions
+        if (cur.try_hit_segment(frame_time, segment_t(reactor_lu_corner, reactor.ru_corner), vec2d(0, 0), hit_impulse)) hit_success_actions
+        if (cur.try_hit_segment(frame_time, segment_t(reactor.ru_corner, reactor_rd_corner), vec2d(0, 0), hit_impulse)) hit_success_actions
+        if (cur.try_hit_segment(frame_time, segment_t(reactor_rd_corner, reactor.ld_corner), vec2d(0, 0), hit_impulse)) hit_success_actions
+        #undef hit_success_actions
 
         array_set(molecules_refresh_status, ind, &unchanged_);
     }
@@ -191,6 +205,20 @@ void molecule_manager_t::refresh_piston(const double frame_time)
     }
     else
         piston = new_piston;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void molecule_manager_t::refresh_energy()
+{
+    energy = 0;
+
+    for (molecule_t **molecule = (molecule_t **) vector_begin(&molecules);
+                      molecule != vector_end(&molecules); ++molecule)
+    {
+        energy += (*molecule)->weight * (*molecule)->speed.len2();
+    }
+    energy /= 2;
 }
 
 //--------------------------------------------------------------------------------------------------

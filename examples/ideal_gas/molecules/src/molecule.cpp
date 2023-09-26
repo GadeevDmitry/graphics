@@ -20,7 +20,8 @@ inline double get_approcach_speed(const vec2d &distance_direct, const double dis
 
 //--------------------------------------------------------------------------------------------------
 
-bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target, const vec2d &target_speed /* = vec2d(0, 0) */)
+bool molecule_t::try_hit_segment(const double frame_time, const segment_t &target,
+                                 const vec2d &target_speed, double &hit_impulse)
 {
     vec2d  distance_direct = distance_circle_segment(shape, target);
     double distance_len    = distance_direct.len();
@@ -31,10 +32,10 @@ bool molecule_t::try_hit_segment(const double frame_time, const segment_t &targe
 
     double real_distance_len = distance_len - shape.radius;
     real_distance_len = real_distance_len < 0 ? 0 : real_distance_len;
-
     if (approcach_speed * frame_time < real_distance_len) return false;
 
-    double hit_time = (dblcmp(real_distance_len, 0) == 0) ? 0 : real_distance_len / approcach_speed;
+    double hit_time       = (dblcmp(real_distance_len, 0) == 0) ? 0 : real_distance_len / approcach_speed;
+    double impulse_before = weight * abs((speed, target.get_normal())) / target.get_normal().len();
 
     shape.center += hit_time * speed;
 
@@ -43,6 +44,9 @@ bool molecule_t::try_hit_segment(const double frame_time, const segment_t &targe
     speed += target_speed;
 
     shape.center += (frame_time - hit_time) * speed;
+
+    double impulse_after = weight * abs((speed, target.get_normal())) / target.get_normal().len();
+    hit_impulse = impulse_after + impulse_after;
 
     return true;
 }
