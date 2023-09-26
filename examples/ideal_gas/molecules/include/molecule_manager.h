@@ -8,10 +8,6 @@
 
 //==================================================================================================
 
-typedef class scene_t scene_t;
-
-//--------------------------------------------------------------------------------------------------
-
 class molecule_manager_t
 {
 private:
@@ -52,6 +48,8 @@ private:
     void molecule_interaction_light_light(const double hit_time, molecule_t &light_1, MOLECULE_REFRESH_STATUS_TYPE &status_1,
                                                                  molecule_t &light_2, MOLECULE_REFRESH_STATUS_TYPE &status_2);
 
+    molecule_t *create_light_molecule();
+
 public:
     explicit molecule_manager_t(const double molecule_size_, const size_t molecules_num_, const vec2d &reactor_size_);
     ~molecule_manager_t() { vector_dtor(&molecules); }
@@ -60,6 +58,9 @@ public:
 
     void draw();
     void refresh(const double frame_time);
+
+    friend void increase_molecules_num(molecule_manager_t &manager);
+    friend void decrease_molecules_num(molecule_manager_t &manager);
 };
 
 #endif // MOLECULE_MANAGER_H

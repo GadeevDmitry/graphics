@@ -29,6 +29,7 @@ public:
 
     void draw();
     void refresh(const vec2d &mouse_pos, const bool is_clicked);
+    void perform(molecule_manager_t &molecule_manager);
 };
 
 #endif // BUTTON_MANAGER_H

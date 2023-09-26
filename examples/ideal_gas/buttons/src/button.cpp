@@ -9,18 +9,19 @@
 
 //==================================================================================================
 
-button_t::button_t(const vec2d &position_,
-                   const vec2d &size_,
+button_t::button_t(const vec2d   &position_,
+                   const vec2d   &size_,
+                   const action_t action_,
 
                    const char *tex_on_file_,
                    const char *tex_off_file_):
-area (position_, position_ + size_),
-scale(1),
 
+area   (position_, position_ + size_),
+scale  (1),
+state  (BUTTON_OFF),
+action (action_),
 tex_on (),
-tex_off(),
-
-state(BUTTON_OFF)
+tex_off()
 {
     log_verify(dblcmp(position_.x, 0) >= 0, ;);
     log_verify(dblcmp(position_.y, 0) >= 0, ;);
@@ -50,8 +51,9 @@ void button_t::draw(sf::RenderTarget &wnd) const
     const sf::Texture button_t::*cur_tex;
     switch (state)
     {
-        case BUTTON_ON : cur_tex = &button_t::tex_on;  break;
-        case BUTTON_OFF: cur_tex = &button_t::tex_off; break;
+        case BUTTON_ON  :
+        case BUTTON_HOLD: cur_tex = &button_t::tex_on;  break;
+        case BUTTON_OFF : cur_tex = &button_t::tex_off; break;
 
         default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
     }
@@ -70,6 +72,12 @@ void button_t::refresh(const vec2d &mouse_pos, const bool is_clicked)
     if (!is_clicked)
     {
         state = BUTTON_OFF;
+        return;
+    }
+
+    if (is_clicked && (state == BUTTON_ON || state == BUTTON_HOLD))
+    {
+        state = BUTTON_HOLD;
         return;
     }
 

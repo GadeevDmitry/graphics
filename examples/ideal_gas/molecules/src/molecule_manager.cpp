@@ -34,22 +34,29 @@ piston (REACTOR_LD_OFF, vec2d(reactor_size_.x - REACTOR_RU_OFF.x, REACTOR_LD_OFF
 
     for (size_t ind = 0; ind < molecules_num_; ++ind)
     {
-        vec2d molecule_ld = reactor.ld_corner + vec2d(molecule_size_, molecule_size_);
-        vec2d molecule_ru = reactor.ru_corner - vec2d(molecule_size_, molecule_size_);
-
-        int molecule_width  = (int) (molecule_ru.x - molecule_ld.x);
-        int molecule_height = (int) (molecule_ru.y - molecule_ld.y);
-
-        vec2d center(molecule_ld.x + abs(rand()) % molecule_width,
-                     molecule_ld.y + abs(rand()) % molecule_height);
-
-        vec2d speed(rand() % 50, rand() % 50);
-
-        light_molecule_t *molecule = new light_molecule_t(circle_t(center, molecule_size_ / 2), speed);
+        molecule_t *molecule = create_light_molecule();
         vector_push_back(&molecules, &molecule);
     }
 
     molecules_tex.create((unsigned) reactor_size_.x, (unsigned) reactor_size_.y);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+molecule_t *molecule_manager_t::create_light_molecule()
+{
+    vec2d molecule_ld = reactor.ld_corner + vec2d(molecule_size, molecule_size);
+    vec2d molecule_ru = reactor.ru_corner - vec2d(molecule_size, molecule_size);
+
+    int molecule_width  = (int) (molecule_ru.x - molecule_ld.x);
+    int molecule_height = (int) (molecule_ru.y - molecule_ld.y);
+
+    vec2d center(molecule_ld.x + abs(rand()) % molecule_width,
+                 molecule_ld.y + abs(rand()) % molecule_height);
+
+    vec2d speed(rand() % 50, rand() % 50);
+
+    return new light_molecule_t(circle_t(center, molecule_size / 2), speed);
 }
 
 //--------------------------------------------------------------------------------------------------

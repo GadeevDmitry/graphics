@@ -23,8 +23,10 @@ public:
     void draw   (sf::RenderTarget &wnd);
     void refresh(const double frame_time, const vec2d &mouse_pos, const bool is_clicked)
     {
+        button_manager.refresh(mouse_pos - board_offset, is_clicked);
+        button_manager.perform(molecule_manager);
+
         molecule_manager.refresh(frame_time);
-        button_manager  .refresh(mouse_pos - board_offset, is_clicked);
     }
 };
 
