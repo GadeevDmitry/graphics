@@ -17,44 +17,93 @@ typedef class molecule_manager_t molecule_manager_t;
 
 class button_t
 {
-private:
+protected:
     rectangle_t area;
-    vec2d       scale;
 
+public:
+    explicit button_t(const vec2d &pos_,
+                      const vec2d &size_):
+    area (pos_, pos_ + size_)
+    {}
+
+    virtual void draw   (sf::RenderTarget &wnd) const = 0;
+    virtual void refresh(const vec2d &mouse_pos, const bool is_clicked) = 0;
+    virtual void perform(molecule_manager_t &molecule_manager) const;
+};
+
+//--------------------------------------------------------------------------------------------------
+
+class hold_button_t: public button_t
+{
+private:
     enum BUTTON_STATE_TYPE
     {
-        BUTTON_ON,
-        BUTTON_OFF,
+        BUTTON_PRESS,
         BUTTON_HOLD,
         BUTTON_RELEASE,
+        BUTTON_OFF,
     }
     state;
 
-    typedef void (*action_t) (const button_t &button, molecule_manager_t &molecule_man);
+    typedef void (*action_t) (molecule_manager_t &molecule_man);
     action_t action;
+    vec2d    scale;
 
-    sf::Texture tex_on;
-    sf::Texture tex_off;
+    static sf::Texture tex_on;
+    static sf::Texture tex_off;
+
+    static bool are_texs_init;
+    static void texs_init();
 
 public:
-    explicit button_t(const vec2d   &position_,
-                      const vec2d   &size_,
-                      const action_t action_,
+    explicit hold_button_t(const vec2d    &pos_,
+                           const vec2d    &size_,
+                           const action_t &action_);
 
-                      const char *tex_on_file_,
-                      const char *tex_off_file_);
+    virtual void draw   (sf::RenderTarget &wnd) const override;
+    virtual void refresh(const vec2d &mouse_pos, const bool is_clicked) override;
+    virtual void perform(molecule_manager_t &molecule_manager) const override;
+};
 
-    void draw   (sf::RenderTarget &wnd) const;
-    void refresh(const vec2d &mouse_pos, const bool is_clicked);
-    void perform(molecule_manager_t &molecule_manager) const
+//--------------------------------------------------------------------------------------------------
+
+class switch012_button_t: public button_t
+{
+private:
+    enum BUTTON_STATE_TYPE
     {
-        action(*this, molecule_manager);
-    }
+        BUTTON_0,
+        BUTTON_1,
+        BUTTON_2,
 
-    friend void increase_molecules_act(const button_t &button, molecule_manager_t &manager);
-    friend void decrease_molecules_act(const button_t &button, molecule_manager_t &manager);
-    friend void raise_piston_act      (const button_t &button, molecule_manager_t &manager);
-    friend void lower_piston_act      (const button_t &button, molecule_manager_t &manager);
+        BUTTON_SWITCHED_TO_0,
+        BUTTON_SWITCHED_TO_1,
+        BUTTON_SWITCHED_TO_2,
+    }
+    state;
+
+    typedef void (*action_t) (molecule_manager_t &molecule_man);
+    action_t switched_0_action;
+    action_t switched_1_action;
+    action_t switched_2_action;
+
+    static sf::Texture tex_0;
+    static sf::Texture tex_1;
+    static sf::Texture tex_2;
+
+    static bool are_texs_init;
+    static void texs_init();
+
+public:
+    explicit switch012_button_t(const vec2d &pos_,
+                                const vec2d &size_,
+                                const action_t &action_0,
+                                const action_t &action_1,
+                                const action_t &action_2);
+
+    virtual void draw   (sf::RenderTarget &wnd) const override;
+    virtual void refresh(const vec2d &mouse_pos, const bool is_clicked) override;
+    virtual void perform(molecule_manager_t &molecule_manager) const override;
 };
 
 #endif // BUTTON_H

@@ -9,88 +9,37 @@
 
 //==================================================================================================
 
-button_t::button_t(const vec2d   &position_,
-                   const vec2d   &size_,
-                   const action_t action_,
+sf::Texture hold_button_t::tex_on;
+sf::Texture hold_button_t::tex_off;
 
-                   const char *tex_on_file_,
-                   const char *tex_off_file_):
+//--------------------------------------------------------------------------------------------------
 
-area   (position_, position_ + size_),
-scale  (1),
-state  (BUTTON_OFF),
-action (action_),
-tex_on (),
-tex_off()
+sf::Texture switch012_button_t::tex_0;
+sf::Texture switch012_button_t::tex_1;
+sf::Texture switch012_button_t::tex_2;
+
+//==================================================================================================
+
+void hold_button_t::texs_init()
 {
-    log_verify(dblcmp(position_.x, 0) >= 0, ;);
-    log_verify(dblcmp(position_.y, 0) >= 0, ;);
+    if (!tex_on .loadFromFile("../../widget/img/button_on.png ")) { log_assert(false && "can't load texture from file\n"); }
+    if (!tex_off.loadFromFile("../../widget/img/button_off.png")) { log_assert(false && "can't load texture from file\n"); }
 
+    are_texs_init = true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+hold_button_t::hold_button_t(const vec2d    &pos_,
+                             const vec2d    &size_,
+                             const action_t &action_):
+button_t(pos_, size_),
+action  (action_)
+{
+    log_verify(dblcmp(pos_.x , 0) >= 0, ;);
+    log_verify(dblcmp(pos_.y , 0) >= 0, ;);
     log_verify(dblcmp(size_.x, 0) >= 0, ;);
     log_verify(dblcmp(size_.y, 0) >= 0, ;);
 
-    if (!tex_on .loadFromFile(tex_on_file_ )) { log_error("can't load texture from \"%s\"\n", tex_on_file_); }
-    if (!tex_off.loadFromFile(tex_off_file_)) { log_error("can't load texture from \"%s\"\n", tex_off_file_); }
-
-    sf::Vector2u size_on  = tex_on .getSize();
-    sf::Vector2u size_off = tex_off.getSize();
-
-    log_assert(size_on .x != 0); log_assert(size_on .y != 0);
-    log_assert(size_off.x != 0); log_assert(size_off.y != 0);
-
-    double scale_x = (size_on.x >= size_off.x) ? size_.x / size_on.x : size_.x / size_off.x;
-    double scale_y = (size_on.y >= size_off.y) ? size_.y / size_on.y : size_.y / size_off.y;
-
-    scale = vec2d(scale_x, scale_y);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void button_t::draw(sf::RenderTarget &wnd) const
-{
-    const sf::Texture button_t::*cur_tex;
-    switch (state)
-    {
-        case BUTTON_ON     :
-        case BUTTON_HOLD   : cur_tex = &button_t::tex_on; break;
-        case BUTTON_OFF    :
-        case BUTTON_RELEASE: cur_tex = &button_t::tex_off; break;
-
-        default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
-    }
-
-    sf::Sprite cur_spr (this->*cur_tex);
-    cur_spr.setPosition((float) area.ld_corner.x, (float) area.ld_corner.y);
-    cur_spr.setScale   ((float) scale.x         , (float) scale.y);
-
-    wnd.draw(cur_spr);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void button_t::refresh(const vec2d &mouse_pos, const bool is_clicked)
-{
-    if (!is_clicked)
-    {
-        switch (state)
-        {
-            case BUTTON_ON     :
-            case BUTTON_HOLD   : state = BUTTON_RELEASE; break;
-            case BUTTON_OFF    :
-            case BUTTON_RELEASE: state = BUTTON_OFF; break;
-
-            default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
-        }
-        return;
-    }
-
-    switch (state)
-    {
-        case BUTTON_ON     :
-        case BUTTON_HOLD   : state = BUTTON_HOLD; break;
-        case BUTTON_OFF    :
-        case BUTTON_RELEASE: state = is_intersection_rectangle_point(area, mouse_pos) ? BUTTON_ON : BUTTON_OFF; break;
-
-        default: log_assert(false && "undefined BUTTON_STATE_TYPE\n");
-    }
+    if (!are_texs_init) texs_init();
 }
