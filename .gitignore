@@ -1,4 +1,5 @@
 build/
+examples/ideal_gas
 .cache/
 .clangd
 compile_commands.json
