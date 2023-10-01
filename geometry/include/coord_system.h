@@ -1,8 +1,6 @@
 #ifndef COORD_SYSTEM_H
 #define COORD_SYSTEM_H
 
-#include <math.h>
-#include "num2d.h"
 #include "vec2d.h"
 
 //==================================================================================================
@@ -10,31 +8,134 @@
 class coord_system
 {
 public:
-    num2d center;
-    num2d unit;
+    vec2d center;
+    vec2d unit;
 
-    explicit coord_system(const num2d &center_, const num2d &unit_):
-    center(center_),
-    unit(unit_)
-    {}
+    inline          coord_system();
+    inline explicit coord_system(const vec2d &center_, const vec2d &unit_);
+    inline         ~coord_system() {}
 
-    explicit coord_system(double center_x_ = 0, double center_y_ = 0, double unit_x_ = 20.0, double unit_y_ = 20.0):
-    center(num2d(center_x_, center_y_)),
-    unit(num2d(unit_x_, unit_y_))
-    {}
+    inline coord_system  operator + (const vec2d &add) const;
+    inline coord_system  operator - (const vec2d &sub) const;
+    inline coord_system  operator * (const double mul) const;
+    inline coord_system  operator / (const double div) const;
 
-    ~coord_system()
-    {
-        center.x = NAN;
-        center.y = NAN;
-        unit.x   = NAN;
-        unit.y   = NAN;
-    }
+    inline coord_system &operator +=(const vec2d &add);
+    inline coord_system &operator -=(const vec2d &sub);
+    inline coord_system &operator *=(const double mul);
+    inline coord_system &operator /=(const double div);
 
-    vec2d get_abs_from_rel(const vec2d &vec) const { return vec2d(vec.x * unit.x, vec.y * unit.y); }
-    vec2d get_rel_from_abs(const vec2d &vec) const { return vec2d(vec.x / unit.y, vec.y / unit.y); }
-    vec2d get_off_from_rel(const vec2d &vec) const { return vec2d(center) + get_abs_from_rel(vec); }
-    vec2d get_rel_from_off(const vec2d &vec) const { return get_rel_from_abs(vec - vec2d(center)); }
+    inline vec2d get_abs_from_rel(const vec2d &vec) const;
+    inline vec2d get_rel_from_abs(const vec2d &vec) const;
+    inline vec2d get_off_from_rel(const vec2d &vec) const;
+    inline vec2d get_rel_from_off(const vec2d &vec) const;
+
+    friend inline coord_system operator *(const double mul, const coord_system &sys);
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system::coord_system():
+center(),
+unit  ()
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system::coord_system(const vec2d &center_, const vec2d &unit_):
+center(center_),
+unit  (unit_)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system coord_system::operator +(const vec2d &add) const
+{
+    return coord_system(center + add, unit);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system coord_system::operator -(const vec2d &sub) const
+{
+    return coord_system(center - sub, unit);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system coord_system::operator *(const double mul) const
+{
+    return coord_system(center, unit * mul);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system coord_system::operator /(const double div) const
+{
+    return coord_system(center, unit / div);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system &coord_system::operator +=(const vec2d &add)
+{
+    return *this = (*this) + add;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system &coord_system::operator -=(const vec2d &sub)
+{
+    return *this = (*this) - sub;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system &coord_system::operator *=(const double mul)
+{
+    return *this = (*this) * mul;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system &coord_system::operator /=(const double div)
+{
+    return *this = (*this) / div;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline coord_system operator *(const double mul, const coord_system &sys)
+{
+    return sys * mul;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d coord_system::get_abs_from_rel(const vec2d &vec) const
+{
+    return vec2d(vec.x * unit.x, vec.y * unit.y);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d coord_system::get_rel_from_abs(const vec2d &vec) const
+{
+    return vec2d(vec.x / unit.x, vec.y / unit.y);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d coord_system::get_off_from_rel(const vec2d &vec) const
+{
+    return vec2d(center) + get_abs_from_rel(vec);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d coord_system::get_rel_from_off(const vec2d &vec) const
+{
+    return get_rel_from_abs(vec - vec2d(center));
+}
 
 #endif // COORD_SYSTEM_H
