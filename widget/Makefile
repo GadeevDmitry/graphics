@@ -1,12 +1,12 @@
 CC := g++
 CFLAGS ?= -D NDEBUG -std=c++20 -O2
 
-GEOMETRY_PREFIX   ?=
-GEOMETRY_BILD_DIR ?= build/geometry/
+WIDGET_PREFIX   ?=
+WIDGET_BILD_DIR ?= build/widget/
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(SFML_INCLUDES)
+INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(WIDGET_INCLUDES) $(SFML_INCLUDES)
 
 #================================================================================================================================
 
@@ -14,13 +14,13 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(SFML_INCLUDES)
 all:
 
 
-$(GEOMETRY_BUILD_DIR)vec2d.o: $(GEOMETRY_PREFIX)src/vec2d.cpp | $(GEOMETRY_BILD_DIR)
+$(WIDGET_BUILD_DIR)widget.o: $(WIDGET_PREFIX)src/widget.cpp | $(WIDGET_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(GEOMETRY_BUILD_DIR)vec2d.o
+all: $(WIDGET_BUILD_DIR)widget.o
 
-$(GEOMETRY_BILD_DIR)vec3d.o: $(GEOMETRY_PREFIX)src/vec3d.cpp | $(GEOMETRY_BILD_DIR)
+$(WIDGET_BILD_DIR)window.o: $(WIDGET_PREFIX)src/window.cpp | $(WIDGET_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(GEOMETRY_BILD_DIR)vec3d.o
+all: $(WIDGET_BILD_DIR)window.o
 
-$(GEOMETRY_BILD_DIR):
+$(WIDGET_BILD_DIR):
 	mkdir -p $@
