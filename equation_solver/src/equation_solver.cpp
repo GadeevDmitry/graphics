@@ -3,7 +3,7 @@
 #include <math.h>
 
 #include "equation_solver.h"
-#include "algorithm/algorithm.h"
+#include "algorithm.h"
 
 //==================================================================================================
 
