@@ -9,7 +9,7 @@ class renderable
 {
 public:
     virtual ~renderable() {}
-    virtual void render(render_texture_t *wnd) const = 0;
+    virtual void render(render_texture_t &wnd) const = 0;
 };
 
 #endif // RANDERABLE_H

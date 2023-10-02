@@ -7,6 +7,8 @@
 
 enum KEY_TYPE
 {
+    KEY_TYPE_UNKNOWN = -1,
+
     A,
     B,
     C,
@@ -43,15 +45,22 @@ enum KEY_TYPE
     Num7,
     Num8,
     Num9,
+    Escape,
+
+    KEY_TYPE_COUNT
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 enum MOUSE_BUTTON_TYPE
 {
+    MOUSE_BUTTON_TYPE_UNKNOWN = -1,
+
     Left,
     Right,
     Middle,
+
+    MOUSE_BUTTON_TYPE_COUNT
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -64,6 +73,9 @@ public:
         WIDGET_OPENED,
         WIDGET_CLOSED,
     };
+
+    static KEY_TYPE          convert_key      (const sf::Keyboard::Key sfml_key);
+    static MOUSE_BUTTON_TYPE convert_mouse_btn(const sf::Mouse::Button sfml_mouse_btn);
 
     inline widget_t();
     inline WIDGET_STATUS_TYPE get_status();

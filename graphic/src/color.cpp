@@ -15,7 +15,7 @@ const color_t color_t::Orange = color_t(1, 0.55, 0);
 
 sf::Color color_t::get_sfml_color() const
 {
-    return sf::Color((sf::Uint8) (dblcmp(r, 1) > 0) ? 255 : 255 * r,
-                     (sf::Uint8) (dblcmp(g, 1) > 0) ? 255 : 255 * g,
-                     (sf::Uint8) (dblcmp(b, 1) > 0) ? 255 : 255 * b);
+    return sf::Color((sf::Uint8) ((dblcmp(r, 1) > 0) ? 255 : 255 * r),
+                     (sf::Uint8) ((dblcmp(g, 1) > 0) ? 255 : 255 * g),
+                     (sf::Uint8) ((dblcmp(b, 1) > 0) ? 255 : 255 * b));
 }

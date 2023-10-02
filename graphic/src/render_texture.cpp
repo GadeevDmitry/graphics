@@ -52,8 +52,8 @@ void render_texture_t::draw_vec2d(const segment_t &abs, const color_t &col)
 
 void render_texture_t::draw_line(const segment_t &abs, const color_t &col)
 {
-    sf::Vertex line[] = {sf::Vertex(sf::Vector2f(abs.endpoint_1.x, abs.endpoint_1.y), col.get_sfml_color()),
-                         sf::Vertex(sf::Vector2f(abs.endpoint_2.x, abs.endpoint_2.y), col.get_sfml_color())};
+    sf::Vertex line[] = {sf::Vertex(sf::Vector2f((float) abs.endpoint_1.x, (float) abs.endpoint_1.y), col.get_sfml_color()),
+                         sf::Vertex(sf::Vector2f((float) abs.endpoint_2.x, (float) abs.endpoint_2.y), col.get_sfml_color())};
 
     data.draw(line, 2, sf::Lines);
 }
@@ -75,7 +75,7 @@ void render_texture_t::draw_point(const vec2d &abs, const color_t &col)
 
     point.setRadius   (POINT_RADIUS);
     point.setFillColor(col.get_sfml_color());
-    point.setPosition (abs.x - POINT_RADIUS, abs.y - POINT_RADIUS);
+    point.setPosition ((float) (abs.x - POINT_RADIUS), (float) (abs.y - POINT_RADIUS));
 
     data.draw(point);
 }
@@ -85,11 +85,11 @@ void render_texture_t::draw_point(const vec2d &abs, const color_t &col)
 void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col)
 {
     sf::Color sfml_outline_col = outline_col.get_sfml_color();
-    sf::Vertex lines[] = {sf::Vertex(sf::Vector2f(abs.ld_corner.x, abs.ld_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f(abs.ru_corner.x, abs.ld_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f(abs.ru_corner.x, abs.ru_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f(abs.ld_corner.x, abs.ru_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f(abs.ld_corner.x, abs.ld_corner.y), sfml_outline_col)};
+    sf::Vertex lines[] = {sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ld_corner.y), sfml_outline_col),
+                          sf::Vertex(sf::Vector2f((float) abs.ru_corner.x, (float) abs.ld_corner.y), sfml_outline_col),
+                          sf::Vertex(sf::Vector2f((float) abs.ru_corner.x, (float) abs.ru_corner.y), sfml_outline_col),
+                          sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ru_corner.y), sfml_outline_col),
+                          sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ld_corner.y), sfml_outline_col)};
 
     data.draw(lines, 5, sf::LineStrip);
 }
@@ -99,9 +99,9 @@ void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color
 void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col)
 {
     vec2d size = abs.ru_corner - abs.ld_corner;
-    sf::RectangleShape rect(sf::Vector2f(size.x, size.y));
+    sf::RectangleShape rect(sf::Vector2f((float) size.x, (float) size.y));
 
-    rect.setPosition    (abs.ld_corner.x, abs.ld_corner.y);
+    rect.setPosition    ((float) abs.ld_corner.x, (float) abs.ld_corner.y);
     rect.setOutlineColor(outline_col.get_sfml_color());
     rect.setFillColor   (   fill_col.get_sfml_color());
 
@@ -112,9 +112,9 @@ void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color
 
 void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col)
 {
-    sf::CircleShape circle(abs.radius);
+    sf::CircleShape circle((float) abs.radius);
 
-    circle.setPosition    (abs.center.x - abs.radius, abs.center.y - abs.radius);
+    circle.setPosition    ((float) (abs.center.x - abs.radius), (float) (abs.center.y - abs.radius));
     circle.setOutlineColor(outline_col.get_sfml_color());
     circle.setFillColor   (   fill_col.get_sfml_color());
 

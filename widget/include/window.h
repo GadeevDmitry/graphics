@@ -13,7 +13,8 @@ protected:
     rectangle_t area;
     list        sub_widgets;
 
-    inline bool is_mouse_inside(const vec2d &pos);
+    inline bool is_mouse_inside   (const vec2d &pos);
+    void        render_sub_widgets(render_texture_t &wnd) const;
 
 public:
     inline          window_t();
@@ -115,9 +116,9 @@ public:
     inline          texture_window_t();
     inline explicit texture_window_t(const rectangle_t &area_, const char *filename_);
     inline explicit texture_window_t(const rectangle_t &area_, const unsigned width_, const unsigned height_);
-    inline         ~texture_window_t();
+    inline         ~texture_window_t() {}
 
-    virtual void render(render_texture_t *wnd) const override;
+    virtual void render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -141,6 +142,32 @@ window_t(area_),
 texture (width_, height_)
 {}
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class color_window_t: public window_t
+{
+public:
+    color_t color;
+
+    inline          color_window_t();
+    inline explicit color_window_t(const rectangle_t &area_, const color_t &color_);
+    inline         ~color_window_t() {}
+
+    virtual void render(render_texture_t &wnd) const override;
+};
+
 //--------------------------------------------------------------------------------------------------
+
+inline color_window_t::color_window_t():
+window_t(),
+color   ()
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline color_window_t::color_window_t(const rectangle_t &area_, const color_t &color_):
+window_t(area_),
+color   (color_)
+{}
 
 #endif // WINDOW_H

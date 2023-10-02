@@ -18,7 +18,10 @@ public:
     inline explicit render_texture_t(const unsigned width_, const unsigned height_);
     inline         ~render_texture_t() {}
 
+    inline const sf::Texture &get_sfml_texture() const;
+
     inline bool create               (const unsigned width, const unsigned height);
+    inline void clear                ();
 
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size);
 
@@ -58,9 +61,23 @@ data()
 
 //--------------------------------------------------------------------------------------------------
 
+inline const sf::Texture &render_texture_t::get_sfml_texture() const
+{
+    return data.getTexture();
+}
+
+//--------------------------------------------------------------------------------------------------
+
 inline bool render_texture_t::create(const unsigned width, const unsigned height)
 {
     return data.create(width, height);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void render_texture_t::clear()
+{
+    data.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
