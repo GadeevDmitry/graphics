@@ -1,4 +1,5 @@
 build/
+SFML/
 examples/ideal_gas
 .cache/
 .clangd
