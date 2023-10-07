@@ -6,6 +6,9 @@ WIDGET_BILD_DIR ?= build/widget/
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
+ROOT_PREFIX = ../
+include $(ROOT_PREFIX)include_paths.d
+
 INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(WIDGET_INCLUDES) $(SFML_INCLUDES)
 
 #================================================================================================================================
@@ -18,9 +21,9 @@ $(WIDGET_BUILD_DIR)widget.o: $(WIDGET_PREFIX)src/widget.cpp | $(WIDGET_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(WIDGET_BUILD_DIR)widget.o
 
-$(WIDGET_BILD_DIR)window.o: $(WIDGET_PREFIX)src/window.cpp | $(WIDGET_BILD_DIR)
+$(WIDGET_BILD_DIR)widget_manager.o: $(WIDGET_PREFIX)src/widget_manager.cpp | $(WIDGET_BUILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(WIDGET_BILD_DIR)window.o
+all: $(WIDGET_BILD_DIR)widget_manager.o
 
 $(WIDGET_BILD_DIR):
 	mkdir -p $@

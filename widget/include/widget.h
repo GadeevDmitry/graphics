@@ -47,7 +47,7 @@ enum KEY_TYPE
     Num9,
     Escape,
 
-    KEY_TYPE_COUNT
+    KEY_TYPE_COUNT,
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -60,7 +60,7 @@ enum MOUSE_BUTTON_TYPE
     Right,
     Middle,
 
-    MOUSE_BUTTON_TYPE_COUNT
+    MOUSE_BUTTON_TYPE_COUNT,
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -68,32 +68,45 @@ enum MOUSE_BUTTON_TYPE
 class widget_t: public renderable
 {
 public:
+    struct mouse_context_t
+    {
+    public:
+        vec2d             pos;
+        MOUSE_BUTTON_TYPE btn;
+
+        explicit mouse_context_t(const sf::Mouse::Button &sfml_mouse_btn_,
+                                 const sf::Vector2i      &sfml_mouse_pos_);
+
+        inline ~mouse_context_t() {}
+    };
+
+protected:
     enum WIDGET_STATUS_TYPE
     {
         WIDGET_OPENED,
         WIDGET_CLOSED,
-    };
+    }
+    status;
 
-    static KEY_TYPE          convert_key      (const sf::Keyboard::Key sfml_key);
-    static MOUSE_BUTTON_TYPE convert_mouse_btn(const sf::Mouse::Button sfml_mouse_btn);
-
+public:
     inline widget_t();
-    inline WIDGET_STATUS_TYPE get_status();
 
-    virtual bool on_key_press  (const KEY_TYPE key) = 0;
-    virtual bool on_key_release(const KEY_TYPE key) = 0;
+    inline WIDGET_STATUS_TYPE get_status() const;
 
-    virtual bool on_mouse_press  (const vec2d &pos, const MOUSE_BUTTON_TYPE btn) = 0;
-    virtual bool on_mouse_release(const vec2d &pos, const MOUSE_BUTTON_TYPE btn) = 0;
+    static KEY_TYPE key_t(const sf::Keyboard::Key &sfml_key);
+
+    virtual bool on_key_press  (const KEY_TYPE &key) = 0;
+    virtual bool on_key_release(const KEY_TYPE &key) = 0;
+
+    virtual bool on_mouse_press  (const mouse_context_t &context) = 0;
+    virtual bool on_mouse_release(const mouse_context_t &context) = 0;
 
 protected:
-    typedef bool (widget_t::*  key_event) (const KEY_TYPE key);
-    typedef bool (widget_t::*mouse_event) (const vec2d &pos, const MOUSE_BUTTON_TYPE btn);
+
+    typedef bool (widget_t::*on_key_event)   (const KEY_TYPE &key);
+    typedef bool (widget_t::*on_mouse_event) (const mouse_context_t &context);
 
     inline static void widget_delete(void *const widget_);
-
-private:
-    WIDGET_STATUS_TYPE status;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -104,17 +117,17 @@ status(WIDGET_OPENED)
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::WIDGET_STATUS_TYPE widget_t::get_status()
-{
-    return status;
-}
-
-//--------------------------------------------------------------------------------------------------
-
 inline void widget_t::widget_delete(void *const widget_)
 {
     widget_t *widget = *(widget_t **) widget_;
     delete    widget;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline widget_t::WIDGET_STATUS_TYPE widget_t::get_status() const
+{
+    return status;
 }
 
 #endif // WIDGET_H
