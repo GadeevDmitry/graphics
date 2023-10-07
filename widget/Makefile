@@ -6,9 +6,6 @@ WIDGET_BILD_DIR ?= build/widget/
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-ROOT_PREFIX = ../
-include $(ROOT_PREFIX)include_paths.d
-
 INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(WIDGET_INCLUDES) $(SFML_INCLUDES)
 
 #================================================================================================================================

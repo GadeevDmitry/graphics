@@ -48,26 +48,22 @@ void run(sf::RenderWindow &sfml_wnd, color_window_t &col_wnd, render_texture_t &
                     if (event.key.code == sf::Keyboard::Escape)
                         sfml_wnd.close();
                     else
-                        col_wnd.on_key_press(widget_t::convert_key(event.key.code));
+                        col_wnd.on_key_press(widget_t::key_t(event.key.code));
                     break;
                 }
                 case sf::Event::KeyReleased:
                 {
-                    col_wnd.on_key_release(widget_t::convert_key(event.key.code));
+                    col_wnd.on_key_release(widget_t::key_t(event.key.code));
                     break;
                 }
                 case sf::Event::MouseButtonPressed:
                 {
-                    MOUSE_BUTTON_TYPE btn = widget_t::convert_mouse_btn(event.mouseButton.button);
-                    vec2d             pos((double) event.mouseButton.x, (double) event.mouseButton.y);
-                    col_wnd.on_mouse_press(pos, btn);
+                    col_wnd.on_mouse_press(widget_t::mouse_context_t(event.mouseButton.button, sf::Mouse::getPosition()));
                     break;
                 }
                 case sf::Event::MouseButtonReleased:
                 {
-                    MOUSE_BUTTON_TYPE btn = widget_t::convert_mouse_btn(event.mouseButton.button);
-                    vec2d             pos((double) event.mouseButton.x, (double) event.mouseButton.y);
-                    col_wnd.on_mouse_release(pos, btn);
+                    col_wnd.on_mouse_release(widget_t::mouse_context_t(event.mouseButton.button, sf::Mouse::getPosition()));
                     break;
                 }
 
@@ -104,4 +100,3 @@ void init(const sf::RenderWindow &sfml_wnd, color_window_t &col_wnd, render_text
 
     rend_texture.create((unsigned) sfml_wnd_size.x, (unsigned) sfml_wnd_size.y);
 }
-
