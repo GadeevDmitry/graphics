@@ -16,11 +16,16 @@ public:
     inline explicit rectangle_t(const vec2d &ld_corner_, const double width_, const double height_);
     inline         ~rectangle_t() {}
 
+    bool is_valid() const;
+
     inline rectangle_t  operator + (const vec2d &add) const;
     inline rectangle_t  operator - (const vec2d &sub) const;
 
     inline rectangle_t &operator +=(const vec2d &add);
     inline rectangle_t &operator -=(const vec2d &sub);
+
+    inline vec2d lu_corner() const;
+    inline vec2d rd_corner() const;
 
     inline bool  is_point_inside(const vec2d &pos) const;
     inline vec2d get_size       () const;
@@ -73,6 +78,20 @@ inline rectangle_t &rectangle_t::operator +=(const vec2d &add)
 inline rectangle_t &rectangle_t::operator -=(const vec2d &sub)
 {
     return *this = (*this) - sub;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d rectangle_t::lu_corner() const
+{
+    return vec2d(ld_corner.x, ru_corner.y);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d rectangle_t::rd_corner() const
+{
+    return vec2d(ru_corner.x, ld_corner.y);
 }
 
 //--------------------------------------------------------------------------------------------------

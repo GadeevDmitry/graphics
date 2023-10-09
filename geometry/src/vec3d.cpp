@@ -3,6 +3,19 @@
 
 //==================================================================================================
 
+bool vec3d::is_valid() const
+{
+    bool is_valid = true;
+
+    is_valid = (isfinite(x) == 0) ? false : is_valid;
+    is_valid = (isfinite(y) == 0) ? false : is_valid;
+    is_valid = (isfinite(z) == 0) ? false : is_valid;
+
+    return is_valid;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 vec3d vec3d::get_reflection(const vec3d &norm) const
 {
     vec3d norm_ = norm.get_normalization();

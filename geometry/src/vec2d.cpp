@@ -1,7 +1,20 @@
+#include <iostream>
 #include <stdio.h>
 #include "vec2d.h"
 
 //==================================================================================================
+
+bool vec2d::is_valid() const
+{
+    bool is_valid = true;
+
+    is_valid = (isfinite(x) == 0) ? false : is_valid;
+    is_valid = (isfinite(y) == 0) ? false : is_valid;
+
+    return is_valid;
+}
+
+//--------------------------------------------------------------------------------------------------
 
 vec2d vec2d::get_rotation(const double degree) const
 {
@@ -28,4 +41,20 @@ vec2d vec2d::get_reflection(const vec2d &norm) const
     reflected.normalize(len_);
 
     return reflected;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+vec2d vec2d::min(const vec2d &op_1, const vec2d &op_2)
+{
+    return vec2d(std::min(op_1.x, op_2.x),
+                 std::min(op_1.y, op_2.y));
+}
+
+//--------------------------------------------------------------------------------------------------
+
+vec2d vec2d::max(const vec2d &op_1, const vec2d &op_2)
+{
+    return vec2d(std::max(op_1.x, op_2.x),
+                 std::max(op_1.y, op_2.y));
 }

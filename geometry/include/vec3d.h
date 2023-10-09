@@ -17,6 +17,8 @@ public:
     inline explicit vec3d(const double x_, const double y_, const double z_);
     inline         ~vec3d();
 
+    bool is_valid() const;
+
     inline vec3d  operator + (const vec3d &add) const;
     inline vec3d  operator - (const vec3d &sub) const;
     inline vec3d  operator * (const double mul) const;

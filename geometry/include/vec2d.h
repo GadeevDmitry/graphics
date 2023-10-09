@@ -16,6 +16,8 @@ public:
     inline explicit vec2d(const double x_, const double y_);
     inline         ~vec2d();
 
+    bool is_valid() const;
+
     inline vec2d  operator + (const vec2d &add) const;
     inline vec2d  operator - (const vec2d &sub) const;
     inline vec2d  operator * (const double mul) const;
@@ -48,6 +50,9 @@ public:
     inline vec2d &reflect       (const vec2d &norm);
 
     friend inline vec2d operator *(const double mul, const vec2d &vec);
+
+    static vec2d min(const vec2d &op_1, const vec2d &op_2);
+    static vec2d max(const vec2d &op_1, const vec2d &op_2);
 };
 
 //--------------------------------------------------------------------------------------------------
