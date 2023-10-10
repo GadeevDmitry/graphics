@@ -8,7 +8,7 @@
 
 class renderable
 {
-public:
+protected:
     clipping_region_t visible;
 
 public:

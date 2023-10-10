@@ -8,19 +8,20 @@
 class window_t: public widget_manager_t
 {
 protected:
-    rectangle_t area;
+    rectangle_t region;
 
 public:
     inline          window_t();
-    inline explicit window_t(const rectangle_t &area_);
+    inline explicit window_t(const rectangle_t &region_);
 
-    inline void set_area(const rectangle_t &area_);
+    inline bool set_region(const rectangle_t &reginon_);
 
     virtual inline bool on_key_press  (const KEY_TYPE &key) override;
     virtual inline bool on_key_release(const KEY_TYPE &key) override;
 
     virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
     virtual inline bool on_mouse_release(const mouse_context_t &context) override;
+    virtual inline bool on_mouse_move   (const mouse_context_t &context) override;
 
     inline static void window_delete(void *const window_);
 };
@@ -29,22 +30,22 @@ public:
 
 inline window_t::window_t():
 widget_manager_t(nullptr),
-area()
+region()
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline window_t::window_t(const rectangle_t &area_):
-widget_manager_t(nullptr, area_),
-area            (area_)
+inline window_t::window_t(const rectangle_t &region_):
+widget_manager_t(nullptr, region_),
+region          (region_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline void window_t::set_area(const rectangle_t &area_)
+inline bool window_t::set_region(const rectangle_t &region_)
 {
-    area = area_;
-    set_area(area_);
+    region = region_;
+    return visible.set_region(region_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,6 +57,7 @@ inline bool window_t::on_key_release(const KEY_TYPE &key) { return false; }
 
 inline bool window_t::on_mouse_press  (const mouse_context_t &context) { return false; }
 inline bool window_t::on_mouse_release(const mouse_context_t &context) { return false; }
+inline bool window_t::on_mouse_move   (const mouse_context_t &context) { return false; }
 
 //--------------------------------------------------------------------------------------------------
 
@@ -73,7 +75,7 @@ public:
     color_t color;
 
     inline          color_window_t();
-    inline explicit color_window_t(const rectangle_t &area_, const color_t &color_);
+    inline explicit color_window_t(const rectangle_t &region_, const color_t &color_);
     inline         ~color_window_t() {}
 
     virtual inline void render(render_texture_t &wnd) const override;
@@ -87,16 +89,16 @@ color()
 
 //--------------------------------------------------------------------------------------------------
 
-inline color_window_t::color_window_t(const rectangle_t &area_, const color_t &color_):
-window_t(area_),
+inline color_window_t::color_window_t(const rectangle_t &region_, const color_t &color_):
+window_t(region_),
 color   (color_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-void color_window_t::render(render_texture_t &wnd) const
+inline void color_window_t::render(render_texture_t &wnd) const
 {
-    wnd.draw_filled_rectangle(area, color);
+    wnd.draw_filled_rectangle(region, color);
     widgets_render(wnd);
 }
 

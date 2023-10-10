@@ -74,19 +74,27 @@ public:
         vec2d             pos;
         MOUSE_BUTTON_TYPE btn;
 
-        explicit mouse_context_t(const sf::Mouse::Button &sfml_mouse_btn_,
-                                 const sf::Vector2i      &sfml_mouse_pos_);
-
-        inline ~mouse_context_t() {}
+                 mouse_context_t();
+        explicit mouse_context_t(const vec2d &pos_, const MOUSE_BUTTON_TYPE &btn_);
+        inline  ~mouse_context_t() {}
     };
 
-protected:
     enum WIDGET_STATUS_TYPE
     {
         WIDGET_OPENED,
         WIDGET_CLOSED,
-    }
-    status;
+    };
+
+protected:
+    typedef bool (widget_t::*on_key_event)   (const KEY_TYPE &key);
+    typedef bool (widget_t::*on_mouse_event) (const mouse_context_t &context);
+
+private:
+    static mouse_context_t saved_mouse_context;
+    static KEY_TYPE        saved_key;
+
+protected:
+    WIDGET_STATUS_TYPE status;
 
 public:
     inline          widget_t();
@@ -94,20 +102,18 @@ public:
 
     inline WIDGET_STATUS_TYPE get_status() const;
 
-    static KEY_TYPE key_t(const sf::Keyboard::Key &sfml_key);
-
     virtual bool on_key_press  (const KEY_TYPE &key) = 0;
     virtual bool on_key_release(const KEY_TYPE &key) = 0;
 
     virtual bool on_mouse_press  (const mouse_context_t &context) = 0;
     virtual bool on_mouse_release(const mouse_context_t &context) = 0;
-
-protected:
-
-    typedef bool (widget_t::*on_key_event)   (const KEY_TYPE &key);
-    typedef bool (widget_t::*on_mouse_event) (const mouse_context_t &context);
+    virtual bool on_mouse_move   (const mouse_context_t &context) = 0;
 
     inline static void widget_delete(void *const widget_);
+
+    static void refresh_key      (const sf::Keyboard::Key &sfml_key);
+    static void refresh_mouse_btn(const sf::Mouse::Button &sfml_mouse_bnt);
+    static void refresh_mouse_pos(const sf::Vector2i      &sfml_mouse_pos);
 };
 
 //--------------------------------------------------------------------------------------------------

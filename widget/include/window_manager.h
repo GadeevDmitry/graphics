@@ -12,6 +12,7 @@ public:
     inline          window_manager_t(void (*delete_window)(void *el));
     inline explicit window_manager_t(void (*delete_window)(void *el), const rectangle_t &region_);
 
+    inline bool set_region     (const rectangle_t &region);
     inline bool register_window(window_t *window);
 
     virtual inline bool on_key_press  (const KEY_TYPE &key) override;
@@ -34,6 +35,13 @@ widget_manager_t(delete_window)
 inline window_manager_t::window_manager_t(void (*delete_window) (void *el), const rectangle_t &region_):
 widget_manager_t(delete_window, region_)
 {}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool window_manager_t::set_region(const rectangle_t &region)
+{
+    return visible.set_region(region);
+}
 
 //--------------------------------------------------------------------------------------------------
 

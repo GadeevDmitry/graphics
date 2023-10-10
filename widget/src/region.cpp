@@ -108,6 +108,42 @@ clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t 
 
 //--------------------------------------------------------------------------------------------------
 
+clipping_region_t &operator -=(clipping_region_t &op_1, const rectangle_t &op_2)
+{
+    if (op_1.areas.size == 0) return op_1;
+
+    list res = {};
+    list_ctor(&res, sizeof(rectangle_t), nullptr);
+    subtract_region_area(&res, &op_1.areas, &op_2);
+
+    op_1.set_areas(&res);
+    list_dtor     (&res);
+
+    return op_1;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+clipping_region_t &operator *=(clipping_region_t &op_1, const rectangle_t &op_2)
+{
+    if (op_1.areas.size == 0) return op_1;
+
+    size_t initial_op_1_size = op_1.areas.size;
+    for (size_t i = 0; i < initial_op_1_size; ++i)
+    {
+        rectangle_t op_1_area = *(rectangle_t *) list_front(&op_1.areas);
+
+        if (intersect_area_area(op_1_area, op_2))
+            list_push_back(&op_1.areas, &op_1_area);
+
+        list_pop_front(&op_1.areas);
+    }
+
+    return op_1;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void clipping_region_t::render(render_texture_t &wnd, const vec2d &offset) const
 {
     rectangle_t *front = (rectangle_t *) list_front(&areas);

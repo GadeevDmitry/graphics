@@ -28,6 +28,7 @@ protected:
 
     inline bool on_widgets_mouse_press  (const mouse_context_t &context);
     inline bool on_widgets_mouse_release(const mouse_context_t &context);
+    inline bool on_widgets_mouse_move   (const mouse_context_t &context);
 
     void widgets_render(render_texture_t &render_texture) const;
 };
@@ -87,6 +88,13 @@ inline bool widget_manager_t::on_widgets_mouse_press(const mouse_context_t &cont
 inline bool widget_manager_t::on_widgets_mouse_release(const mouse_context_t &context)
 {
     return on_widgets_mouse_event(&widget_t::on_mouse_release, context);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_widgets_mouse_move(const mouse_context_t &context)
+{
+    return on_widgets_mouse_event(&widget_t::on_mouse_move, context);
 }
 
 #endif // WIDGET_MANAGER_H
