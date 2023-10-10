@@ -92,7 +92,7 @@ void color_window_t::render(render_texture_t &wnd) const
     reg.push_area(rect);
 
     wnd.draw_filled_rectangle(rect, color);
-    wnd.draw_filled_circle(circle_t(vec2d(200, 200), 50), color_t(255, 255, 255), reg);
+    wnd.draw_filled_circle(circle_t(vec2d(200, 200), 50), color_t(0, 255, 255), color_t(255, 0, 0), reg);
     widgets_render(wnd);
 }
 

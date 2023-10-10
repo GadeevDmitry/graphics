@@ -37,13 +37,7 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
     {
         rectangle_t test_rect = tex_rect;
 
-        std::cout << "Test #1 " << test_rect.ld_corner.x << ' ' << test_rect.ld_corner.y << ' ' << test_rect.ru_corner.x << ' ' << test_rect.ru_corner.y <<  '\n';
-        std::cout << "Test #2 " << cur->ld_corner.x << ' ' << cur->ld_corner.y << ' ' <<  cur->ru_corner.x << ' ' << cur->ru_corner.y <<  '\n';
-
         if (intersect_rectangle_rectangle(test_rect, *cur)) {
-            std::cout << "Test\n";
-
-            std::cout << "Test #3 " << test_rect.ld_corner.x << ' ' << test_rect.ld_corner.y << ' ' << test_rect.ru_corner.x << ' ' << test_rect.ru_corner.y <<  '\n';
 
             sf::Sprite spr(texture.data);
             spr.setPosition((float) pos.x + size.x / 2, (float) pos.y + size.y / 2);
@@ -283,12 +277,9 @@ void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &ou
     vec2d circle_pos = vec2d(abs.center.x - abs.radius, abs.center.y - abs.radius);
     vec2d txt_size   = vec2d(data.getSize().x, data.getSize().y);
 
-    std::cout << circle_pos.x << ' ' << circle_pos.y << '\n';
-
     sfml_text.setPosition    (circle_pos.x, circle_pos.y);
-    sfml_text.setFillColor   (fill_col   .get_sfml_color());
+    sfml_text.setFillColor   (fill_col.get_sfml_color());
     sfml_text.setOutlineColor(outline_col.get_sfml_color());
-
 
     sf::RenderTexture tmp_render_texture;
     tmp_render_texture.create (txt_size.x, txt_size.y);
@@ -297,7 +288,7 @@ void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &ou
 
     texture_t circle_texture = texture_t(tmp_render_texture.getTexture());
 
-    draw_texture(circle_texture, vec2d(0, 0), txt_size, reg);
+    draw_texture(circle_texture, circle_pos, vec2d(abs.radius * 2, abs.radius * 2), reg);
 }
 
 //--------------------------------------------------------------------------------------------------
