@@ -37,6 +37,8 @@ public:
     inline color_t &operator *=(const double   mul);
 
     friend inline color_t operator *(const double mul, const color_t &col);
+
+    static color_t get_rand_color();
 };
 
 //--------------------------------------------------------------------------------------------------

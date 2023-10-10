@@ -9,8 +9,8 @@
 class window_manager_t: public widget_manager_t
 {
 public:
-    inline          window_manager_t();
-    inline explicit window_manager_t(const rectangle_t &region_);
+    inline          window_manager_t(void (*delete_window)(void *el));
+    inline explicit window_manager_t(void (*delete_window)(void *el), const rectangle_t &region_);
 
     inline bool register_window(window_t *window);
 
@@ -25,14 +25,14 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline window_manager_t::window_manager_t():
-widget_manager_t()
+inline window_manager_t::window_manager_t(void (*delete_window) (void *el)):
+widget_manager_t(delete_window)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline window_manager_t::window_manager_t(const rectangle_t &region_):
-widget_manager_t(region_)
+inline window_manager_t::window_manager_t(void (*delete_window) (void *el), const rectangle_t &region_):
+widget_manager_t(delete_window, region_)
 {}
 
 //--------------------------------------------------------------------------------------------------

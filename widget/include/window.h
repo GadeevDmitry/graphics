@@ -21,18 +21,21 @@ public:
 
     virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
     virtual inline bool on_mouse_release(const mouse_context_t &context) override;
+
+    inline static void window_delete(void *const window_);
 };
 
 //--------------------------------------------------------------------------------------------------
 
 inline window_t::window_t():
+widget_manager_t(nullptr),
 area()
 {}
 
 //--------------------------------------------------------------------------------------------------
 
 inline window_t::window_t(const rectangle_t &area_):
-widget_manager_t(area_),
+widget_manager_t(nullptr, area_),
 area            (area_)
 {}
 
@@ -41,6 +44,7 @@ area            (area_)
 inline void window_t::set_area(const rectangle_t &area_)
 {
     area = area_;
+    set_area(area_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,6 +56,14 @@ inline bool window_t::on_key_release(const KEY_TYPE &key) { return false; }
 
 inline bool window_t::on_mouse_press  (const mouse_context_t &context) { return false; }
 inline bool window_t::on_mouse_release(const mouse_context_t &context) { return false; }
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_t::window_delete(void *const window_)
+{
+    window_t *window = *(window_t **) window_;
+    delete    window;
+}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

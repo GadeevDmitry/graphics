@@ -19,3 +19,14 @@ sf::Color color_t::get_sfml_color() const
                      (sf::Uint8) ((dblcmp(g, 1) > 0) ? 255 : 255 * g),
                      (sf::Uint8) ((dblcmp(b, 1) > 0) ? 255 : 255 * b));
 }
+
+//--------------------------------------------------------------------------------------------------
+
+color_t color_t::get_rand_color()
+{
+    double r = (double) (abs(rand()) % 255) / 255.0;
+    double g = (double) (abs(rand()) % 255) / 255.0;
+    double b = (double) (abs(rand()) % 255) / 255.0;
+
+    return color_t(r, g, b);
+}

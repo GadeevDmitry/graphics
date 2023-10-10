@@ -108,6 +108,20 @@ clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t 
 
 //--------------------------------------------------------------------------------------------------
 
+void clipping_region_t::render(render_texture_t &wnd, const vec2d &offset) const
+{
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        wnd.draw_hollow_rectangle(*cur + offset, color_t::get_rand_color());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
 static void intersect_region_region(list *const op_1, const list *const op_2)
 {
     if (op_2->size == 0)

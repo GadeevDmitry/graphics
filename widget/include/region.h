@@ -3,6 +3,7 @@
 
 #include "list.h"
 #include "rectangle.h"
+#include "render_texture.h"
 
 //==================================================================================================
 
@@ -21,8 +22,10 @@ public:
            void set_areas (const list *const  areas_);
     inline bool push_area (const rectangle_t &area);
 
-    inline void clear();
-    inline void reset();
+    inline void clear ();
+    inline void reset ();
+
+    void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const;
 
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2);
     friend clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2);
