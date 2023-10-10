@@ -27,6 +27,10 @@ public:
 
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size);
 
+    // reg func
+    void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size, const clipping_region_t &reg);
+    //
+
     void        draw_coord_sys       (const coord_system &sys, const rectangle_t &area, const color_t &col);
 
     inline void draw_vec2d           (const segment_t    &rel, const coord_system &sys, const color_t &col);
@@ -39,21 +43,30 @@ public:
     void        draw_segment         (const segment_t    &abs, const color_t &col);
     void        draw_point           (const vec2d        &abs, const color_t &col);
 
+    // reg funcs
     void        draw_vec2d           (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
     void        draw_line            (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
     void        draw_segment         (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
     void        draw_point           (const vec2d        &abs, const color_t &col, const clipping_region_t &reg);
+    //
 
     void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col);
     void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col);
     inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &   fill_col);
 
+    // reg funcs
     void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col,                          const clipping_region_t &reg);
     void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
     inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &fill_col,                             const clipping_region_t &reg);
+    //
 
     void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col);
     inline void draw_filled_circle   (const circle_t     &abs, const color_t &   fill_col);
+
+    // reg funcs
+    void draw_filled_circle (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
+    void draw_filled_circle (const circle_t     &abs, const color_t &   fill_col, const clipping_region_t &reg);
+    //
 };
 
 //==================================================================================================
