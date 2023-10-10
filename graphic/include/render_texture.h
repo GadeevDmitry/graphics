@@ -2,8 +2,9 @@
 #define RENDER_TARGET_H
 
 #include "color.h"
-#include "region.h"
+#include "../../widget/include/region.h"
 #include "texture.h"
+#include "intersect.h"
 #include "shape_types.h"
 #include <SFML/Graphics.hpp>
 
@@ -46,6 +47,10 @@ public:
     void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col);
     void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col);
     inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &   fill_col);
+
+    void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col,                          const clipping_region_t &reg);
+    void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
+    inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &fill_col,                             const clipping_region_t &reg);
 
     void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col);
     inline void draw_filled_circle   (const circle_t     &abs, const color_t &   fill_col);

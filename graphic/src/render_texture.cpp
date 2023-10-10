@@ -146,6 +146,66 @@ void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color
 
 //--------------------------------------------------------------------------------------------------
 
+void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col, const clipping_region_t &reg) {
+    list regions = reg.getAreas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&regions);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        if (cur) {
+            rectangle_t draw_zone = abs;
+            if (intersect_rectangle_rectangle(draw_zone, *cur)) {
+                draw_hollow_rectangle(draw_zone, outline_col);
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg) {
+    list regions = reg.getAreas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&regions);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        if (cur) {
+            rectangle_t draw_zone = abs;
+            if (intersect_rectangle_rectangle(draw_zone, *cur)) {
+                draw_filled_rectangle(draw_zone, outline_col, fill_col);
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg) {
+    list regions = reg.getAreas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&regions);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        if (cur) {
+            rectangle_t draw_zone = abs;
+            if (intersect_rectangle_rectangle(draw_zone, *cur)) {
+                draw_filled_rectangle(draw_zone, fill_col);
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col)
 {
     sf::CircleShape circle((float) abs.radius);
