@@ -13,8 +13,6 @@ void widget_manager_t::on_widget_event_reaction(widget_t **widget_, const size_t
         list_erase(&widgets, widget_pos);
     else
         list_replace(&widgets, widget_, widget_pos, 0);
-
-    return;
 }
 
 //--------------------------------------------------------------------------------------------------

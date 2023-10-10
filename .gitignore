@@ -1,5 +1,6 @@
 build/
 SFML/
+unit_tests/
 examples/ideal_gas
 .cache/
 .clangd

@@ -21,9 +21,10 @@ public:
            void set_areas (const list *const  areas_);
     inline bool push_area (const rectangle_t &area);
 
-
     friend clipping_region_t &operator -= (      clipping_region_t &op_1,
                                            const clipping_region_t &op_2);
+
+    static void dump(const void *clipping_region_);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -31,7 +32,7 @@ public:
 inline clipping_region_t::clipping_region_t():
 region()
 {
-    list_ctor(&areas, sizeof(rectangle_t));
+    list_ctor(&areas, sizeof(rectangle_t), nullptr, rectangle_t::dump);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -39,7 +40,7 @@ region()
 inline clipping_region_t::clipping_region_t(const rectangle_t &region_):
 region(region_)
 {
-    list_ctor(&areas, sizeof(rectangle_t));
+    list_ctor(&areas, sizeof(rectangle_t), nullptr, rectangle_t::dump);
     list_push_front(&areas, &region_);
 }
 

@@ -58,12 +58,9 @@ endif
 $(BUILD_DIR):
 	mkdir -p $@
 
+.PHONY: compilation_database
 compilation_database:
-ifeq ($(base), debug)
-	bear -- $(MAKE) debug -k
-else
-	bear -- $(MAKE) release -k
-endif
+	bear -- $(MAKE) -k
 
 .PHONY: clean
 clean:

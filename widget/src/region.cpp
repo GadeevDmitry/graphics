@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "region.h"
 #include "intersect.h"
+#include "log.h"
 
 //==================================================================================================
 
@@ -11,6 +12,22 @@ static void intersect_region_region(list *const  op_1, const list *const  op_2);
 static bool intersect_area_area    (rectangle_t &op_1, const rectangle_t &op_2);
 
 //==================================================================================================
+
+void clipping_region_t::dump(const void *clipping_region_)
+{
+    const clipping_region_t *clipping_region = (const clipping_region_t *) clipping_region_;
+
+    LOG_TAB_SERVICE_MESSAGE("clipping_region_t (address: %p)\n{", "\n", clipping_region);
+    LOG_TAB++;
+
+    rectangle_t::dump(&clipping_region->region);
+    list_dump        (&clipping_region->areas);
+
+    LOG_TAB--;
+    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+}
+
+//--------------------------------------------------------------------------------------------------
 
 void clipping_region_t::set_areas(const list *const areas_)
 {
@@ -35,7 +52,7 @@ clipping_region_t &operator -=(      clipping_region_t &op_1,
     if (op_2.areas.size == 0) return op_1;
 
     list res = {};
-    list_ctor(&res, sizeof(rectangle_t));
+    list_ctor(&res, sizeof(rectangle_t), nullptr, rectangle_t::dump);
 
     rectangle_t *op_2_front = (rectangle_t *) list_front(&op_2.areas);
     rectangle_t *op_2_fict  = (rectangle_t *) list_fict (&op_2.areas);
@@ -49,15 +66,21 @@ clipping_region_t &operator -=(      clipping_region_t &op_1,
     }
 
     list temp = {};
-    list_ctor(&temp, sizeof(rectangle_t));
+    list_ctor(&temp, sizeof(rectangle_t), nullptr, rectangle_t::dump);
 
     rectangle_t *op_2_cur = (rectangle_t *) list_next(op_2_front);
     for (; op_2_cur != op_2_fict; op_2_cur = (rectangle_t *) list_next(op_2_cur))
     {
         subtract_region_area(&temp, &op_1.areas, op_2_cur);
-        intersect_region_region(&res, &temp);
-        list_clear(&temp);
+//      LOG_TAB_MESSAGE("RES & TEMP BEFORE MERGING\n");
+//      list_dump(&res);
+//      list_dump(&temp);
 
+        intersect_region_region(&res, &temp);
+//      LOG_TAB_MESSAGE("RES AFTER MERGING\n");
+//      list_dump(&res);
+
+        list_clear(&temp);
         if (res.size == 0) break;
     }
 
@@ -79,25 +102,45 @@ static void intersect_region_region(list *const op_1, const list *const op_2)
         return;
     }
 
+//  LOG_TAB_MESSAGE(">>>>>>>>>>>>>>>>>>>>>>>>>\n"
+//                  "INTERSECTION\n"
+//                  ">>>>>>>>>>>>>>>>>>>>>>>>>\n");
+
     rectangle_t *op_2_front = (rectangle_t *) list_front(op_2);
     rectangle_t *op_2_fict  = (rectangle_t *) list_fict (op_2);
 
     size_t initial_op_1_size = op_1->size;
     for (size_t i = 0; i < initial_op_1_size; ++i)
     {
-        rectangle_t *op_1_area = (rectangle_t *) list_front(op_1);
-        bool     is_empty_area = false;
+        rectangle_t op_1_area = *(rectangle_t *) list_front(op_1);
 
         for (rectangle_t *op_2_area = op_2_front; op_2_area != op_2_fict;
              op_2_area = (rectangle_t *) list_next(op_2_area))
         {
-            is_empty_area = intersect_area_area(*op_1_area, *op_2_area);
-            if (is_empty_area) break;
+//          LOG_TAB_MESSAGE("op_1_area\n");
+//          rectangle_t::dump(&op_1_area);
+//          LOG_TAB_MESSAGE("op_2_area\n");
+//          rectangle_t::dump(op_2_area);
+
+            rectangle_t op_1_area_dup = op_1_area;
+
+            bool is_valid_area = intersect_area_area(op_1_area_dup, *op_2_area);
+            if (is_valid_area)
+                list_push_back(op_1, &op_1_area_dup);
+
+//          LOG_TAB_MESSAGE("intersect\n");
+//          if (is_valid_area)
+//              rectangle_t::dump(&op_1_area);
+//          else
+//              LOG_TAB_MESSAGE("invalid\n");
         }
 
         list_pop_front(op_1);
-        if (!is_empty_area) list_push_back(op_1, op_1_area);
     }
+
+//  LOG_TAB_MESSAGE("<<<<<<<<<<<<<<<<<<<<<<<<<\n"
+//                  "INTERSECTION\n"
+//                  "<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,15 +180,18 @@ static void subtract_area_area(list *const res, const rectangle_t &op_1, const r
         list_push_back(res, &sub_area);
     }
 
+    double l_bound = std::max(op_1.ld_corner.x, op_2.ld_corner.x);
+    double r_bound = std::min(op_1.ru_corner.x, op_2.ru_corner.x);
+
     if (op_1.ru_corner.y > op_2.ru_corner.y)
     {
-        rectangle_t sub_area(op_1.lu_corner(), vec2d(op_2.ru_corner.x, op_1.ru_corner.y));
+        rectangle_t sub_area(vec2d(l_bound, op_2.ru_corner.y), vec2d(r_bound, op_1.ru_corner.y));
         list_push_back(res, &sub_area);
     }
 
     if (op_1.ld_corner.y < op_2.ld_corner.y)
     {
-        rectangle_t sub_area(vec2d(op_2.ld_corner.x, op_1.ld_corner.y), op_2.rd_corner());
+        rectangle_t sub_area(vec2d(l_bound, op_1.ld_corner.y), vec2d(r_bound, op_2.ld_corner.y));
         list_push_back(res, &sub_area);
     }
 

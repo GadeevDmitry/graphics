@@ -22,5 +22,9 @@ $(WIDGET_BILD_DIR)widget_manager.o: $(WIDGET_PREFIX)src/widget_manager.cpp | $(W
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(WIDGET_BILD_DIR)widget_manager.o
 
+$(WIDGET_BUILD_DIR)region.o: $(WIDGET_PREFIX)src/region.cpp | $(WIDGET_BUILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(WIDGET_BUILD_DIR)region.o
+
 $(WIDGET_BILD_DIR):
 	mkdir -p $@

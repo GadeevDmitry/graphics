@@ -1,11 +1,11 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "widget.h"
+#include "widget_manager.h"
 
 //==================================================================================================
 
-class window_t: public widget_t
+class window_t: public widget_manager_t
 {
 protected:
     rectangle_t area;
@@ -26,15 +26,15 @@ public:
 //--------------------------------------------------------------------------------------------------
 
 inline window_t::window_t():
-widget_t(),
-area    ()
+widget_manager_t(),
+area            ()
 {}
 
 //--------------------------------------------------------------------------------------------------
 
 inline window_t::window_t(const rectangle_t &area_):
-widget_t(),
-area    (area_)
+widget_manager_t(),
+area       (area_)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -87,6 +87,7 @@ color   (color_)
 void color_window_t::render(render_texture_t &wnd) const
 {
     wnd.draw_filled_rectangle(area, color);
+    widgets_render(wnd);
 }
 
 #endif // WINDOW_H
