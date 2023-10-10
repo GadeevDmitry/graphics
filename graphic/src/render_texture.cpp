@@ -88,14 +88,30 @@ void render_texture_t::draw_vec2d(const segment_t &abs, const color_t &col, cons
 
 //--------------------------------------------------------------------------------------------------
 
+#include <iostream>
 void render_texture_t::draw_line(const segment_t &abs, const color_t &col, const clipping_region_t &reg) {
+    list regions = reg.getAreas();
 
+    rectangle_t *front = (rectangle_t *) list_front(&regions);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        segment_t test_segment = abs;
+        if (intersect_line_rectangle(test_segment, *cur)) {
+            draw_line(test_segment, col);
+            break;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void render_texture_t::draw_segment(const segment_t &abs, const color_t &col, const clipping_region_t &reg) {
-
+    draw_line (abs           , col, reg);
+    draw_point(abs.endpoint_1, col, reg);
+    draw_point(abs.endpoint_2, col, reg);
 }
 
 //--------------------------------------------------------------------------------------------------

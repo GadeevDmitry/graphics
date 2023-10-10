@@ -64,8 +64,8 @@ static LINE_INTERS get_intersect_segment_segment(const segment_t &seg1, const se
     inters_point = vec2d(x, y);
 
     // figure out that point is inside segment
-    if (std::min(seg1.endpoint_1.x, seg1.endpoint_1.x) <= x && x <= std::max(seg1.endpoint_1.x, seg1.endpoint_1.x) &&
-        std::min(seg1.endpoint_1.y, seg1.endpoint_1.y) <= y && y <= std::max(seg1.endpoint_1.y, seg1.endpoint_1.y)) 
+    if (std::min(seg1.endpoint_1.x, seg1.endpoint_2.x) <= x && x <= std::max(seg1.endpoint_1.x, seg1.endpoint_2.x) &&
+        std::min(seg1.endpoint_1.y, seg1.endpoint_2.y) <= y && y <= std::max(seg1.endpoint_1.y, seg1.endpoint_2.y)) 
             return POINT;
 
     return NONE;
@@ -167,5 +167,6 @@ bool intersect_line_rectangle(segment_t &seg, const rectangle_t &rect) {
     if (!get_intersect_segment_rectangle(seg, rect, res)) return false;
 
     seg = res;
+
     return true;
 }
