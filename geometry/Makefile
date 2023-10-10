@@ -22,5 +22,13 @@ $(GEOMETRY_BILD_DIR)vec3d.o: $(GEOMETRY_PREFIX)src/vec3d.cpp | $(GEOMETRY_BILD_D
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(GEOMETRY_BILD_DIR)vec3d.o
 
+$(GEOMETRY_BUILD_DIR)intersect.o: $(GEOMETRY_PREFIX)src/intersect.cpp | $(GEOMETRY_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(GEOMETRY_BUILD_DIR)intersect.o
+
+$(GEOMETRY_BILD_DIR)rectangle.o: $(GEOMETRY_PREFIX)src/rectangle.cpp | $(GEOMETRY_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(GEOMETRY_BILD_DIR)rectangle.o
+
 $(GEOMETRY_BILD_DIR):
 	mkdir -p $@

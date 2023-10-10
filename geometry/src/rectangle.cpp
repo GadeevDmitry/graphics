@@ -1,7 +1,24 @@
 #include <stdio.h>
 #include "rectangle.h"
+#include "log.h"
 
 //==================================================================================================
+
+void rectangle_t::dump(const void *rect_)
+{
+    const rectangle_t *rect = (const rectangle_t *) rect_;
+
+    LOG_TAB_SERVICE_MESSAGE("rectangle_t (address: %p)\n{", "\n", rect);
+    LOG_TAB++;
+
+    LOG_TAB_MESSAGE("ld_corner = {%15lg, %15lg}\n", rect->ld_corner.x, rect->ld_corner.y);
+    LOG_TAB_MESSAGE("ru_corner = {%15lg, %15lg}\n", rect->ru_corner.x, rect->ru_corner.y);
+
+    LOG_TAB--;
+    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+}
+
+//--------------------------------------------------------------------------------------------------
 
 bool rectangle_t::is_valid() const
 {

@@ -1,7 +1,25 @@
 #include <stdio.h>
 #include "vec3d.h"
+#include "log.h"
 
 //==================================================================================================
+
+void vec3d::dump(const void *vec_)
+{
+    const vec3d *vec = (const vec3d *) vec_;
+
+    LOG_TAB_SERVICE_MESSAGE("vec3d (address: %p)\n{", "\n", vec);
+    LOG_TAB++;
+
+    USUAL_FIELD_DUMP("x", "%lg", vec->x);
+    USUAL_FIELD_DUMP("y", "%lg", vec->y);
+    USUAL_FIELD_DUMP("z", "%lg", vec->z);
+
+    LOG_TAB--;
+    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+}
+
+//--------------------------------------------------------------------------------------------------
 
 bool vec3d::is_valid() const
 {

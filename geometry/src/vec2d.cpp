@@ -1,8 +1,25 @@
 #include <iostream>
 #include <stdio.h>
 #include "vec2d.h"
+#include "log.h"
 
 //==================================================================================================
+
+void vec2d::dump(const void *vec_)
+{
+    const vec2d *vec = (const vec2d *) vec_;
+
+    LOG_TAB_SERVICE_MESSAGE("vec2d (address: %p)\n{", "\n", vec);
+    LOG_TAB++;
+
+    USUAL_FIELD_DUMP("x", "%lg", vec->x);
+    USUAL_FIELD_DUMP("y", "%lg", vec->y);
+
+    LOG_TAB--;
+    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+}
+
+//--------------------------------------------------------------------------------------------------
 
 bool vec2d::is_valid() const
 {

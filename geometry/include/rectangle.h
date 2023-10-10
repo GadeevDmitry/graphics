@@ -29,6 +29,8 @@ public:
 
     inline bool  is_point_inside(const vec2d &pos) const;
     inline vec2d get_size       () const;
+
+    static void dump(const void *rect_);
 };
 
 //--------------------------------------------------------------------------------------------------

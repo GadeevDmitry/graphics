@@ -45,6 +45,8 @@ public:
     vec3d        &reflect          (const vec3d &norm) const;
 
     friend inline vec3d operator *(const double mul, const vec3d &vec);
+
+    static void dump(const void *vec_);
 };
 
 //--------------------------------------------------------------------------------------------------

@@ -51,8 +51,10 @@ public:
 
     friend inline vec2d operator *(const double mul, const vec2d &vec);
 
-    static vec2d min(const vec2d &op_1, const vec2d &op_2);
-    static vec2d max(const vec2d &op_1, const vec2d &op_2);
+    static vec2d min (const vec2d &op_1, const vec2d &op_2);
+    static vec2d max (const vec2d &op_1, const vec2d &op_2);
+
+    static void  dump(const void *vec_);
 };
 
 //--------------------------------------------------------------------------------------------------
