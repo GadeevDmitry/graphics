@@ -1,6 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include "region.h"
 #include "rendarable.h"
 
 //==================================================================================================
@@ -88,9 +89,12 @@ protected:
     }
     status;
 
+    widget_t*         parent = nullptr;
+    clipping_region_t clip_region;
+
 public:
     inline          widget_t();
-    inline explicit widget_t(const rectangle_t &region_);
+    inline explicit widget_t(const rectangle_t &region_, widget_t *parent_);
 
     inline WIDGET_STATUS_TYPE get_status() const;
 
@@ -101,6 +105,8 @@ public:
 
     virtual bool on_mouse_press  (const mouse_context_t &context) = 0;
     virtual bool on_mouse_release(const mouse_context_t &context) = 0;
+
+    // virtual clipping_region_t& updateRegions (clipping_region_t &region) = 0;
 
 protected:
 
@@ -118,10 +124,13 @@ status(WIDGET_OPENED)
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t(const rectangle_t &region_):
+inline widget_t::widget_t(const rectangle_t &region_, widget_t *parent_):
 renderable(region_),
+parent    (parent_),
 status    (WIDGET_OPENED)
-{}
+{
+    clip_region.push_area(region_);
+}
 
 //--------------------------------------------------------------------------------------------------
 

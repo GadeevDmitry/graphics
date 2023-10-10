@@ -87,3 +87,19 @@ void widget_manager_t::widgets_render(render_texture_t &render_texture) const
         cur.render(render_texture);
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+
+// clipping_region_t& widget_manager_t::updateRegions (clipping_region_t &region) {
+//     if (widgets.size == 0) return;
+
+//     widget_t **back = (widget_t **) list_back(&widgets);
+//     widget_t **fict = (widget_t **) list_fict(&widgets);
+
+//     for (widget_t **cnt = back; cnt != fict;
+//          cnt = (widget_t **) list_prev(cnt))
+//     {
+//         widget_t &cur = **cnt;
+//         cur.updateRegions();
+//     }
+// }
