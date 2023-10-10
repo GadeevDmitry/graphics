@@ -86,7 +86,8 @@ void color_window_t::render(render_texture_t &wnd) const
 {
 
 
-    wnd.draw_filled_rectangle(area, color);
+    // wnd.draw_filled_rectangle(area, color);
+    wnd.draw_line(segment_t(vec2d(10, 0), vec2d(300, 400)), color_t(255, 255, 255));
     widgets_render(wnd);
 }
 
