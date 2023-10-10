@@ -9,7 +9,8 @@
 class window_manager_t: public widget_manager_t
 {
 public:
-    inline window_manager_t();
+    inline          window_manager_t();
+    inline explicit window_manager_t(const rectangle_t &region_);
 
     inline bool register_window(window_t *window);
 
@@ -26,6 +27,12 @@ public:
 
 inline window_manager_t::window_manager_t():
 widget_manager_t()
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline window_manager_t::window_manager_t(const rectangle_t &region_):
+widget_manager_t(region_)
 {}
 
 //--------------------------------------------------------------------------------------------------

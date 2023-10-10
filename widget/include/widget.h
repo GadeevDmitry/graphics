@@ -89,7 +89,8 @@ protected:
     status;
 
 public:
-    inline widget_t();
+    inline          widget_t();
+    inline explicit widget_t(const rectangle_t &region_);
 
     inline WIDGET_STATUS_TYPE get_status() const;
 
@@ -113,6 +114,13 @@ protected:
 
 inline widget_t::widget_t():
 status(WIDGET_OPENED)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline widget_t::widget_t(const rectangle_t &region_):
+renderable(region_),
+status    (WIDGET_OPENED)
 {}
 
 //--------------------------------------------------------------------------------------------------

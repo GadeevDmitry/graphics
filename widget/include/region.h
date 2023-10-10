@@ -21,8 +21,11 @@ public:
            void set_areas (const list *const  areas_);
     inline bool push_area (const rectangle_t &area);
 
-    friend clipping_region_t &operator -= (      clipping_region_t &op_1,
-                                           const clipping_region_t &op_2);
+    inline void clear();
+    inline void reset();
+
+    friend clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2);
+    friend clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2);
 
     static void dump(const void *clipping_region_);
 };
@@ -64,6 +67,21 @@ inline bool clipping_region_t::set_region(const rectangle_t &region_)
 inline bool clipping_region_t::push_area(const rectangle_t &area)
 {
     return list_push_back(&areas, &area);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void clipping_region_t::clear()
+{
+    list_clear(&areas);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void clipping_region_t::reset()
+{
+    list_clear(&areas);
+    list_push_back(&areas, &region);
 }
 
 #endif // REGION_H

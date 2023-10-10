@@ -45,10 +45,9 @@ void clipping_region_t::set_areas(const list *const areas_)
 
 //--------------------------------------------------------------------------------------------------
 
-clipping_region_t &operator -=(      clipping_region_t &op_1,
-                               const clipping_region_t &op_2)
+clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2)
 {
-    if (op_2.areas.size == 0) return op_1;
+    if (op_1.areas.size == 0) return op_1;
     if (op_2.areas.size == 0) return op_1;
 
     list res = {};
@@ -89,6 +88,21 @@ clipping_region_t &operator -=(      clipping_region_t &op_1,
     list_dtor(&res);
     list_dtor(&temp);
 
+    return op_1;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2)
+{
+    if (op_1.areas.size == 0) return op_1;
+    if (op_2.areas.size == 0)
+    {
+        list_clear(&op_1.areas);
+        return op_1;
+    }
+
+    intersect_region_region(&op_1.areas, &op_2.areas);
     return op_1;
 }
 

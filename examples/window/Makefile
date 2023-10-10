@@ -20,13 +20,13 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-WIDGET_OBJS := widget widget_manager
+WIDGET_OBJS := widget widget_manager region
 WIDGET_OBJS := $(foreach OBJ, $(WIDGET_OBJS), $(WIDGET_BUILD_DIR)$(OBJ).o)
 
 GRAPHIC_OBJS := color render_texture
 GRAPHIC_OBJS := $(foreach OBJ, $(GRAPHIC_OBJS), $(GRAPHIC_BUILD_DIR)$(OBJ).o)
 
-GEOMETRY_OBJS := vec2d
+GEOMETRY_OBJS := vec2d intersect rectangle
 GEOMETRY_OBJS := $(foreach OBJ, $(GEOMETRY_OBJS), $(GEOMETRY_BUILD_DIR)$(OBJ).o)
 
 DATA_STRUCTS_OBJS := algorithm array list log trace stack

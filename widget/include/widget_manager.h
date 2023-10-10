@@ -17,8 +17,9 @@ private:
 protected:
     list widgets;
 
-    inline  widget_manager_t();
-    inline ~widget_manager_t();
+    inline          widget_manager_t();
+    inline explicit widget_manager_t(const rectangle_t &region_);
+    inline         ~widget_manager_t();
 
     inline bool register_widget(widget_t *widget);
 
@@ -35,6 +36,14 @@ protected:
 //--------------------------------------------------------------------------------------------------
 
 inline widget_manager_t::widget_manager_t()
+{
+    list_ctor(&widgets, sizeof(widget_t *), widget_delete);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline widget_manager_t::widget_manager_t(const rectangle_t &region_):
+widget_t(region_)
 {
     list_ctor(&widgets, sizeof(widget_t *), widget_delete);
 }
