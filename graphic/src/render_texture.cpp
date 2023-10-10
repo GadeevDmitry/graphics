@@ -82,6 +82,42 @@ void render_texture_t::draw_point(const vec2d &abs, const color_t &col)
 
 //--------------------------------------------------------------------------------------------------
 
+void render_texture_t::draw_vec2d(const segment_t &abs, const color_t &col, const clipping_region_t &reg) {
+
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_line(const segment_t &abs, const color_t &col, const clipping_region_t &reg) {
+
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_segment(const segment_t &abs, const color_t &col, const clipping_region_t &reg) {
+
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_point(const vec2d &abs, const color_t &col, const clipping_region_t &reg) {
+    list regions = reg.getAreas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&regions);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        if (cur->is_point_inside(abs)) {
+            draw_point(abs, col);
+            break;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col)
 {
     sf::Color sfml_outline_col = outline_col.get_sfml_color();

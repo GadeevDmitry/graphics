@@ -2,6 +2,7 @@
 #define RENDER_TARGET_H
 
 #include "color.h"
+#include "region.h"
 #include "texture.h"
 #include "shape_types.h"
 #include <SFML/Graphics.hpp>
@@ -36,6 +37,11 @@ public:
     void        draw_line            (const segment_t    &abs, const color_t &col);
     void        draw_segment         (const segment_t    &abs, const color_t &col);
     void        draw_point           (const vec2d        &abs, const color_t &col);
+
+    void        draw_vec2d           (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
+    void        draw_line            (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
+    void        draw_segment         (const segment_t    &abs, const color_t &col, const clipping_region_t &reg);
+    void        draw_point           (const vec2d        &abs, const color_t &col, const clipping_region_t &reg);
 
     void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col);
     void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col);

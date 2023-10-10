@@ -24,6 +24,8 @@ public:
     inline void clear();
     inline void reset();
 
+    inline list getAreas() const;
+
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2);
     friend clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2);
 
@@ -82,6 +84,12 @@ inline void clipping_region_t::reset()
 {
     list_clear(&areas);
     list_push_back(&areas, &region);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline list clipping_region_t::getAreas() const {
+    return areas;
 }
 
 #endif // REGION_H
