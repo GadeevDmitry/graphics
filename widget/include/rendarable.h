@@ -16,7 +16,7 @@ public:
     inline explicit renderable(const rectangle_t &region_);
 
     virtual ~renderable() {}
-    virtual void render(render_texture_t &wnd) const = 0;
+    virtual void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const = 0;
 };
 
 //--------------------------------------------------------------------------------------------------

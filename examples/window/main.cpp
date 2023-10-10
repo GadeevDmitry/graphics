@@ -11,7 +11,7 @@ int main()
 {
     sf::RenderWindow sfml_wnd(sf::VideoMode(), "simple", sf::Style::Fullscreen);
     render_texture_t rend_texture(sfml_wnd.getSize().x, sfml_wnd.getSize().y);
-
+/*
     color_window_t wnd_1(rectangle_t(vec2d(100 , 200), vec2d(1400, 900)), color_t::Orange);
     color_window_t wnd_2(rectangle_t(vec2d(100 , 200), vec2d(300 , 250)), color_t::Green);
     color_window_t wnd_3(rectangle_t(vec2d(600 , 100), vec2d(800 , 350)), color_t::Blue);
@@ -33,6 +33,10 @@ int main()
     wnd_6.render(rend_texture);
 
     wnd_1.visible.render(rend_texture);
+*/
+
+    color_window_t wnd(rectangle_t(vec2d(100, 200), vec2d(1400, 900)));
+    wnd.render(rend_texture);
 
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);

@@ -30,7 +30,7 @@ protected:
     inline bool on_widgets_mouse_release(const mouse_context_t &context);
     inline bool on_widgets_mouse_move   (const mouse_context_t &context);
 
-    void widgets_render(render_texture_t &render_texture) const;
+    void widgets_render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const;
 };
 
 //--------------------------------------------------------------------------------------------------

@@ -73,7 +73,7 @@ bool widget_manager_t::on_widgets_mouse_event
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_render(render_texture_t &render_texture) const
+void widget_manager_t::widgets_render(render_texture_t &render_texture, const vec2d &offset) const
 {
     if (widgets.size == 0) return;
 
@@ -84,6 +84,6 @@ void widget_manager_t::widgets_render(render_texture_t &render_texture) const
          cnt = (widget_t **) list_prev(cnt))
     {
         widget_t &cur = **cnt;
-        cur.render(render_texture);
+        cur.render(render_texture, offset);
     }
 }

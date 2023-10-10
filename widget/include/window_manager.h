@@ -21,7 +21,7 @@ public:
     virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
     virtual inline bool on_mouse_release(const mouse_context_t &context) override;
 
-    virtual inline void render(render_texture_t &render_texture) const override;
+    virtual inline void render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -80,9 +80,9 @@ inline bool window_manager_t::on_mouse_release(const mouse_context_t &mouse)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void window_manager_t::render(render_texture_t &render_texture) const
+inline void window_manager_t::render(render_texture_t &render_texture, const vec2d &offset) const
 {
-    return widgets_render(render_texture);
+    return widgets_render(render_texture, offset);
 }
 
 #endif // WINDOW_MANAGER_H

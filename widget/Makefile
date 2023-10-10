@@ -14,17 +14,29 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(
 all:
 
 
-$(WIDGET_BUILD_DIR)widget.o: $(WIDGET_PREFIX)src/widget.cpp | $(WIDGET_BILD_DIR)
+$(WIDGET_BILD_DIR)button.o: $(WIDGET_PREFIX)src/button.cpp | $(WIDGET_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(WIDGET_BUILD_DIR)widget.o
+all: $(WIDGET_BUILD_DIR)button.o
+
+$(WIDGET_BUILD_DIR)menu.o: $(WIDGET_PREFIX)src/menu.cpp | $(WIDGET_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(WIDGET_BILD_DIR)menu.o
+
+$(WIDGET_BUILD_DIR)region.o: $(WIDGET_PREFIX)src/region.cpp | $(WIDGET_BUILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(WIDGET_BUILD_DIR)region.o
 
 $(WIDGET_BILD_DIR)widget_manager.o: $(WIDGET_PREFIX)src/widget_manager.cpp | $(WIDGET_BUILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(WIDGET_BILD_DIR)widget_manager.o
 
-$(WIDGET_BUILD_DIR)region.o: $(WIDGET_PREFIX)src/region.cpp | $(WIDGET_BUILD_DIR)
+$(WIDGET_BUILD_DIR)widget.o: $(WIDGET_PREFIX)src/widget.cpp | $(WIDGET_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(WIDGET_BUILD_DIR)region.o
+all: $(WIDGET_BUILD_DIR)widget.o
+
+$(WIDGET_BILD_DIR)window.o: $(WIDGET_PREFIX)src/window.cpp | $(WIDGET_BUILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(WIDGET_BILD_DIR)window.o
 
 $(WIDGET_BILD_DIR):
 	mkdir -p $@

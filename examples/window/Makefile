@@ -20,7 +20,7 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-WIDGET_OBJS := widget widget_manager region
+WIDGET_OBJS := menu region widget_manager widget window
 WIDGET_OBJS := $(foreach OBJ, $(WIDGET_OBJS), $(WIDGET_BUILD_DIR)$(OBJ).o)
 
 GRAPHIC_OBJS := color render_texture

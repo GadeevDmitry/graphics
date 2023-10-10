@@ -86,4 +86,42 @@ inline bool menu_t::on_key_release(const KEY_TYPE &key)
     return on_widgets_key_release(key);
 }
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class color_menu_t: public menu_t
+{
+public:
+    color_t color;
+
+    inline          color_menu_t(void (*delete_button)(void *el));
+    inline explicit color_menu_t(void (*delete_button)(void *el), const rectangle_t &region_,
+                                 menu_mouse_func on_mouse_move_func_, const color_t &color_);
+    inline         ~color_menu_t() {}
+
+    virtual inline void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const override;
+};
+
+//--------------------------------------------------------------------------------------------------
+
+inline color_menu_t::color_menu_t(void (*delete_button)(void *el)):
+menu_t(delete_button),
+color ()
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline color_menu_t::color_menu_t(void (*delete_button)(void *el), const rectangle_t &region_,
+                                  menu_mouse_func on_mouse_move_func_, const color_t &color_):
+menu_t(delete_button, region_, on_mouse_move_func_),
+color (color_)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void color_menu_t::render(render_texture_t &wnd, const vec2d &offset) const
+{
+    wnd.draw_filled_rectangle(region + offset, color);
+    widgets_render(wnd, offset + region.ld_corner);
+}
+
 #endif // MENU_H

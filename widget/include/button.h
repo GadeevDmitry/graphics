@@ -130,7 +130,7 @@ public:
     inline explicit color_button_t(const rectangle_t &region, const color_t &color_);
     inline         ~color_button_t() {}
 
-    virtual inline void render(render_texture_t &wnd) const override;
+    virtual inline void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -148,9 +148,9 @@ color   (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void color_button_t::render(render_texture_t &wnd) const
+inline void color_button_t::render(render_texture_t &wnd, const vec2d &offset) const
 {
-    wnd.draw_filled_rectangle(region, color);
+    wnd.draw_filled_rectangle(region + offset, color);
 }
 
 #endif // BUTTON_H
