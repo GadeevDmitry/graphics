@@ -24,3 +24,9 @@ btn(MOUSE_BUTTON_TYPE_UNKNOWN)
         btn = (MOUSE_BUTTON_TYPE) sfml_mouse_btn_;
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+
+void widget_t::updateRegions (clipping_region_t &region) {
+    visible -= region;
+}

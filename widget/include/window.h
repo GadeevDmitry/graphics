@@ -12,7 +12,7 @@ protected:
 
 public:
     inline          window_t();
-    inline explicit window_t(const rectangle_t &area_, widget_t *parent_);
+    inline explicit window_t(const rectangle_t &area_);
 
     inline void set_area(const rectangle_t &area_);
 
@@ -31,8 +31,8 @@ area()
 
 //--------------------------------------------------------------------------------------------------
 
-inline window_t::window_t(const rectangle_t &area_, widget_t *parent_):
-widget_manager_t(area_, parent_),
+inline window_t::window_t(const rectangle_t &area_):
+widget_manager_t(area_),
 area            (area_)
 {}
 
@@ -61,7 +61,7 @@ public:
     color_t color;
 
     inline          color_window_t();
-    inline explicit color_window_t(const rectangle_t &area_, const color_t &color_, widget_t *parent_);
+    inline explicit color_window_t(const rectangle_t &area_, const color_t &color_);
     inline         ~color_window_t() {}
 
     virtual inline void render(render_texture_t &wnd) const override;
@@ -75,8 +75,8 @@ color()
 
 //--------------------------------------------------------------------------------------------------
 
-inline color_window_t::color_window_t(const rectangle_t &area_, const color_t &color_, widget_t *parent_):
-window_t(area_, parent_),
+inline color_window_t::color_window_t(const rectangle_t &area_, const color_t &color_):
+window_t(area_),
 color   (color_)
 {}
 
