@@ -3,9 +3,10 @@
 
 #include "list.h"
 #include "rectangle.h"
-#include "render_texture.h"
 
 //==================================================================================================
+
+class render_texture_t;
 
 class clipping_region_t
 {

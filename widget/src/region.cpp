@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "region.h"
 #include "intersect.h"
+#include "render_texture.h"
 #include "log.h"
 
 //==================================================================================================
