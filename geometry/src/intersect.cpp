@@ -1,28 +1,14 @@
 #include <stdio.h>
 #include "intersect.h"
+#include "algorithm.h"
 
 //==================================================================================================
 
-static const double epsilon = 1e-9;
-
-static inline const bool cmpDoubles(double a, double b);
-
-static rectangle_t get_intersect_rectangle_rectangle(const rectangle_t &rect_1,
-                                                     const rectangle_t &rect_2);
-
-static LINE_INTERS get_intersect_segment_segment(const segment_t &seg1,
-                                                 const segment_t &seg2, vec2d &inters_point);
-
-static bool get_intersect_segment_rectangle(const segment_t &seg, 
-                                            const rectangle_t &rect, segment_t &res);
+static rectangle_t      get_intersect_rectangle_rectangle(const rectangle_t &rect_1, const rectangle_t &rect_2);
+static bool             get_intersect_segment_rectangle  (const segment_t   &seg   , const rectangle_t &rect, segment_t &res);
+static LINE_INTERS_TYPE get_intersect_segment_segment    (const segment_t   &seg1  , const segment_t   &seg2, vec2d &inters_point);
 
 //==================================================================================================
-
-static inline const bool cmpDoubles(double a, double b) {
-    return (a - b) < epsilon;
-}
-
-//--------------------------------------------------------------------------------------------------
 
 static rectangle_t get_intersect_rectangle_rectangle(const rectangle_t &rect_1,
                                                      const rectangle_t &rect_2)
@@ -33,7 +19,8 @@ static rectangle_t get_intersect_rectangle_rectangle(const rectangle_t &rect_1,
 
 //--------------------------------------------------------------------------------------------------
 
-static LINE_INTERS get_intersect_segment_segment(const segment_t &seg1, const segment_t &seg2, vec2d &inters_point) {
+static LINE_INTERS_TYPE get_intersect_segment_segment(const segment_t &seg1, const segment_t &seg2, vec2d &inters_point)
+{
     // build 1 segment a1x + b1y = c1
     double a1 = seg1.endpoint_2.y - seg1.endpoint_1.y;
     double b1 = seg1.endpoint_1.x - seg1.endpoint_2.x;
@@ -49,12 +36,15 @@ static LINE_INTERS get_intersect_segment_segment(const segment_t &seg1, const se
     double delta = a1 * b2 - a2 * b1;
 
     // parallel case
-    if (cmpDoubles(delta, 0)) {
+    if (dblcmp(delta, 0) == 0)
+    {
         inters_point = vec2d(0, 0);
 
         // lines are equal
-        if (seg1.endpoint_1.x == seg2.endpoint_1.x || seg2.endpoint_1.y == seg2.endpoint_1.y)
+        if (seg1.endpoint_1.x == seg2.endpoint_1.x ||
+            seg2.endpoint_1.y == seg2.endpoint_1.y)
             return SAME;
+
         return NONE;
     }
 
@@ -66,14 +56,15 @@ static LINE_INTERS get_intersect_segment_segment(const segment_t &seg1, const se
     // figure out that point is inside segment
     if (std::min(seg1.endpoint_1.x, seg1.endpoint_2.x) <= x && x <= std::max(seg1.endpoint_1.x, seg1.endpoint_2.x) &&
         std::min(seg1.endpoint_1.y, seg1.endpoint_2.y) <= y && y <= std::max(seg1.endpoint_1.y, seg1.endpoint_2.y)) 
-            return POINT;
+        return POINT;
 
     return NONE;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-static bool get_intersect_segment_rectangle(const segment_t &seg, const rectangle_t &rect, segment_t &res) {
+static bool get_intersect_segment_rectangle(const segment_t &seg, const rectangle_t &rect, segment_t &res)
+{
     segment_t upper = segment_t(rect.lu_corner(), rect.ru_corner);
     segment_t down  = segment_t(rect.ld_corner  , rect.rd_corner());
     segment_t left  = segment_t(rect.lu_corner(), rect.ld_corner);
@@ -83,47 +74,57 @@ static bool get_intersect_segment_rectangle(const segment_t &seg, const rectangl
 
     int point_cnt = 0;
 
-    LINE_INTERS inters_res = get_intersect_segment_segment(seg, upper, segment_points[point_cnt]);
-    if (inters_res == SAME)  { 
+    LINE_INTERS_TYPE inters_res = get_intersect_segment_segment(seg, upper, segment_points[point_cnt]);
+    if (inters_res == SAME)
+    {
         res = upper;
-        return true; 
+        return true;
     }
     else if (inters_res == POINT) point_cnt++;
 
     inters_res = get_intersect_segment_segment(seg, down, segment_points[point_cnt]);
-    if (inters_res == SAME)  {
+    if (inters_res == SAME)
+    {
         res = down;
         return true;
     }
-    else if (inters_res == POINT) {
+    else if (inters_res == POINT)
+    {
         point_cnt++;
-        if (point_cnt == 2) {
+        if (point_cnt == 2)
+        {
             res = segment_t(segment_points[0], segment_points[1]);
             return true;
         }
     }
 
     inters_res = get_intersect_segment_segment(seg, left, segment_points[point_cnt]);
-    if (inters_res == SAME)  {
+    if (inters_res == SAME)
+    {
         res = left;
         return true;
     }
-    else if (inters_res == POINT) {
+    else if (inters_res == POINT)
+    {
         point_cnt++;
-        if (point_cnt == 2) {
+        if (point_cnt == 2)
+        {
             res = segment_t(segment_points[0], segment_points[1]);
             return true;
         }
     }
 
     inters_res = get_intersect_segment_segment(seg, right, segment_points[point_cnt]);
-    if (inters_res == SAME)  {
+    if (inters_res == SAME)
+    {
         res = right;
         return true;
     }
-    else if (inters_res == POINT) {
+    else if (inters_res == POINT)
+    {
         point_cnt++;
-        if (point_cnt == 2) {
+        if (point_cnt == 2)
+        {
             res = segment_t(segment_points[0], segment_points[1]);
             return true;
         }
@@ -155,18 +156,19 @@ bool intersect_rectangle_rectangle(      rectangle_t &rect_1,
 
 //--------------------------------------------------------------------------------------------------
 
-bool is_intersect_line_rectangle(const segment_t &seg, const rectangle_t &rect) {
+bool is_intersect_line_rectangle(const segment_t &seg, const rectangle_t &rect)
+{
     segment_t res = segment_t();
     return get_intersect_segment_rectangle(seg, rect, res);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool intersect_line_rectangle(segment_t &seg, const rectangle_t &rect) {
+bool intersect_line_rectangle(segment_t &seg, const rectangle_t &rect)
+{
     segment_t res = segment_t();
     if (!get_intersect_segment_rectangle(seg, rect, res)) return false;
 
     seg = res;
-
     return true;
 }
