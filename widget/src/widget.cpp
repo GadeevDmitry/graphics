@@ -22,44 +22,38 @@ btn(btn_)
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::refresh_key(const sf::Keyboard::Key &sfml_key)
+const KEY_TYPE &widget_t::refresh_key(const sf::Keyboard::Key &sfml_key)
 {
     KEY_TYPE cur_key = KEY_TYPE_UNKNOWN;
 
     if ((int) sfml_key > (int) KEY_TYPE_UNKNOWN &&
         (int) sfml_key < (int) KEY_TYPE_COUNT)
         cur_key = (KEY_TYPE) sfml_key;
-    else
-        return;
 
-    if (saved_key == cur_key)
-        saved_key = KEY_TYPE_UNKNOWN;       // release
-    else if (saved_key == KEY_TYPE_UNKNOWN)
-        saved_key = cur_key;                // press
+    return saved_key = cur_key;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::refresh_mouse_btn(const sf::Mouse::Button &sfml_mouse_bnt)
+const widget_t::mouse_context_t &widget_t::refresh_mouse_context(const sf::Mouse::Button &sfml_mouse_btn,
+                                                                 const sf::Vector2i      &sfml_mouse_pos)
 {
     MOUSE_BUTTON_TYPE cur_btn = MOUSE_BUTTON_TYPE_UNKNOWN;
 
-    if ((int) sfml_mouse_bnt > (int) MOUSE_BUTTON_TYPE_UNKNOWN &&
-        (int) sfml_mouse_bnt < (int) MOUSE_BUTTON_TYPE_COUNT)
-        cur_btn = (MOUSE_BUTTON_TYPE) sfml_mouse_bnt;
-    else
-        return;
+    if ((int) sfml_mouse_btn > (int) MOUSE_BUTTON_TYPE_UNKNOWN &&
+        (int) sfml_mouse_btn < (int) MOUSE_BUTTON_TYPE_COUNT)
+        cur_btn = (MOUSE_BUTTON_TYPE) sfml_mouse_btn;
 
-    if (saved_mouse_context.btn == cur_btn)
-        saved_mouse_context.btn = MOUSE_BUTTON_TYPE_UNKNOWN;        // release
-    else if (saved_mouse_context.btn == MOUSE_BUTTON_TYPE_UNKNOWN)
-        saved_mouse_context.btn = cur_btn;                          // press
+    saved_mouse_context.btn = cur_btn;
+    saved_mouse_context.pos = vec2d((double) sfml_mouse_pos.x, (double) sfml_mouse_pos.y);
+
+    return saved_mouse_context;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::refresh_mouse_pos(const sf::Vector2i &sfml_mouse_pos)
+const widget_t::mouse_context_t &widget_t::refresh_mouse_pos(const sf::Vector2i &sfml_mouse_pos)
 {
-    vec2d cur_pos((double) sfml_mouse_pos.x, (double) sfml_mouse_pos.y);
-    saved_mouse_context.pos = cur_pos - saved_mouse_context.pos;
+    saved_mouse_context.pos = vec2d((double) sfml_mouse_pos.x, (double) sfml_mouse_pos.y);
+    return saved_mouse_context;
 }

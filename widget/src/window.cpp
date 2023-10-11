@@ -4,6 +4,10 @@
 
 //==================================================================================================
 
+bool move_window(void *window_, const widget_t::mouse_context_t &context);
+
+//--------------------------------------------------------------------------------------------------
+
 static const double HEADER_MENU_HEIGHT = 30;
 
 //==================================================================================================
@@ -23,6 +27,53 @@ header_menu     (nullptr)
     }
 
     header_menu.set_region(rectangle_t(vec2d(0, wnd_size.y - HEADER_MENU_HEIGHT), wnd_size));
+    header_menu.set_func  (move_window);
+    header_menu.set_args  ((window_t *) this);
     header_menu.color = color_t::Orange;
+
+    LOG_MESSAGE("header_menu:\n");
+    rectangle_t header(vec2d(0, wnd_size.y - HEADER_MENU_HEIGHT), wnd_size);
+    rectangle_t::dump(&header);
+
     widget_manager_t:register_widget(&header_menu);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool window_t::on_mouse_press(const mouse_context_t &context)
+{
+    mouse_context_t context_rel = context - region.ld_corner;
+
+    LOG_TAB_MESSAGE("WINDOW: ON_MOUSE_PRESS\n"
+                    "context = {%lg %lg}\n", context.pos.x, context.pos.y);
+
+    if (!region.is_point_inside(context.pos)) return false;
+    if (on_widgets_mouse_press (context_rel)) return true;
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool window_t::on_mouse_release(const mouse_context_t &context)
+{
+    mouse_context_t context_rel = context - region.ld_corner;
+    return on_widgets_mouse_release(context_rel);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool window_t::on_mouse_move(const mouse_context_t &context)
+{
+    return on_widgets_mouse_move(context);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool move_window(void *window_, const widget_t::mouse_context_t &context)
+{
+    window_t *window = (window_t *) window_;
+    window->region += context.pos;
+
+    return true;
 }

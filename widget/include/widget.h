@@ -77,6 +77,9 @@ public:
                  mouse_context_t();
         explicit mouse_context_t(const vec2d &pos_, const MOUSE_BUTTON_TYPE &btn_);
         inline  ~mouse_context_t() {}
+
+        inline mouse_context_t &operator -=(const vec2d &offset);
+        inline mouse_context_t  operator - (const vec2d &offset) const;
     };
 
     enum WIDGET_STATUS_TYPE
@@ -111,9 +114,13 @@ public:
 
     inline static void widget_delete(void *const widget_);
 
-    static void refresh_key      (const sf::Keyboard::Key &sfml_key);
-    static void refresh_mouse_btn(const sf::Mouse::Button &sfml_mouse_bnt);
-    static void refresh_mouse_pos(const sf::Vector2i      &sfml_mouse_pos);
+    static const KEY_TYPE        &refresh_key          (const sf::Keyboard::Key &sfml_key);
+    static const mouse_context_t &refresh_mouse_pos    (const sf::Vector2i      &sfml_mouse_pos);
+    static const mouse_context_t &refresh_mouse_context(const sf::Mouse::Button &sfml_mouse_btn,
+                                                        const sf::Vector2i      &sfml_mouse_pos);
+
+    static inline const mouse_context_t &get_mouse_context();
+    static inline const KEY_TYPE        &get_key          ();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -142,6 +149,34 @@ inline void widget_t::widget_delete(void *const widget_)
 inline widget_t::WIDGET_STATUS_TYPE widget_t::get_status() const
 {
     return status;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+const widget_t::mouse_context_t &widget_t::get_mouse_context()
+{
+    return saved_mouse_context;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+const KEY_TYPE &widget_t::get_key()
+{
+    return saved_key;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+widget_t::mouse_context_t widget_t::mouse_context_t::operator -(const vec2d &offset) const
+{
+    return mouse_context_t(pos - offset, btn);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+widget_t::mouse_context_t &widget_t::mouse_context_t::operator -=(const vec2d &offset)
+{
+    return *this = (*this) - offset;
 }
 
 #endif // WIDGET_H

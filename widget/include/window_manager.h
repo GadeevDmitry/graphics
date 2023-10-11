@@ -20,6 +20,7 @@ public:
 
     virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
     virtual inline bool on_mouse_release(const mouse_context_t &context) override;
+    virtual inline bool on_mouse_move   (const mouse_context_t &context) override;
 
     virtual inline void render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const override;
 };
@@ -66,16 +67,23 @@ inline bool window_manager_t::on_key_release(const KEY_TYPE &key)
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool window_manager_t::on_mouse_press(const mouse_context_t &mouse)
+inline bool window_manager_t::on_mouse_press(const mouse_context_t &context)
 {
-    return on_mouse_press(mouse);
+    return on_widgets_mouse_press(context);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool window_manager_t::on_mouse_release(const mouse_context_t &mouse)
+inline bool window_manager_t::on_mouse_release(const mouse_context_t &context)
 {
-    return on_mouse_release(mouse);
+    return on_widgets_mouse_release(context);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool window_manager_t::on_mouse_move(const mouse_context_t &context)
+{
+    return on_widgets_mouse_move(context);
 }
 
 //--------------------------------------------------------------------------------------------------

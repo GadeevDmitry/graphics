@@ -7,6 +7,10 @@
 
 //==================================================================================================
 
+static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos);
+
+//==================================================================================================
+
 int main()
 {
     sf::RenderWindow sfml_wnd(sf::VideoMode(), "simple", sf::Style::Fullscreen);
@@ -35,12 +39,11 @@ int main()
     wnd_1.visible.render(rend_texture);
 */
 
-    color_window_t wnd(rectangle_t(vec2d(100, 200), vec2d(1400, 900)));
-    wnd.render(rend_texture);
+    color_window_t wnd(rectangle_t(vec2d(0, 0), vec2d(1400, 900)));
 
-    sf::Sprite spr(rend_texture.get_sfml_texture());
-    sfml_wnd.draw(spr);
-    sfml_wnd.display();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch"
+#pragma GCC diagnostic ignored "-Wswitch-default"
 
     while (sfml_wnd.isOpen())
     {
@@ -52,6 +55,51 @@ int main()
             {
                 sfml_wnd.close();
             }
+
+            switch (event.type)
+            {
+                case sf::Event::MouseButtonPressed:
+                {
+                    wnd.on_mouse_press(widget_t::refresh_mouse_context(event.mouseButton.button,
+                                       recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition(sfml_wnd))));
+                } break;
+
+                case sf::Event::MouseButtonReleased:
+                {
+                    wnd.on_mouse_release(widget_t::refresh_mouse_context(event.mouseButton.button,
+                                         recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition(sfml_wnd))));
+                } break;
+
+                case sf::Event::MouseMoved:
+                {
+                    sf::Vector2i mouse_pos = recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition(sfml_wnd));
+                    vec2d        move_vec  = vec2d((double) mouse_pos.x, (double) mouse_pos.y) -
+                                             widget_t::get_mouse_context().pos;
+
+                    widget_t::mouse_context_t move_context(move_vec, widget_t::get_mouse_context().btn);
+                    widget_t::refresh_mouse_pos(mouse_pos);
+
+                    wnd.on_mouse_move(move_context);
+                } break;
+            }
+
+            sfml_wnd.clear();
+            rend_texture.clear();
+
+            wnd.render(rend_texture);
+
+            sf::Sprite spr(rend_texture.get_sfml_texture());
+            sfml_wnd.draw(spr);
+            sfml_wnd.display();
         }
     }
+
+#pragma GCC diagnostic pop
+}
+
+//--------------------------------------------------------------------------------------------------
+
+static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos)
+{
+    return sf::Vector2i(mouse_pos.x, sfml_wnd.getSize().y - mouse_pos.y);
 }

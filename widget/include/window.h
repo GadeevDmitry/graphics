@@ -19,23 +19,19 @@ public:
     virtual inline bool on_key_press  (const KEY_TYPE &key) override;
     virtual inline bool on_key_release(const KEY_TYPE &key) override;
 
-    virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
-    virtual inline bool on_mouse_release(const mouse_context_t &context) override;
-    virtual inline bool on_mouse_move   (const mouse_context_t &context) override;
+    virtual bool on_mouse_press  (const mouse_context_t &context) override;
+    virtual bool on_mouse_release(const mouse_context_t &context) override;
+    virtual bool on_mouse_move   (const mouse_context_t &context) override;
 
     inline static void window_delete(void *const window_);
+
+    friend bool move_window(void *window_, const mouse_context_t &context);
 };
 
 //--------------------------------------------------------------------------------------------------
 
 inline bool window_t::on_key_press  (const KEY_TYPE &key) { (void) key; return false; }
 inline bool window_t::on_key_release(const KEY_TYPE &key) { (void) key; return false; }
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_t::on_mouse_press  (const mouse_context_t &context) { (void) context; return false; }
-inline bool window_t::on_mouse_release(const mouse_context_t &context) { (void) context; return false; }
-inline bool window_t::on_mouse_move   (const mouse_context_t &context) { (void) context; return false; }
 
 //--------------------------------------------------------------------------------------------------
 

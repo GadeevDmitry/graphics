@@ -8,8 +8,8 @@
 class button_t: public widget_t
 {
 protected:
-    typedef bool (*button_key_func)   (const void *, const KEY_TYPE &key);
-    typedef bool (*button_mouse_func) (const void *, const mouse_context_t &context);
+    typedef bool (*button_key_func)   (void *, const KEY_TYPE &key);
+    typedef bool (*button_mouse_func) (void *, const mouse_context_t &context);
 
     button_key_func on_key_press_func;
     button_key_func on_key_release_func;
@@ -21,7 +21,7 @@ protected:
     MOUSE_BUTTON_TYPE saved_mouse_btn;
     KEY_TYPE          saved_key;
 
-    const void *args;
+    void        *args;
     rectangle_t region;
 
 public:
@@ -33,7 +33,7 @@ public:
                           button_mouse_func on_mouse_press_func_, button_mouse_func on_mouse_release_func_,
                           button_mouse_func on_mouse_move_func_);
 
-    inline void set_args  (const void        *args_);
+    inline void set_args  (void *args_);
     inline void set_region(const rectangle_t &region_);
 
     bool on_key_press  (const KEY_TYPE &key) override;
@@ -98,7 +98,7 @@ inline void button_t::set_funcs(button_key_func   on_key_press_func_  , button_k
 
 //--------------------------------------------------------------------------------------------------
 
-inline void button_t::set_args(const void *args_)
+inline void button_t::set_args(void *args_)
 {
     args = args_;
 }
