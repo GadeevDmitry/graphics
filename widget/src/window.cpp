@@ -31,10 +31,6 @@ header_menu     (nullptr)
     header_menu.set_args  ((window_t *) this);
     header_menu.color = color_t::Orange;
 
-    LOG_MESSAGE("header_menu:\n");
-    rectangle_t header(vec2d(0, wnd_size.y - HEADER_MENU_HEIGHT), wnd_size);
-    rectangle_t::dump(&header);
-
     widget_manager_t:register_widget(&header_menu);
 }
 
@@ -43,9 +39,6 @@ header_menu     (nullptr)
 bool window_t::on_mouse_press(const mouse_context_t &context)
 {
     mouse_context_t context_rel = context - region.ld_corner;
-
-    LOG_TAB_MESSAGE("WINDOW: ON_MOUSE_PRESS\n"
-                    "context = {%lg %lg}\n", context.pos.x, context.pos.y);
 
     if (!region.is_point_inside(context.pos)) return false;
     if (on_widgets_mouse_press (context_rel)) return true;
