@@ -30,7 +30,11 @@ protected:
     inline bool on_widgets_mouse_release(const mouse_context_t &context);
     inline bool on_widgets_mouse_move   (const mouse_context_t &context);
 
+    void widgets_recalc_region(const vec2d &offset = vec2d(0, 0));
     void widgets_render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const;
+
+public:
+    virtual void recalc_region(const vec2d &offset = vec2d(0, 0)) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -96,5 +100,9 @@ inline bool widget_manager_t::on_widgets_mouse_move(const mouse_context_t &conte
 {
     return on_widgets_mouse_event(&widget_t::on_mouse_move, context);
 }
+
+//==================================================================================================
+
+void widgets_recalc_region(widget_manager_t *manager, const vec2d &offset);
 
 #endif // WIDGET_MANAGER_H

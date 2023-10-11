@@ -65,6 +65,8 @@ enum MOUSE_BUTTON_TYPE
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+class widget_manager_t;
+
 class widget_t: public renderable
 {
 public:
@@ -111,6 +113,8 @@ public:
     virtual bool on_mouse_press  (const mouse_context_t &context) = 0;
     virtual bool on_mouse_release(const mouse_context_t &context) = 0;
     virtual bool on_mouse_move   (const mouse_context_t &context) = 0;
+
+    virtual inline void recalc_region(const vec2d &offset = vec2d(0, 0)) override {}
 
     inline static void widget_delete(void *const widget_);
 

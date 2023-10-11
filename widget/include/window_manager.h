@@ -22,6 +22,7 @@ public:
     virtual inline bool on_mouse_release(const mouse_context_t &context) override;
     virtual inline bool on_mouse_move   (const mouse_context_t &context) override;
 
+    virtual inline void recalc_region(const vec2d &offset = vec2d(0, 0)) override;
     virtual inline void render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const override;
 };
 
@@ -84,6 +85,13 @@ inline bool window_manager_t::on_mouse_release(const mouse_context_t &context)
 inline bool window_manager_t::on_mouse_move(const mouse_context_t &context)
 {
     return on_widgets_mouse_move(context);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_manager_t::recalc_region(const vec2d &offset)
+{
+    widgets_recalc_region(offset);
 }
 
 //--------------------------------------------------------------------------------------------------

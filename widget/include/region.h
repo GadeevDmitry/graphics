@@ -21,10 +21,11 @@ public:
     inline explicit clipping_region_t(const rectangle_t &region_);
     inline         ~clipping_region_t();
 
-    inline bool        set_region(const rectangle_t &region_);
-    inline rectangle_t get_region() const;
-    inline void        reset     ();
+    inline bool               set_region(const rectangle_t &region_);
+    inline const rectangle_t &get_region() const;
+    inline const list        &get_areas () const;
 
+    inline void reset();
     void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const;
 
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2);
@@ -70,9 +71,16 @@ inline bool clipping_region_t::set_region(const rectangle_t &region_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline rectangle_t clipping_region_t::get_region() const
+inline const rectangle_t &clipping_region_t::get_region() const
 {
     return region;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline const list &clipping_region_t::get_areas() const
+{
+    return areas;
 }
 
 //--------------------------------------------------------------------------------------------------

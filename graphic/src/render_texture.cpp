@@ -23,7 +23,7 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
 
 void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, const vec2d &size, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     sf::Vector2u tex_size = texture.data.getSize();
 
@@ -128,7 +128,7 @@ void render_texture_t::draw_vec2d(const segment_t &abs, const color_t &col, cons
 
 void render_texture_t::draw_line(const segment_t &abs, const color_t &col, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -155,7 +155,7 @@ void render_texture_t::draw_segment(const segment_t &abs, const color_t &col, co
 
 void render_texture_t::draw_point(const vec2d &abs, const color_t &col, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -203,7 +203,7 @@ void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color
 
 void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -224,7 +224,7 @@ void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color
 /*
 void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -245,7 +245,7 @@ void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color
 
 void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg)
 {
-    list regions = reg.getAreas();
+    const list &regions = reg.get_areas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);

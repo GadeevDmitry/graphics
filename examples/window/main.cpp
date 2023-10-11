@@ -70,12 +70,14 @@ int main()
                 {
                     manager.on_mouse_press(widget_t::refresh_mouse_context(event.mouseButton.button,
                                        recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition(sfml_wnd))));
+                    manager.recalc_region();
                 } break;
 
                 case sf::Event::MouseButtonReleased:
                 {
                     manager.on_mouse_release(widget_t::refresh_mouse_context(event.mouseButton.button,
                                          recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition(sfml_wnd))));
+                    manager.recalc_region();
                 } break;
 
                 case sf::Event::MouseMoved:
@@ -87,7 +89,9 @@ int main()
                     widget_t::mouse_context_t move_context(move_vec, widget_t::get_mouse_context().btn);
                     widget_t::refresh_mouse_pos(mouse_pos);
 
+                    manager.recalc_region();
                     manager.on_mouse_move(move_context);
+                    manager.recalc_region();
                 } break;
             }
 

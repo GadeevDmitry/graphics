@@ -6,7 +6,7 @@ GRAPHIC_BILD_DIR ?= build/graphic/
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(SFML_INCLUDES)
+INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GEOMETRY_INCLUDES) $(GRAPHIC_INCLUDES) $(SFML_INCLUDES) $(WIDGET_INCLUDES)
 
 #================================================================================================================================
 

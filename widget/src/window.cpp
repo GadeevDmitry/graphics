@@ -67,6 +67,7 @@ bool move_window(void *window_, const widget_t::mouse_context_t &context)
 {
     window_t *window = (window_t *) window_;
     window->region += context.pos;
+    window->visible.set_region(window->visible.get_region() + context.pos);
 
     return true;
 }

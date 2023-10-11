@@ -150,7 +150,7 @@ color   (color_)
 
 inline void color_button_t::render(render_texture_t &wnd, const vec2d &offset) const
 {
-    wnd.draw_filled_rectangle(region + offset, color);
+    wnd.draw_filled_rectangle(region + offset, color, visible);
 }
 
 #endif // BUTTON_H
