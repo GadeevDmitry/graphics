@@ -21,7 +21,7 @@ protected:
     inline explicit widget_manager_t(const rectangle_t &region_);
     inline         ~widget_manager_t();
 
-    inline bool register_widget(widget_t *widget);
+    // inline bool register_widget(widget_t *widget);
 
     inline bool on_widgets_key_press  (const KEY_TYPE &key);
     inline bool on_widgets_key_release(const KEY_TYPE &key);
@@ -30,6 +30,10 @@ protected:
     inline bool on_widgets_mouse_release(const mouse_context_t &context);
 
     void widgets_render(render_texture_t &render_texture) const;
+
+// test
+public:
+    inline bool register_widget(widget_t *widget);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -58,6 +62,8 @@ inline widget_manager_t::~widget_manager_t()
 
 inline bool widget_manager_t::register_widget(widget_t *widget)
 {
+    clipping_region_t diff_region = widget->getVisible();
+    updateRegions(diff_region);
 
     return list_push_front(&widgets, &widget);
 }

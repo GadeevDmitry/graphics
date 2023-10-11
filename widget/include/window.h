@@ -41,6 +41,9 @@ area            (area_)
 inline void window_t::set_area(const rectangle_t &area_)
 {
     area = area_;
+
+    clipping_region_t reg_upd = clipping_region_t(area_);
+    visible = reg_upd;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,15 +87,7 @@ color   (color_)
 
 void color_window_t::render(render_texture_t &wnd) const
 {
-
-
-    // wnd.draw_filled_rectangle(area, color);
-    rectangle_t rect = rectangle_t(vec2d(100, 100), vec2d(300, 400));
-    clipping_region_t reg = clipping_region_t();
-    reg.push_area(rect);
-
-    wnd.draw_filled_rectangle(rect, color);
-    wnd.draw_filled_circle(circle_t(vec2d(200, 200), 50), color_t(0, 255, 255), color_t(255, 0, 0), reg);
+    wnd.draw_filled_rectangle(area, color, visible);
     widgets_render(wnd);
 }
 

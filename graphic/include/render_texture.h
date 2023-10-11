@@ -55,9 +55,9 @@ public:
     inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &   fill_col);
 
     // reg funcs
-    void        draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col,                          const clipping_region_t &reg);
-    void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
-    inline void draw_filled_rectangle(const rectangle_t  &abs, const color_t &fill_col,                             const clipping_region_t &reg);
+    void draw_hollow_rectangle(const rectangle_t  &abs, const color_t &outline_col,                          const clipping_region_t &reg);
+    // void draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
+    void draw_filled_rectangle(const rectangle_t  &abs, const color_t &fill_col,                             const clipping_region_t &reg);
     //
 
     void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col);

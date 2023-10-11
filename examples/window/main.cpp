@@ -98,5 +98,11 @@ void init(const sf::RenderWindow &sfml_wnd, color_window_t &col_wnd, render_text
     col_wnd.set_area(rectangle_t(ld_corner, ru_corner));
     col_wnd.color = color_t::Orange;
 
+    // temp part
+    rectangle_t    area1   = rectangle_t(vec2d(100, 100), vec2d(300, 300));
+    color_window_t* child1 = new color_window_t(area1, color_t::Blue);
+    // child1->isVis = false;
+    col_wnd.register_widget(child1);
+
     rend_texture.create((unsigned) sfml_wnd_size.x, (unsigned) sfml_wnd_size.y);
 }

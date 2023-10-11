@@ -54,7 +54,7 @@ region(region_)
 
 inline clipping_region_t::~clipping_region_t()
 {
-    list_dtor(&areas);
+    // list_dtor(&areas);
 }
 
 //--------------------------------------------------------------------------------------------------

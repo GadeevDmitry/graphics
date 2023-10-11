@@ -218,27 +218,27 @@ void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg) {
-    list regions = reg.getAreas();
+// void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg) {
+//     list regions = reg.getAreas();
 
-    rectangle_t *front = (rectangle_t *) list_front(&regions);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+//     rectangle_t *front = (rectangle_t *) list_front(&regions);
+//     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
 
-    for (rectangle_t *cur = front; cur != fict;
-         cur = (rectangle_t *) list_next(cur))
-    {
-        if (cur) {
-            rectangle_t draw_zone = abs;
-            if (intersect_rectangle_rectangle(draw_zone, *cur)) {
-                draw_filled_rectangle(draw_zone, outline_col, fill_col);
-            }
-        }
-    }
-}
+//     for (rectangle_t *cur = front; cur != fict;
+//          cur = (rectangle_t *) list_next(cur))
+//     {
+//         if (cur) {
+//             rectangle_t draw_zone = abs;
+//             if (intersect_rectangle_rectangle(draw_zone, *cur)) {
+//                 draw_filled_rectangle(draw_zone, outline_col, fill_col);
+//             }
+//         }
+//     }
+// }
 
 //--------------------------------------------------------------------------------------------------
 
-inline void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg) {
+void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg) {
     list regions = reg.getAreas();
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
