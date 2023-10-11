@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "widget_manager.h"
+#include "log.h"
 
 //==================================================================================================
 
@@ -77,39 +78,61 @@ void widget_manager_t::widgets_recalc_region(const vec2d &offset)
 {
     if (widgets.size == 0) return;
 
+    LOG_TAB_SERVICE_MESSAGE("WIDGETS_RECALC_REGION", "\n");
+
     widget_t **front = (widget_t **) list_front(&widgets);
     widget_t **fict  = (widget_t **) list_fict (&widgets);
 
+    LOG_TAB_SERVICE_MESSAGE("parent", "\n");
+    clipping_region_t::dump(&visible);
+
+    clipping_region_t rel_parent = visible - visible.get_region().ld_corner;
+    LOG_TAB_SERVICE_MESSAGE("rel_parent", "\n");
+    clipping_region_t::dump(&rel_parent);
+
+    LOG_TAB++;
     for (widget_t **cnt_1 = front; cnt_1 != fict;
          cnt_1 = (widget_t **) list_next(cnt_1))
     {
         widget_t          &cur_1     = **cnt_1;
         clipping_region_t &cur_1_reg = cur_1.get_clipping_region();
 
-        cur_1_reg.set_region(cur_1_reg.get_region() + offset);
-        cur_1_reg.reset();
-        cur_1_reg *= visible;
+        LOG_TAB_SERVICE_MESSAGE("SUB_WIDGET", "\n");
+        clipping_region_t::dump(&cur_1_reg);
 
+        LOG_TAB_SERVICE_MESSAGE("RESET", "\n");
+        cur_1_reg.reset();
+        clipping_region_t::dump(&cur_1_reg);
+
+        LOG_TAB_SERVICE_MESSAGE("*= rel_parent", "\n");
+        cur_1_reg *= rel_parent;
+        clipping_region_t::dump(&cur_1_reg);
+
+        LOG_TAB++;
         for (widget_t **cnt_2 = front; cnt_2 != cnt_1;
              cnt_2 = (widget_t **) list_next(cnt_2))
         {
             widget_t          &cur_2     = **cnt_2;
             clipping_region_t &cur_2_reg = cur_2.get_clipping_region();
 
-            cur_1_reg -= cur_2_reg.get_region();
-        }
+            LOG_TAB_SERVICE_MESSAGE("SUB OP_2", "\n");
+            clipping_region_t::dump(&cur_2_reg);
 
-        cur_1.recalc_region(cur_1_reg.get_region().ld_corner);
+            LOG_TAB_MESSAGE("-= op_2", "\n");
+            cur_1_reg -= cur_2_reg.get_region();
+            clipping_region_t::dump(&cur_1_reg);
+        }
+        LOG_TAB--;
+
+        cur_1.recalc_region(offset + cur_1_reg.get_region().ld_corner);
     }
+    LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void widget_manager_t::recalc_region(const vec2d &offset)
 {
-    visible.set_region(visible.get_region() + offset);
-    visible.reset();
-
     widgets_recalc_region(offset);
 
     widget_t **front = (widget_t **) list_front(&widgets);
@@ -118,10 +141,10 @@ void widget_manager_t::recalc_region(const vec2d &offset)
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
-        renderable        &cur     = **cnt;
-        clipping_region_t &cur_reg = cur.get_clipping_region();
+        widget_t   &cur     = **cnt;
+        rectangle_t cur_reg = cur.get_object_region() + visible.get_region().ld_corner;
 
-        visible -= cur_reg.get_region();
+        visible -= cur_reg;
     }
 }
 

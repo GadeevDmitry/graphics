@@ -65,7 +65,7 @@ color   (color_)
 
 inline void color_window_t::render(render_texture_t &wnd, const vec2d &offset) const
 {
-    wnd.draw_filled_rectangle(region, color, visible);
+    wnd.draw_filled_rectangle(region, color, visible + offset);
     widgets_render(wnd, offset + region.ld_corner);
 }
 

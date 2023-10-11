@@ -20,7 +20,7 @@ public:
     inline const rectangle_t       &get_object_region  () const;
     inline const list              &get_visible_areas  () const;
 
-    virtual void recalc_region(const vec2d &offset = vec2d(0, 0)) = 0;
+    virtual void recalc_region(const vec2d &offset) = 0;
     virtual void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const = 0;
 };
 

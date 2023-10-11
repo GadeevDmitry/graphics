@@ -34,6 +34,9 @@ public:
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const rectangle_t &op_2);
     friend clipping_region_t &operator *=(clipping_region_t &op_1, const rectangle_t &op_2);
 
+    friend clipping_region_t  operator + (const clipping_region_t &op_1, const vec2d &op_2);
+    friend clipping_region_t  operator - (const clipping_region_t &op_1, const vec2d &op_2);
+
     static void dump(const void *clipping_region_);
 };
 
