@@ -9,10 +9,10 @@
 class widget_manager_t: public widget_t
 {
 private:
-    bool on_widgets_key_event  (on_key_event   event, const KEY_TYPE &key);
-    bool on_widgets_mouse_event(on_mouse_event event, const mouse_context_t &context);
+    bool on_widgets_key_click_event  (on_key_click_event   event, const KEY_TYPE          &key);
+    bool on_widgets_mouse_click_event(on_mouse_click_event event, const MOUSE_BUTTON_TYPE &btn);
 
-    void on_widget_event_reaction(widget_t **widget_, const size_t widget_pos);
+    void on_widget_event_react       (widget_t **widget_, const size_t widget_pos);
 
 protected:
     list widgets;
@@ -23,19 +23,26 @@ protected:
 
     inline bool register_widget(widget_t *widget);
 
-    inline bool on_widgets_key_press  (const KEY_TYPE &key);
-    inline bool on_widgets_key_release(const KEY_TYPE &key);
+    void widgets_move         (const vec2d &offset);
+    void widgets_recalc_region();
+    void widgets_render       (render_texture_t &render_texture) const;
 
-    inline bool on_widgets_mouse_press  (const mouse_context_t &context);
-    inline bool on_widgets_mouse_release(const mouse_context_t &context);
-    inline bool on_widgets_mouse_move   (const mouse_context_t &context);
-
-    void widgets_recalc_region(const vec2d &offset);
-    void widgets_render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const;
+    inline bool on_widgets_key_press    (const KEY_TYPE          &key);
+    inline bool on_widgets_key_release  (const KEY_TYPE          &key);
+    inline bool on_widgets_mouse_press  (const MOUSE_BUTTON_TYPE &btn);
+    inline bool on_widgets_mouse_release(const MOUSE_BUTTON_TYPE &btn);
+           bool on_widgets_mouse_move   (const vec2d             &off);
 
 public:
-    virtual void recalc_region(const vec2d &offset) override;
-    inline const list &get_widgets() const;
+    virtual inline void move         (const vec2d &off)            override;
+    virtual inline void recalc_region()                            override;
+    virtual inline void render       (render_texture_t &wnd) const override;
+
+    virtual inline bool on_key_press    (const KEY_TYPE          &key) override;
+    virtual inline bool on_key_release  (const KEY_TYPE          &key) override;
+    virtual inline bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
+    virtual inline bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
+    virtual inline bool on_mouse_move   (const vec2d             &off) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -69,48 +76,86 @@ inline bool widget_manager_t::register_widget(widget_t *widget)
 
 //--------------------------------------------------------------------------------------------------
 
-inline const list &widget_manager_t::get_widgets() const
-{
-    return widgets;
-}
-
-//--------------------------------------------------------------------------------------------------
-
 inline bool widget_manager_t::on_widgets_key_press(const KEY_TYPE &key)
 {
-    return on_widgets_key_event(&widget_t::on_key_press, key);
+    return on_widgets_key_click_event(&widget_t::on_key_press, key);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline bool widget_manager_t::on_widgets_key_release(const KEY_TYPE &key)
 {
-    return on_widgets_key_event(&widget_t::on_key_release, key);
+    return on_widgets_key_click_event(&widget_t::on_key_release, key);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool widget_manager_t::on_widgets_mouse_press(const mouse_context_t &context)
+inline bool widget_manager_t::on_widgets_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    return on_widgets_mouse_event(&widget_t::on_mouse_press, context);
+    return on_widgets_mouse_click_event(&widget_t::on_mouse_press, btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool widget_manager_t::on_widgets_mouse_release(const mouse_context_t &context)
+inline bool widget_manager_t::on_widgets_mouse_release(const MOUSE_BUTTON_TYPE &btn)
 {
-    return on_widgets_mouse_event(&widget_t::on_mouse_release, context);
+    return on_widgets_mouse_click_event(&widget_t::on_mouse_release, btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool widget_manager_t::on_widgets_mouse_move(const mouse_context_t &context)
+inline void widget_manager_t::move(const vec2d &off)
 {
-    return on_widgets_mouse_event(&widget_t::on_mouse_move, context);
+    widgets_move(off);
 }
 
-//==================================================================================================
+//--------------------------------------------------------------------------------------------------
 
-void widgets_recalc_region(widget_manager_t *manager, const vec2d &offset);
+inline void widget_manager_t::recalc_region()
+{
+    widgets_recalc_region();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_manager_t::render(render_texture_t &wnd) const
+{
+    widgets_render(wnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_key_press(const KEY_TYPE &key)
+{
+    return on_widgets_key_press(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_key_release(const KEY_TYPE &key)
+{
+    return on_widgets_key_release(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
+{
+    return on_widgets_mouse_press(btn);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_mouse_release(const MOUSE_BUTTON_TYPE &btn)
+{
+    return on_widgets_mouse_release(btn);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool widget_manager_t::on_mouse_move(const vec2d &off)
+{
+    return on_widgets_mouse_move(off);
+}
 
 #endif // WIDGET_MANAGER_H

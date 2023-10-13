@@ -6,71 +6,99 @@
 
 bool button_t::on_key_press(const KEY_TYPE &key)
 {
-    LOG_VERIFY(saved_key == KEY_TYPE_UNKNOWN, false);
-
     if (on_key_press_func == nullptr) return false;
-
-    bool res = on_key_press_func(args, key);
-    if (res) saved_key = key;
-
-    return res;
+    return on_key_press_func(this, args, key, active);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool button_t::on_key_release(const KEY_TYPE &key)
 {
-    if (saved_key == KEY_TYPE_UNKNOWN) return false;
-
-    LOG_VERIFY(saved_key == key, false);
-
-    saved_key = KEY_TYPE_UNKNOWN;
-    if (on_key_release_func != nullptr)
-        on_key_release_func(args, key);
-
-    return true;
+    if (on_key_release_func == nullptr) return false;
+    return on_key_release_func(this, args, key, active);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool button_t::on_mouse_press(const mouse_context_t &context)
+bool button_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    LOG_VERIFY(saved_mouse_btn == MOUSE_BUTTON_TYPE_UNKNOWN, false);
+    const mouse_context_t &context = get_mouse_context();
 
     if (!region.is_point_inside(context.pos)) return false;
-
-    saved_mouse_btn = context.btn;
     if (on_mouse_press_func != nullptr)
-        on_mouse_press_func(args, context);
+        on_mouse_press_func(this, args, btn, active);
 
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool button_t::on_mouse_release(const mouse_context_t &context)
+bool button_t::on_mouse_release(const MOUSE_BUTTON_TYPE &btn)
 {
-    if (saved_mouse_btn == MOUSE_BUTTON_TYPE_UNKNOWN) return false;
+    if (on_mouse_release_func == nullptr) return false;
 
-    LOG_VERIFY(saved_mouse_btn == context.btn, false);
-
-    saved_mouse_btn = MOUSE_BUTTON_TYPE_UNKNOWN;
-    if (on_mouse_release_func != nullptr)
-        on_mouse_release_func(args, context);
-
+    on_mouse_release_func(this, args, btn, active);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool button_t::on_mouse_move(const mouse_context_t &context)
+bool button_t::on_mouse_move(const vec2d &off)
 {
-    if (saved_mouse_btn == MOUSE_BUTTON_TYPE_UNKNOWN) return false;
+    LOG_VERIFY(active == this, false);
 
-    LOG_VERIFY(saved_mouse_btn == context.btn, false);
+    if (on_mouse_move_func == nullptr) return false;
 
-    if (on_mouse_move_func != nullptr)
-        on_mouse_move_func(args, context);
+    on_mouse_move_func(this, args, off, active);
+    return true;
+}
 
+//--------------------------------------------------------------------------------------------------
+
+bool button_t::activate_by_key_click(button_t *self, void *args, const KEY_TYPE &key, widget_t *&active)
+{
+    LOG_VERIFY(active == nullptr, false);
+    (void) args;
+    (void) key;
+
+    active = (widget_t *) self;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool button_t::deactivate_by_key_click(button_t *self, void *args, const KEY_TYPE &key, widget_t *&active)
+{
+    LOG_VERIFY(active == (widget_t *) self, false);
+    (void) self;
+    (void) args;
+    (void) key;
+
+    active = nullptr;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool button_t::activate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
+{
+    LOG_VERIFY(active == nullptr, false);
+    (void) args;
+    (void) btn;
+
+    active = (widget_t *) self;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool button_t::deactivate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &key, widget_t *&active)
+{
+    LOG_VERIFY(active == (widget_t *) self, false);
+    (void) self;
+    (void) args;
+    (void) key;
+
+    active = nullptr;
     return true;
 }

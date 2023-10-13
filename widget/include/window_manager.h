@@ -12,17 +12,8 @@ public:
     inline          window_manager_t(void (*delete_window)(void *el));
     inline explicit window_manager_t(void (*delete_window)(void *el), const rectangle_t &region_);
 
-    inline bool set_region     (const rectangle_t &region);
+    inline void set_region     (const rectangle_t &region);
     inline bool register_window(window_t *window);
-
-    virtual inline bool on_key_press  (const KEY_TYPE &key) override;
-    virtual inline bool on_key_release(const KEY_TYPE &key) override;
-
-    virtual inline bool on_mouse_press  (const mouse_context_t &context) override;
-    virtual inline bool on_mouse_release(const mouse_context_t &context) override;
-    virtual inline bool on_mouse_move   (const mouse_context_t &context) override;
-
-    virtual inline void render(render_texture_t &render_texture, const vec2d &offset = vec2d(0, 0)) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -39,9 +30,9 @@ widget_manager_t(delete_window, region_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool window_manager_t::set_region(const rectangle_t &region)
+inline void window_manager_t::set_region(const rectangle_t &region)
 {
-    return visible.set_region(region);
+    visible.region = region;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,48 +40,6 @@ inline bool window_manager_t::set_region(const rectangle_t &region)
 inline bool window_manager_t::register_window(window_t *window)
 {
     return register_widget(window);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_manager_t::on_key_press(const KEY_TYPE &key)
-{
-    return on_widgets_key_press(key);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_manager_t::on_key_release(const KEY_TYPE &key)
-{
-    return on_widgets_key_release(key);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_manager_t::on_mouse_press(const mouse_context_t &context)
-{
-    return on_widgets_mouse_press(context);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_manager_t::on_mouse_release(const mouse_context_t &context)
-{
-    return on_widgets_mouse_release(context);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool window_manager_t::on_mouse_move(const mouse_context_t &context)
-{
-    return on_widgets_mouse_move(context);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void window_manager_t::render(render_texture_t &render_texture, const vec2d &offset) const
-{
-    return widgets_render(render_texture, offset);
 }
 
 #endif // WINDOW_MANAGER_H

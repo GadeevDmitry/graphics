@@ -10,6 +10,7 @@ static void subtract_region_area   (list *const res, const list *const region, c
 static void subtract_area_area     (list *const res, const rectangle_t  &op_1, const rectangle_t       &op_2);
 
 static void intersect_region_region(list *const  op_1, const list *const  op_2);
+static void intersect_region_area  (list *const  op_1, const rectangle_t &op_2);
 static bool intersect_area_area    (rectangle_t &op_1, const rectangle_t &op_2);
 
 //==================================================================================================
@@ -72,13 +73,7 @@ clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t 
     for (; op_2_cur != op_2_fict; op_2_cur = (rectangle_t *) list_next(op_2_cur))
     {
         subtract_region_area(&temp, &op_1.areas, op_2_cur);
-//      LOG_TAB_MESSAGE("RES & TEMP BEFORE MERGING\n");
-//      list_dump(&res);
-//      list_dump(&temp);
-
         intersect_region_region(&res, &temp);
-//      LOG_TAB_MESSAGE("RES AFTER MERGING\n");
-//      list_dump(&res);
 
         list_clear(&temp);
         if (res.size == 0) break;
@@ -125,43 +120,12 @@ clipping_region_t &operator -=(clipping_region_t &op_1, const rectangle_t &op_2)
 
 //--------------------------------------------------------------------------------------------------
 
-clipping_region_t operator +(const clipping_region_t &op_1, const vec2d &op_2)
+clipping_region_t &operator *=(clipping_region_t &op_1, const rectangle_t &op_2)
 {
-    clipping_region_t res;
-    res.region = op_1.region + op_2;
+    if (op_1.areas.size == 0) return op_1;
 
-    rectangle_t *front = (rectangle_t *) list_front(&op_1.areas);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&op_1.areas);
-
-    for (rectangle_t *cur = front; cur != fict;
-         cur = (rectangle_t *) list_next(cur))
-    {
-        rectangle_t rel = *cur + op_2;
-        list_push_back(&res.areas, &rel);
-    }
-
-    return res;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-clipping_region_t operator -(const clipping_region_t &op_1, const vec2d &op_2)
-{
-    return op_1 + (-op_2);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void clipping_region_t::render(render_texture_t &wnd, const vec2d &offset) const
-{
-    rectangle_t *front = (rectangle_t *) list_front(&areas);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
-
-    for (rectangle_t *cur = front; cur != fict;
-         cur = (rectangle_t *) list_next(cur))
-    {
-        wnd.draw_hollow_rectangle(*cur + offset, color_t::get_rand_color());
-    }
+    intersect_region_area(&op_1.areas, op_2);
+    return op_1;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,10 +138,6 @@ static void intersect_region_region(list *const op_1, const list *const op_2)
         return;
     }
 
-//  LOG_TAB_MESSAGE(">>>>>>>>>>>>>>>>>>>>>>>>>\n"
-//                  "INTERSECTION\n"
-//                  ">>>>>>>>>>>>>>>>>>>>>>>>>\n");
-
     rectangle_t *op_2_front = (rectangle_t *) list_front(op_2);
     rectangle_t *op_2_fict  = (rectangle_t *) list_fict (op_2);
 
@@ -189,30 +149,32 @@ static void intersect_region_region(list *const op_1, const list *const op_2)
         for (rectangle_t *op_2_area = op_2_front; op_2_area != op_2_fict;
              op_2_area = (rectangle_t *) list_next(op_2_area))
         {
-//          LOG_TAB_MESSAGE("op_1_area\n");
-//          rectangle_t::dump(&op_1_area);
-//          LOG_TAB_MESSAGE("op_2_area\n");
-//          rectangle_t::dump(op_2_area);
-
             rectangle_t op_1_area_dup = op_1_area;
 
             bool is_valid_area = intersect_area_area(op_1_area_dup, *op_2_area);
             if (is_valid_area)
                 list_push_back(op_1, &op_1_area_dup);
-
-//          LOG_TAB_MESSAGE("intersect\n");
-//          if (is_valid_area)
-//              rectangle_t::dump(&op_1_area);
-//          else
-//              LOG_TAB_MESSAGE("invalid\n");
         }
 
         list_pop_front(op_1);
     }
+}
 
-//  LOG_TAB_MESSAGE("<<<<<<<<<<<<<<<<<<<<<<<<<\n"
-//                  "INTERSECTION\n"
-//                  "<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+//--------------------------------------------------------------------------------------------------
+
+static void intersect_region_area(list *const op_1, const rectangle_t &op_2)
+{
+    size_t initial_op_1_size = op_1->size;
+    for (size_t i = 0; i < initial_op_1_size; ++i)
+    {
+        rectangle_t op_1_area = *(rectangle_t *) list_front(op_1);
+
+        bool is_valid_area = intersect_area_area(op_1_area, op_2);
+        if (is_valid_area)
+            list_push_back(op_1, &op_1_area);
+
+        list_pop_front(op_1);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -16,22 +16,36 @@ public:
     explicit window_t(const rectangle_t &region_);
     inline  ~window_t() {}
 
-    virtual inline bool on_key_press  (const KEY_TYPE &key) override;
-    virtual inline bool on_key_release(const KEY_TYPE &key) override;
+    virtual inline void move(const vec2d &offset) override;
 
-    virtual bool on_mouse_press  (const mouse_context_t &context) override;
-    virtual bool on_mouse_release(const mouse_context_t &context) override;
-    virtual bool on_mouse_move   (const mouse_context_t &context) override;
+    virtual inline bool on_key_press    (const KEY_TYPE          &key) override;
+    virtual inline bool on_key_release  (const KEY_TYPE          &key) override;
+    virtual        bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
+    virtual inline bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
+    virtual inline bool on_mouse_move   (const vec2d             &off) override;
 
-    inline static void window_delete(void *const window_);
-
-    friend bool move_window(void *window_, const mouse_context_t &context);
+    static inline void window_delete(void *const window_);
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_t::move(const vec2d &offset)
+{
+    region         += offset;
+    visible.region += offset;
+
+    widgets_move(offset);
+}
 
 //--------------------------------------------------------------------------------------------------
 
 inline bool window_t::on_key_press  (const KEY_TYPE &key) { (void) key; return false; }
 inline bool window_t::on_key_release(const KEY_TYPE &key) { (void) key; return false; }
+
+//--------------------------------------------------------------------------------------------------
+
+bool window_t::on_mouse_release(const MOUSE_BUTTON_TYPE &btn) { return on_widgets_mouse_release(btn); }
+bool window_t::on_mouse_move   (const vec2d             &off) { return on_widgets_mouse_move   (off); }
 
 //--------------------------------------------------------------------------------------------------
 
@@ -51,7 +65,7 @@ public:
     inline explicit color_window_t(const rectangle_t &region_, const color_t &color_ = color_t::White);
     inline         ~color_window_t() {}
 
-    virtual inline void render(render_texture_t &wnd, const vec2d &offset = vec2d(0, 0)) const override;
+    virtual inline void render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -63,10 +77,10 @@ color   (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void color_window_t::render(render_texture_t &wnd, const vec2d &offset) const
+inline void color_window_t::render(render_texture_t &wnd) const
 {
-    wnd.draw_filled_rectangle(region, color, visible + offset);
-    widgets_render(wnd, offset + region.ld_corner);
+    wnd.draw_filled_rectangle(region, color);
+    widgets_render(wnd);
 }
 
 #endif // WINDOW_H

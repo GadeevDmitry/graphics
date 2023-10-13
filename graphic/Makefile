@@ -18,6 +18,10 @@ $(GRAPHIC_BUILD_DIR)color.o: $(GRAPHIC_PREFIX)src/color.cpp | $(GRAPHIC_BILD_DIR
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(GRAPHIC_BUILD_DIR)color.o
 
+$(GRAPHIC_BUILD_DIR)region.o: $(GRAPHIC_PREFIX)src/region.cpp | $(GRAPHIC_BUILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(GRAPHIC_BUILD_DIR)region.o
+
 $(GRAPHIC_BILD_DIR)render_texture.o: $(GRAPHIC_PREFIX)src/render_texture.cpp | $(GRAPHIC_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(GRAPHIC_BILD_DIR)render_texture.o

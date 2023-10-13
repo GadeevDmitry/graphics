@@ -4,11 +4,11 @@
 
 //==================================================================================================
 
-bool move_window(void *window_, const widget_t::mouse_context_t &context);
+static const double HEADER_MENU_HEIGHT = 30;
 
 //--------------------------------------------------------------------------------------------------
 
-static const double HEADER_MENU_HEIGHT = 30;
+static void header_menu_mouse_move_func(menu_t *self, void *args, const vec2d &off, widget_t *&active);
 
 //==================================================================================================
 
@@ -18,7 +18,6 @@ region          (region_),
 header_menu     (nullptr)
 {
     vec2d wnd_size = region.ru_corner - region.ld_corner;
-
     if (wnd_size.y < HEADER_MENU_HEIGHT)
     {
         LOG_ERROR("CAN'T CREATE WINDOW: it's height = %lg < %lg\n",
@@ -26,48 +25,55 @@ header_menu     (nullptr)
         return;
     }
 
-    header_menu.set_region(rectangle_t(vec2d(0, wnd_size.y - HEADER_MENU_HEIGHT), wnd_size));
-    header_menu.set_func  (move_window);
-    header_menu.set_args  ((window_t *) this);
+    rectangle_t header_menu_region(vec2d(0, 0), vec2d(wnd_size.x, HEADER_MENU_HEIGHT));
+    header_menu_region += (region.lu_corner() - vec2d(0, HEADER_MENU_HEIGHT));
+
+    header_menu.set_region(header_menu_region);
+    header_menu.set_funcs (nullptr, nullptr,
+                           menu_t::activate_by_mouse_click,
+                           menu_t::deactivate_by_mouse_click,
+                           header_menu_mouse_move_func);
+    header_menu.set_args  (this);
     header_menu.color = color_t::Orange;
 
-    widget_manager_t:register_widget(&header_menu);
+    register_widget(&header_menu);
+
+    LOG_MESSAGE("<<<<<<<<<<<<<<<<\n"
+                "window        = %p\n"
+                "header_menu   = %p\n"
+                "widgets.front = %p\n"
+                ">>>>>>>>>>>>>>>>\n", this, &header_menu, *(widget_t **) list_front(&widgets));
+
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool window_t::on_mouse_press(const mouse_context_t &context)
+bool window_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    mouse_context_t context_rel = context - region.ld_corner;
+    const mouse_context_t &context = get_mouse_context();
 
-    if (!region.is_point_inside(context.pos)) return false;
-    if (on_widgets_mouse_press (context_rel)) return true;
+    LOG_TAB_SERVICE_MESSAGE("WINDOW_T::ON_MOUSE_PRESS", "\n");
+    LOG_TAB++;
 
-    return false;
-}
+    if (!region.is_point_inside(context.pos))
+    {
+        LOG_TAB_MESSAGE("POINT {%lg, %lg} IS NOT INSIDE\n", context.pos.x, context.pos.y);
+        LOG_TAB--;
+        return false;
+    }
 
-//--------------------------------------------------------------------------------------------------
-
-bool window_t::on_mouse_release(const mouse_context_t &context)
-{
-    mouse_context_t context_rel = context - region.ld_corner;
-    return on_widgets_mouse_release(context_rel);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool window_t::on_mouse_move(const mouse_context_t &context)
-{
-    return on_widgets_mouse_move(context);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool move_window(void *window_, const widget_t::mouse_context_t &context)
-{
-    window_t *window = (window_t *) window_;
-    window->region += context.pos;
-    window->visible.set_region(window->visible.get_region() + context.pos);
-
+    on_widgets_mouse_press(btn);
+    LOG_TAB--;
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+static void header_menu_mouse_move_func(menu_t *self, void *args, const vec2d &off, widget_t *&active)
+{
+    (void) self;
+    (void) active;
+
+    window_t *parent = (window_t *) args;
+    parent->move(off);
 }

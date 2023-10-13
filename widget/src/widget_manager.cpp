@@ -4,13 +4,13 @@
 
 //==================================================================================================
 
-void widget_manager_t::on_widget_event_reaction(widget_t **widget_, const size_t widget_pos)
+void widget_manager_t::on_widget_event_react(widget_t **widget_, const size_t widget_pos)
 {
     widget_t &widget = **widget_;
 
     if (status == WIDGET_CLOSED)
         return;
-    if (widget.get_status() == WIDGET_CLOSED)
+    if (widget.status == WIDGET_CLOSED)
         list_erase(&widgets, widget_pos);
     else
         list_replace(&widgets, widget_, widget_pos, 0);
@@ -18,8 +18,7 @@ void widget_manager_t::on_widget_event_reaction(widget_t **widget_, const size_t
 
 //--------------------------------------------------------------------------------------------------
 
-bool widget_manager_t::on_widgets_key_event
-    (widget_t::on_key_event event, const KEY_TYPE &key)
+bool widget_manager_t::on_widgets_key_click_event(widget_t::on_key_click_event event, const KEY_TYPE &key)
 {
     if (widgets.size == 0) return false;
 
@@ -33,12 +32,10 @@ bool widget_manager_t::on_widgets_key_event
         widget_t &cur = **cnt;
         if ((cur.*event)(key))
         {
-            on_widget_event_reaction(cnt, ind);
+            on_widget_event_react(cnt, ind);
             return true;
         }
-
         ++ind;
-        continue;
     }
 
     return false;
@@ -46,8 +43,7 @@ bool widget_manager_t::on_widgets_key_event
 
 //--------------------------------------------------------------------------------------------------
 
-bool widget_manager_t::on_widgets_mouse_event
-    (widget_t::on_mouse_event event, const mouse_context_t &context)
+bool widget_manager_t::on_widgets_mouse_click_event(widget_t::on_mouse_click_event event, const MOUSE_BUTTON_TYPE &btn)
 {
     if (widgets.size == 0) return false;
 
@@ -55,85 +51,65 @@ bool widget_manager_t::on_widgets_mouse_event
     widget_t **fict  = (widget_t **) list_fict (&widgets);
     size_t     ind   = 0;
 
+    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::ON_WIDGETS_MOUSE_CLICK_EVENT", "\n");
+    LOG_TAB++;
+    LOG_TAB_MESSAGE("size  = %lu\n"
+                    "front = %p\n", widgets.size, *front);
+
+
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
         widget_t &cur = **cnt;
-        if ((cur.*event)(context))
+        if ((cur.*event)(btn))
         {
-            on_widget_event_reaction(cnt, ind);
+            on_widget_event_react(cnt, ind);
+            LOG_TAB--;
             return true;
         }
-
         ++ind;
-        continue;
     }
 
+    LOG_TAB--;
     return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_recalc_region(const vec2d &offset)
+bool widget_manager_t::on_widgets_mouse_move(const vec2d &off)
 {
-    if (widgets.size == 0) return;
-
-    LOG_TAB_SERVICE_MESSAGE("WIDGETS_RECALC_REGION", "\n");
+    if (widgets.size == 0) return false;
 
     widget_t **front = (widget_t **) list_front(&widgets);
     widget_t **fict  = (widget_t **) list_fict (&widgets);
+    size_t     ind   = 0;
 
-    LOG_TAB_SERVICE_MESSAGE("parent", "\n");
-    clipping_region_t::dump(&visible);
-
-    clipping_region_t rel_parent = visible - visible.get_region().ld_corner;
-    LOG_TAB_SERVICE_MESSAGE("rel_parent", "\n");
-    clipping_region_t::dump(&rel_parent);
-
+    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::ON_WIDGETS_MOUSE_MOVE", "\n");
     LOG_TAB++;
-    for (widget_t **cnt_1 = front; cnt_1 != fict;
-         cnt_1 = (widget_t **) list_next(cnt_1))
+    LOG_TAB_MESSAGE("size = %lu\n", widgets.size);
+
+    for (widget_t **cnt = front; cnt != fict;
+        cnt = (widget_t **) list_next(cnt))
     {
-        widget_t          &cur_1     = **cnt_1;
-        clipping_region_t &cur_1_reg = cur_1.get_clipping_region();
-
-        LOG_TAB_SERVICE_MESSAGE("SUB_WIDGET", "\n");
-        clipping_region_t::dump(&cur_1_reg);
-
-        LOG_TAB_SERVICE_MESSAGE("RESET", "\n");
-        cur_1_reg.reset();
-        clipping_region_t::dump(&cur_1_reg);
-
-        LOG_TAB_SERVICE_MESSAGE("*= rel_parent", "\n");
-        cur_1_reg *= rel_parent;
-        clipping_region_t::dump(&cur_1_reg);
-
-        LOG_TAB++;
-        for (widget_t **cnt_2 = front; cnt_2 != cnt_1;
-             cnt_2 = (widget_t **) list_next(cnt_2))
+        widget_t &cur = **cnt;
+        if ((cur.on_mouse_move(off)))
         {
-            widget_t          &cur_2     = **cnt_2;
-            clipping_region_t &cur_2_reg = cur_2.get_clipping_region();
-
-            LOG_TAB_SERVICE_MESSAGE("SUB OP_2", "\n");
-            clipping_region_t::dump(&cur_2_reg);
-
-            LOG_TAB_MESSAGE("-= op_2", "\n");
-            cur_1_reg -= cur_2_reg.get_region();
-            clipping_region_t::dump(&cur_1_reg);
+            on_widget_event_react(cnt, ind);
+            LOG_TAB--;
+            return true;
         }
-        LOG_TAB--;
-
-        cur_1.recalc_region(offset + cur_1_reg.get_region().ld_corner);
+        ++ind;
     }
+
     LOG_TAB--;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::recalc_region(const vec2d &offset)
+void widget_manager_t::widgets_move(const vec2d &offset)
 {
-    widgets_recalc_region(offset);
+    if (widgets.size == 0) return;
 
     widget_t **front = (widget_t **) list_front(&widgets);
     widget_t **fict  = (widget_t **) list_fict (&widgets);
@@ -141,16 +117,21 @@ void widget_manager_t::recalc_region(const vec2d &offset)
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
-        widget_t   &cur     = **cnt;
-        rectangle_t cur_reg = cur.get_object_region() + visible.get_region().ld_corner;
-
-        visible -= cur_reg;
+        widget_t &cur = **cnt;
+        cur.move(offset);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_render(render_texture_t &render_texture, const vec2d &offset) const
+void widget_manager_t::widgets_recalc_region()
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void widget_manager_t::widgets_render(render_texture_t &render_texture) const
 {
     if (widgets.size == 0) return;
 
@@ -161,6 +142,6 @@ void widget_manager_t::widgets_render(render_texture_t &render_texture, const ve
          cnt = (widget_t **) list_prev(cnt))
     {
         widget_t &cur = **cnt;
-        cur.render(render_texture, offset);
+        cur.render(render_texture);
     }
 }

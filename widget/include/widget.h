@@ -1,7 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "rendarable.h"
+#include "renderable.h"
 
 //==================================================================================================
 
@@ -47,8 +47,57 @@ enum KEY_TYPE
     Num9,
     Escape,
 
+    //>>> special keys
+    LControl,
+    LShift,
+    LAlt,
+    LSystem,
+    RControl,
+    RShift,
+    RAlt,
+    RSystem,
+    //<<< special keys
+
     KEY_TYPE_COUNT,
 };
+
+//--------------------------------------------------------------------------------------------------
+
+struct key_context_t
+{
+public:
+    KEY_TYPE key;
+    char     alt;
+    char     control;
+    char     shift;
+    char     system;
+
+    inline          key_context_t();
+    inline explicit key_context_t(const KEY_TYPE key_, const char alt_, const char control_, const char shift_, const char system_);
+    inline         ~key_context_t() {}
+
+    static KEY_TYPE convert_sfml(const sf::Keyboard::Key &sfml_key);
+};
+
+//--------------------------------------------------------------------------------------------------
+
+inline key_context_t::key_context_t():
+key    (KEY_TYPE_UNKNOWN),
+alt    (false),
+control(false),
+shift  (false),
+system (false)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline key_context_t::key_context_t(const KEY_TYPE key_, const char alt_, const char control_, const char shift_, const char system_):
+key    (key_),
+alt    (alt_),
+control(control_),
+shift  (shift_),
+system (system_)
+{}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -63,24 +112,38 @@ enum MOUSE_BUTTON_TYPE
     MOUSE_BUTTON_TYPE_COUNT,
 };
 
+//--------------------------------------------------------------------------------------------------
+
+struct mouse_context_t
+{
+public:
+    vec2d pos;
+    char  left;
+    char  right;
+    char  middle;
+
+    inline  mouse_context_t();
+    inline ~mouse_context_t() {}
+
+    static MOUSE_BUTTON_TYPE convert_sfml(const sf::Mouse::Button &sfml_mouse_btn);
+};
+
+//--------------------------------------------------------------------------------------------------
+
+inline mouse_context_t::mouse_context_t():
+pos   (),
+left  (false),
+right (false),
+middle(false)
+{}
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class widget_manager_t;
 
 class widget_t: public renderable
 {
 public:
-    struct mouse_context_t
-    {
-    public:
-        vec2d             pos;
-        MOUSE_BUTTON_TYPE btn;
-
-                 mouse_context_t();
-        explicit mouse_context_t(const vec2d &pos_, const MOUSE_BUTTON_TYPE &btn_);
-        inline  ~mouse_context_t() {}
-
-        inline mouse_context_t &operator -=(const vec2d &offset);
-        inline mouse_context_t  operator - (const vec2d &offset) const;
-    };
 
     enum WIDGET_STATUS_TYPE
     {
@@ -89,41 +152,48 @@ public:
     };
 
 protected:
-    typedef bool (widget_t::*on_key_event)   (const KEY_TYPE &key);
-    typedef bool (widget_t::*on_mouse_event) (const mouse_context_t &context);
+    typedef bool (widget_t::*on_key_click_event)   (const KEY_TYPE          &key);
+    typedef bool (widget_t::*on_mouse_click_event) (const MOUSE_BUTTON_TYPE &btn);
 
 private:
+    static key_context_t   saved_key_context;
     static mouse_context_t saved_mouse_context;
-    static KEY_TYPE        saved_key;
+
+    static bool  refresh_context_on_key_press    (const KEY_TYPE          &pressed_key);
+    static bool  refresh_context_on_key_release  (const KEY_TYPE          &released_key);
+    static bool  refresh_context_on_mouse_press  (const MOUSE_BUTTON_TYPE &pressed_btn);
+    static bool  refresh_context_on_mouse_release(const MOUSE_BUTTON_TYPE &released_btn);
+    static vec2d refresh_context_on_mouse_move   (const sf::Vector2i      &pos);
 
 protected:
     WIDGET_STATUS_TYPE status;
+    static widget_t   *active;
 
 public:
     inline          widget_t();
     inline explicit widget_t(const rectangle_t &region_);
 
-    inline WIDGET_STATUS_TYPE get_status() const;
+    virtual void move         (const vec2d &offset) = 0;
+    virtual void recalc_region() override {}
 
-    virtual bool on_key_press  (const KEY_TYPE &key) = 0;
-    virtual bool on_key_release(const KEY_TYPE &key) = 0;
+    virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
+    virtual bool on_key_release  (const KEY_TYPE          &key) = 0;
+    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) = 0;
+    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
+    virtual bool on_mouse_move   (const vec2d             &off) = 0;
 
-    virtual bool on_mouse_press  (const mouse_context_t &context) = 0;
-    virtual bool on_mouse_release(const mouse_context_t &context) = 0;
-    virtual bool on_mouse_move   (const mouse_context_t &context) = 0;
-
-    virtual inline void recalc_region(const vec2d &offset) override {}
-
-    inline static void widget_delete(void *const widget_);
-
-    static const KEY_TYPE        &refresh_key          (const sf::Keyboard::Key &sfml_key);
-    static const mouse_context_t &refresh_mouse_pos    (const sf::Vector2i      &sfml_mouse_pos);
-    static const mouse_context_t &refresh_mouse_context(const sf::Mouse::Button &sfml_mouse_btn,
-                                                        const sf::Vector2i      &sfml_mouse_pos);
+    static void process_key_press_event    (widget_t &system, const KEY_TYPE          &pressed_key);
+    static void process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
+    static void process_mouse_press_event  (widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn);
+    static void process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn);
+    static void process_mouse_move_event   (                  const sf::Vector2i      &pos);
 
     static inline const mouse_context_t &get_mouse_context();
-    static inline const KEY_TYPE        &get_key          ();
-};
+    static inline const key_context_t   &get_key_context  ();
+    static inline void                   widget_delete    (void *const widget_);
+
+    friend widget_manager_t;
+};  
 
 //--------------------------------------------------------------------------------------------------
 
@@ -148,37 +218,16 @@ inline void widget_t::widget_delete(void *const widget_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::WIDGET_STATUS_TYPE widget_t::get_status() const
-{
-    return status;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-const widget_t::mouse_context_t &widget_t::get_mouse_context()
+const mouse_context_t &widget_t::get_mouse_context()
 {
     return saved_mouse_context;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-const KEY_TYPE &widget_t::get_key()
+const key_context_t &widget_t::get_key_context()
 {
-    return saved_key;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-widget_t::mouse_context_t widget_t::mouse_context_t::operator -(const vec2d &offset) const
-{
-    return mouse_context_t(pos - offset, btn);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-widget_t::mouse_context_t &widget_t::mouse_context_t::operator -=(const vec2d &offset)
-{
-    return *this = (*this) - offset;
+    return saved_key_context;
 }
 
 #endif // WIDGET_H
