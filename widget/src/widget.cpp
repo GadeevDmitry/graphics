@@ -161,10 +161,10 @@ vec2d widget_t::refresh_context_on_mouse_move(const sf::Vector2i &pos_)
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_key_press_event(widget_t &system, const KEY_TYPE &pressed_key)
+bool widget_t::process_key_press_event(widget_t &system, const KEY_TYPE &pressed_key)
 {
     if (!refresh_context_on_key_press(pressed_key))
-        return;
+        return false;
 
     bool res = false;
 
@@ -172,14 +172,16 @@ void widget_t::process_key_press_event(widget_t &system, const KEY_TYPE &pressed
     else                   res = system .on_key_press(pressed_key);
 
     if (res) system.recalc_region();
+
+    return res;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_key_release_event(widget_t &system, const KEY_TYPE &released_key)
+bool widget_t::process_key_release_event(widget_t &system, const KEY_TYPE &released_key)
 {
     if (!refresh_context_on_key_release(released_key))
-        return;
+        return false;
 
     bool res = false;
 
@@ -187,14 +189,16 @@ void widget_t::process_key_release_event(widget_t &system, const KEY_TYPE &relea
     else                   res = system .on_key_release(released_key);
 
     if (res) system.recalc_region();
+
+    return res;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_mouse_press_event(widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn)
+bool widget_t::process_mouse_press_event(widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn)
 {
     if (!refresh_context_on_mouse_press(pressed_btn))
-        return;
+        return false;
 
     LOG_TAB_SERVICE_MESSAGE("PROCESS MOUSE_PRESS", "\n");
     LOG_TAB++;
@@ -208,14 +212,15 @@ void widget_t::process_mouse_press_event(widget_t &system, const MOUSE_BUTTON_TY
     if (res) system.recalc_region();
 
     LOG_TAB--;
+    return res;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn)
+bool widget_t::process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn)
 {
     if (!refresh_context_on_mouse_release(released_btn))
-        return;
+        return false;
 
     LOG_TAB_SERVICE_MESSAGE("PROCESS MOUSE_RELEASE", "\n");
     LOG_TAB++;
@@ -229,14 +234,15 @@ void widget_t::process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_
     if (res) system.recalc_region();
 
     LOG_TAB--;
+    return res;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_mouse_move_event(widget_t &system, const sf::Vector2i &pos)
+bool widget_t::process_mouse_move_event(widget_t &system, const sf::Vector2i &pos)
 {
     vec2d off = refresh_context_on_mouse_move(pos);
-    if (active == nullptr) return;
+    if (active == nullptr) return false;
 
     LOG_TAB_SERVICE_MESSAGE("PROCESS MOUSE_MOVE", "\n");
     LOG_TAB++;
@@ -246,4 +252,5 @@ void widget_t::process_mouse_move_event(widget_t &system, const sf::Vector2i &po
     if (res) system.recalc_region();
 
     LOG_TAB--;
+    return res;
 }

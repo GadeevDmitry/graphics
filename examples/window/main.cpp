@@ -26,7 +26,7 @@ int main()
     manager.register_window(&wnd_2);
     manager.register_window(&wnd_3);
     manager.recalc_region  ();
-/*
+
     sfml_wnd    .clear(sf::Color::Cyan);
     rend_texture.clear();
 
@@ -35,7 +35,7 @@ int main()
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);
     sfml_wnd.display();    
-
+/*
     while (sfml_wnd.isOpen())
     {
         sf::Event event;
@@ -66,6 +66,8 @@ int main()
                 sfml_wnd.close();
             }
 
+            bool rerender = false;
+
             switch (event.type)
             {
                 case sf::Event::MouseButtonPressed:
@@ -75,8 +77,8 @@ int main()
                     sf::Mouse::getPosition().y);
                     LOG_TAB++;
 
-                    widget_t::process_mouse_press_event
-                        (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
+                    rerender = widget_t::process_mouse_press_event
+                                    (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
 
                     LOG_TAB--;
                 } break;
@@ -86,23 +88,25 @@ int main()
                     LOG_TAB_SERVICE_MESSAGE("MOUSE BUTTON RELEASED", "\n");
                     LOG_TAB++;
 
-                    widget_t::process_mouse_release_event
-                        (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
+                    rerender = widget_t::process_mouse_release_event
+                                    (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
 
                     LOG_TAB--;
                 } break;
 
                 case sf::Event::MouseMoved:
                 {
-                    widget_t::process_mouse_move_event
-                        (manager, recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition()));
+                    rerender = widget_t::process_mouse_move_event
+                                    (manager, recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition()));
                 } break;
 
                 default: break;
             }
 
-            sfml_wnd    .clear(sf::Color::Cyan);
-            rend_texture.clear();
+            if (!rerender) continue;
+
+            sfml_wnd    .clear();
+            rend_texture.clear(color_t::Blue);
 
             manager.render(rend_texture);
 

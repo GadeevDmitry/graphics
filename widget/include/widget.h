@@ -182,11 +182,11 @@ public:
     virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
     virtual bool on_mouse_move   (const vec2d             &off) = 0;
 
-    static void process_key_press_event    (widget_t &system, const KEY_TYPE          &pressed_key);
-    static void process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
-    static void process_mouse_press_event  (widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn);
-    static void process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn);
-    static void process_mouse_move_event   (widget_t &system, const sf::Vector2i      &pos);
+    static bool process_key_press_event    (widget_t &system, const KEY_TYPE          &pressed_key);
+    static bool process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
+    static bool process_mouse_press_event  (widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn);
+    static bool process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn);
+    static bool process_mouse_move_event   (widget_t &system, const sf::Vector2i      &pos);
 
     static inline const mouse_context_t &get_mouse_context();
     static inline const key_context_t   &get_key_context  ();
