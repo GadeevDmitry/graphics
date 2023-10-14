@@ -20,6 +20,9 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
+TOOLS_OBJS := tool
+TOOLS_OBJS := $(foreach OBJ, $(TOOLS_OBJS), $(TOOLS_BUILD_DIR)$(OBJ).o)
+
 WIDGET_OBJS := menu widget_manager widget window
 WIDGET_OBJS := $(foreach OBJ, $(WIDGET_OBJS), $(WIDGET_BUILD_DIR)$(OBJ).o)
 
@@ -41,6 +44,8 @@ SFML_LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 #================================================================================================================================
 
 all: | $(BUILD_DIR)
+	@echo BUILDING TOOLS
+	$(MAKE) -f $(TOOLS_PREFIX)Makefile
 	@echo BUILDING WIDGET
 	$(MAKE) -f $(WIDGET_PREFIX)Makefile
 	@echo BUILDING GRAPHIC
