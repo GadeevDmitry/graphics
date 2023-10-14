@@ -126,7 +126,54 @@ void widget_manager_t::widgets_move(const vec2d &offset)
 
 void widget_manager_t::widgets_recalc_region()
 {
+    if (widgets.size == 0) return;
 
+    widget_t **front = (widget_t **) list_front(&widgets);
+    widget_t **fict  = (widget_t **) list_fict (&widgets);
+
+    for (widget_t **cnt_1 = front; cnt_1 != fict;
+         cnt_1 = (widget_t **) list_next(cnt_1))
+    {
+        widget_t &cur_1 = **cnt_1;
+
+        cur_1.visible.reset();
+        cur_1.visible *= visible;
+
+        for (widget_t **cnt_2 = front; cnt_2 != cnt_1;
+             cnt_2 = (widget_t **) list_next(cnt_2))
+        {
+            widget_t &cur_2 = **cnt_2;
+            cur_1.visible -= cur_2.visible;
+        }
+
+        cur_1.recalc_region();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void widget_manager_t::widgets_regions_dump() const
+{
+    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::WIDGET_REGIONS_DUMP", "\n");
+    LOG_TAB++;
+
+    if (widgets.size == 0)
+    {
+        LOG_TAB--;
+        return;
+    }
+
+    widget_t **front = (widget_t **) list_front(&widgets);
+    widget_t **fict  = (widget_t **) list_fict (&widgets);
+
+    for (widget_t **cnt = front; cnt != fict;
+         cnt = (widget_t **) list_next(cnt))
+    {
+        widget_t &cur = **cnt;
+        clipping_region_t::dump(&cur.visible);
+    }
+
+    LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------

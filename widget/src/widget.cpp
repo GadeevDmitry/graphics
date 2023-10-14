@@ -166,8 +166,12 @@ void widget_t::process_key_press_event(widget_t &system, const KEY_TYPE &pressed
     if (!refresh_context_on_key_press(pressed_key))
         return;
 
-    if (active != nullptr) active->on_key_press(pressed_key);
-    else                   system .on_key_press(pressed_key);
+    bool res = false;
+
+    if (active != nullptr) res = active->on_key_press(pressed_key);
+    else                   res = system .on_key_press(pressed_key);
+
+    if (res) system.recalc_region();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,8 +181,12 @@ void widget_t::process_key_release_event(widget_t &system, const KEY_TYPE &relea
     if (!refresh_context_on_key_release(released_key))
         return;
 
-    if (active != nullptr) active->on_key_release(released_key);
-    else                   system .on_key_release(released_key);
+    bool res = false;
+
+    if (active != nullptr) res = active->on_key_release(released_key);
+    else                   res = system .on_key_release(released_key);
+
+    if (res) system.recalc_region();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,8 +200,12 @@ void widget_t::process_mouse_press_event(widget_t &system, const MOUSE_BUTTON_TY
     LOG_TAB++;
     LOG_TAB_MESSAGE("active = %p\n", active);
 
-    if (active != nullptr) active->on_mouse_press(pressed_btn);
-    else                   system .on_mouse_press(pressed_btn);
+    bool res = false;
+
+    if (active != nullptr) res = active->on_mouse_press(pressed_btn);
+    else                   res = system .on_mouse_press(pressed_btn);
+
+    if (res) system.recalc_region();
 
     LOG_TAB--;
 }
@@ -209,15 +221,19 @@ void widget_t::process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_
     LOG_TAB++;
     LOG_TAB_MESSAGE("active = %p\n", active);
 
-    if (active != nullptr) active->on_mouse_release(released_btn);
-    else                   system .on_mouse_release(released_btn);
+    bool res = false;
+
+    if (active != nullptr) res = active->on_mouse_release(released_btn);
+    else                   res = system .on_mouse_release(released_btn);
+
+    if (res) system.recalc_region();
 
     LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_t::process_mouse_move_event(const sf::Vector2i &pos)
+void widget_t::process_mouse_move_event(widget_t &system, const sf::Vector2i &pos)
 {
     vec2d off = refresh_context_on_mouse_move(pos);
     if (active == nullptr) return;
@@ -226,7 +242,8 @@ void widget_t::process_mouse_move_event(const sf::Vector2i &pos)
     LOG_TAB++;
     LOG_TAB_MESSAGE("active = %p\n", active);
 
-    active->on_mouse_move(off);
+    bool res = active->on_mouse_move(off);
+    if (res) system.recalc_region();
 
     LOG_TAB--;
 }

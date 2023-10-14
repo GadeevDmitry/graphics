@@ -25,6 +25,7 @@ public:
     inline         ~color_t();
 
     sf::Color get_sfml_color() const;
+    void maximize_brightness();
 
     inline color_t  operator + (const color_t &add) const;
     inline color_t  operator - (const color_t &sub) const;

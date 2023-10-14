@@ -186,7 +186,7 @@ public:
     static void process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
     static void process_mouse_press_event  (widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn);
     static void process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn);
-    static void process_mouse_move_event   (                  const sf::Vector2i      &pos);
+    static void process_mouse_move_event   (widget_t &system, const sf::Vector2i      &pos);
 
     static inline const mouse_context_t &get_mouse_context();
     static inline const key_context_t   &get_key_context  ();

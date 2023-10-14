@@ -14,6 +14,8 @@ public:
 
     inline void set_region     (const rectangle_t &region);
     inline bool register_window(window_t *window);
+
+    virtual inline void recalc_region() override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -40,6 +42,14 @@ inline void window_manager_t::set_region(const rectangle_t &region)
 inline bool window_manager_t::register_window(window_t *window)
 {
     return register_widget(window);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_manager_t::recalc_region()
+{
+    visible.reset();
+    widgets_recalc_region();
 }
 
 #endif // WINDOW_MANAGER_H

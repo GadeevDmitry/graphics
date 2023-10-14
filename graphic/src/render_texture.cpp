@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "render_texture.h"
+#include "log.h"
 
 //==================================================================================================
 
@@ -45,6 +46,25 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
 
             data.draw(spr);
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_region(const clipping_region_t &region)
+{
+    const list &areas = region.get_areas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *cnt = front; cnt != fict;
+         cnt = (rectangle_t *) list_next(cnt))
+    {
+        color_t rand = color_t::get_rand_color();
+        LOG_TAB_SERVICE_MESSAGE("GENERATED_COLOR = {%lg, %lg, %lg}", "\n", rand.r, rand.g, rand.b);
+
+        draw_filled_rectangle(*cnt, color_t::Black, rand);
     }
 }
 

@@ -29,6 +29,8 @@ public:
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size);
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size, const clipping_region_t &reg);
 
+    void        draw_region          (const clipping_region_t &reg);
+
     void        draw_coord_sys       (const coord_system &sys, const rectangle_t &area, const color_t &col);
 
     inline void draw_vec2d           (const segment_t    &rel, const coord_system &sys, const color_t &col);

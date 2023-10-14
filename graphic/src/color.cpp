@@ -22,6 +22,23 @@ sf::Color color_t::get_sfml_color() const
 
 //--------------------------------------------------------------------------------------------------
 
+void color_t::maximize_brightness()
+{
+    double fictional_k = 1000.0;
+
+    double r_k = (dblcmp(r, 0) == 0) ? fictional_k : 255.0 / r;
+    double g_k = (dblcmp(g, 0) == 0) ? fictional_k : 255.0 / g;
+    double b_k = (dblcmp(b, 0) == 0) ? fictional_k : 255.0 / b;
+
+    double min_k = std::min({r_k, g_k, b_k});
+
+    r *= min_k;
+    g *= min_k;
+    b *= min_k;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 color_t color_t::get_rand_color()
 {
     double r = (double) (abs(rand()) % 255) / 255.0;

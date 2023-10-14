@@ -157,7 +157,7 @@ color (color_)
 
 inline void color_menu_t::render(render_texture_t &wnd) const
 {
-    wnd.draw_filled_rectangle(region, color);
+    wnd.draw_region(visible);
     widgets_render(wnd);
 }
 

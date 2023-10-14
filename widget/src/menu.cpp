@@ -114,8 +114,6 @@ bool menu_t::deactivate_by_key_click(menu_t *self, void *args, const KEY_TYPE &k
 
 bool menu_t::activate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
 {
-    LOG_TAB_SERVICE_MESSAGE("MENU_T::ACTIVATE_BY_MOUSE_CLICK", "\n");
-
     LOG_VERIFY(active == nullptr, false);
     (void) args;
     (void) btn;
@@ -128,8 +126,6 @@ bool menu_t::activate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTO
 
 bool menu_t::deactivate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
 {
-    LOG_TAB_SERVICE_MESSAGE("MENU_T::DEACTIVATE_BY_MOUSE_CLICK", "\n");
-
     LOG_VERIFY(active == (widget_t *) self, false);
     (void) self;
     (void) args;

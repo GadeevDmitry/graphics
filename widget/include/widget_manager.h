@@ -34,6 +34,8 @@ protected:
            bool on_widgets_mouse_move   (const vec2d             &off);
 
 public:
+    void widgets_regions_dump () const;
+
     virtual inline void move         (const vec2d &off)            override;
     virtual inline void recalc_region()                            override;
     virtual inline void render       (render_texture_t &wnd) const override;
