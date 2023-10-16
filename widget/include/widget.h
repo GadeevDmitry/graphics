@@ -65,6 +65,15 @@ enum KEY_TYPE
 
 struct key_context_t
 {
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
+public:
+    static KEY_TYPE convert_sfml(const sf::Keyboard::Key &sfml_key);
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 public:
     KEY_TYPE key;
     char     alt;
@@ -75,8 +84,6 @@ public:
     inline          key_context_t();
     inline explicit key_context_t(const KEY_TYPE key_, const char alt_, const char control_, const char shift_, const char system_);
     inline         ~key_context_t() {}
-
-    static KEY_TYPE convert_sfml(const sf::Keyboard::Key &sfml_key);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -116,6 +123,15 @@ enum MOUSE_BUTTON_TYPE
 
 struct mouse_context_t
 {
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
+public:
+    static MOUSE_BUTTON_TYPE convert_sfml(const sf::Mouse::Button &sfml_mouse_btn);
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 public:
     vec2d pos;
     char  left;
@@ -124,8 +140,6 @@ public:
 
     inline  mouse_context_t();
     inline ~mouse_context_t() {}
-
-    static MOUSE_BUTTON_TYPE convert_sfml(const sf::Mouse::Button &sfml_mouse_btn);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -140,6 +154,7 @@ middle(false)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class widget_manager_t;
+class window_t;
 class button_t;
 class menu_t;
 
@@ -154,11 +169,13 @@ public:
     {
         WIDGET_OPENED,
         WIDGET_CLOSED,
+        WIDGET_UPDATED,
     };
 
 protected:
-    typedef bool (widget_t::*on_key_click_event)   (const KEY_TYPE          &key);
-    typedef bool (widget_t::*on_mouse_click_event) (const MOUSE_BUTTON_TYPE &btn);
+    typedef bool (*widget_key_click_func)   (widget_t *self, void *args, const KEY_TYPE          &key);
+    typedef bool (*widget_mouse_click_func) (widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn);
+    typedef bool (*widget_mouse_move_func)  (widget_t *self, void *args, const vec2d             &off);
 
 ///////////////////////////////////////////////
 // STATIC
@@ -176,6 +193,11 @@ private:
 protected:
     static widget_t *active;
 
+    static bool   activate_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn);
+    static bool deactivate_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn);
+    static bool      close_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn);
+    static bool       move_by_mouse_move (widget_t *self, void *args, const vec2d             &off);
+
 public:
     static bool process_key_press_event    (widget_t &system, const KEY_TYPE          &pressed_key);
     static bool process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
@@ -185,27 +207,35 @@ public:
 
     static inline const mouse_context_t &get_mouse_context();
     static inline const key_context_t   &get_key_context  ();
-    static inline void                   widget_delete    (void *const widget_);
+
+    static inline void widget_delete(void *const widget_);
 
 ///////////////////////////////////////////////
 // FRIENDS
 ///////////////////////////////////////////////
 public:
     friend widget_manager_t;
+    friend window_t;
     friend button_t;
     friend menu_t;
 
 ///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
-public:
-    inline          widget_t();
-    inline explicit widget_t(const rectangle_t &region_);
+private:
+    bool refresh();
 
-    virtual void move(const vec2d &offset) = 0;
+protected:
+    WIDGET_STATUS_TYPE status;
+    widget_t          *ancestor;
 
-    virtual rectangle_t  get_region() const = 0;
-    virtual void        dump_region() const {} ;
+    inline const rectangle_t &get_region() const;
+
+    void update_ancestral_status(WIDGET_STATUS_TYPE upd_status);
+
+    virtual inline void move(const vec2d &offset);
+    virtual inline bool update_struct() { return false; }
+    virtual inline void recalc_region() override {}
 
     virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
     virtual bool on_key_release  (const KEY_TYPE          &key) = 0;
@@ -213,23 +243,26 @@ public:
     virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
     virtual bool on_mouse_move   (const vec2d             &off) = 0;
 
-    virtual void recalc_region() override {}
+public:
+    inline          widget_t(widget_t *ancestor_ = nullptr);
+    inline explicit widget_t(const rectangle_t &region_, widget_t *ancestor_ = nullptr);
 
-protected:
-    WIDGET_STATUS_TYPE status;
-};  
+    virtual void dump_region() const override {}
+};
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t():
-status(WIDGET_OPENED)
+inline widget_t::widget_t(widget_t *ancestor_):
+status  (WIDGET_OPENED),
+ancestor(ancestor_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t(const rectangle_t &region_):
+inline widget_t::widget_t(const rectangle_t &region_, widget_t *ancestor_):
 renderable(region_),
-status    (WIDGET_OPENED)
+status    (WIDGET_OPENED),
+ancestor  (ancestor_)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -252,6 +285,20 @@ const mouse_context_t &widget_t::get_mouse_context()
 const key_context_t &widget_t::get_key_context()
 {
     return saved_key_context;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_t::move(const vec2d &offset)
+{
+    visible.region += offset;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline const rectangle_t &widget_t::get_region() const
+{
+    return visible.region;
 }
 
 #endif // WIDGET_H

@@ -4,38 +4,31 @@
 
 //==================================================================================================
 
-void widget_manager_t::on_widget_event_react(widget_t **widget_, const size_t widget_pos)
+bool widget_manager_t::register_subwidget(widget_t *subwidget)
 {
-    widget_t &widget = **widget_;
+    if (list_push_front(&subwidgets, &subwidget))
+    {
+        subwidget->ancestor = this;
+        return true;
+    }
 
-    if (status == WIDGET_CLOSED)
-        return;
-    if (widget.status == WIDGET_CLOSED)
-        list_erase(&widgets, widget_pos);
-    else
-        list_replace(&widgets, widget_, widget_pos, 0);
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool widget_manager_t::on_widgets_key_click_event(widget_t::on_key_click_event event, const KEY_TYPE &key)
+bool widget_manager_t::on_subwidgets_key_press(const KEY_TYPE &key)
 {
-    if (widgets.size == 0) return false;
+    if (subwidgets.size == 0) return false;
 
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
-    size_t     ind   = 0;
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
 
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
         widget_t &cur = **cnt;
-        if ((cur.*event)(key))
-        {
-            on_widget_event_react(cnt, ind);
-            return true;
-        }
-        ++ind;
+        if (cur.on_key_press(key)) return true;
     }
 
     return false;
@@ -43,24 +36,18 @@ bool widget_manager_t::on_widgets_key_click_event(widget_t::on_key_click_event e
 
 //--------------------------------------------------------------------------------------------------
 
-bool widget_manager_t::on_widgets_mouse_click_event(widget_t::on_mouse_click_event event, const MOUSE_BUTTON_TYPE &btn)
+bool widget_manager_t::on_subwidgets_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    if (widgets.size == 0) return false;
+    if (subwidgets.size == 0) return false;
 
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
-    size_t     ind   = 0;
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
 
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
         widget_t &cur = **cnt;
-        if ((cur.*event)(btn))
-        {
-            on_widget_event_react(cnt, ind);
-            return true;
-        }
-        ++ind;
+        if (cur.on_mouse_press(btn)) return true;
     }
 
     return false;
@@ -68,37 +55,12 @@ bool widget_manager_t::on_widgets_mouse_click_event(widget_t::on_mouse_click_eve
 
 //--------------------------------------------------------------------------------------------------
 
-bool widget_manager_t::on_widgets_mouse_move(const vec2d &off)
+void widget_manager_t::subwidgets_move(const vec2d &offset)
 {
-    if (widgets.size == 0) return false;
+    if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
-    size_t     ind   = 0;
-
-    for (widget_t **cnt = front; cnt != fict;
-        cnt = (widget_t **) list_next(cnt))
-    {
-        widget_t &cur = **cnt;
-        if ((cur.on_mouse_move(off)))
-        {
-            on_widget_event_react(cnt, ind);
-            return true;
-        }
-        ++ind;
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void widget_manager_t::widgets_move(const vec2d &offset)
-{
-    if (widgets.size == 0) return;
-
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
 
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
@@ -110,12 +72,12 @@ void widget_manager_t::widgets_move(const vec2d &offset)
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_recalc_region()
+void widget_manager_t::subwidgets_recalc_region()
 {
-    if (widgets.size == 0) return;
+    if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
 
     for (widget_t **cnt_1 = front; cnt_1 != fict;
          cnt_1 = (widget_t **) list_next(cnt_1))
@@ -139,12 +101,12 @@ void widget_manager_t::widgets_recalc_region()
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_regions_dump() const
+void widget_manager_t::subwidgets_dump_region() const
 {
-    if (widgets.size == 0) return;
+    if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&widgets);
-    widget_t **fict  = (widget_t **) list_fict (&widgets);
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
 
     LOG_TAB++;
     for (widget_t **cnt = front; cnt != fict;
@@ -160,12 +122,12 @@ void widget_manager_t::widgets_regions_dump() const
 
 //--------------------------------------------------------------------------------------------------
 
-void widget_manager_t::widgets_render(render_texture_t &render_texture) const
+void widget_manager_t::subwidgets_render(render_texture_t &render_texture) const
 {
-    if (widgets.size == 0) return;
+    if (subwidgets.size == 0) return;
 
-    widget_t **back = (widget_t **) list_back(&widgets);
-    widget_t **fict = (widget_t **) list_fict(&widgets);
+    widget_t **back = (widget_t **) list_back(&subwidgets);
+    widget_t **fict = (widget_t **) list_fict(&subwidgets);
 
     for (widget_t **cnt = back; cnt != fict;
          cnt = (widget_t **) list_prev(cnt))
@@ -173,4 +135,40 @@ void widget_manager_t::widgets_render(render_texture_t &render_texture) const
         widget_t &cur = **cnt;
         cur.render(render_texture);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool widget_manager_t::subwidgets_update_struct()
+{
+    if (status == WIDGET_CLOSED) return true;
+    if (subwidgets.size == 0)    return false;
+
+    widget_t **front = (widget_t **) list_front(&subwidgets);
+    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    size_t     ind   = 0;
+
+    for (widget_t **cnt = front; cnt != fict;
+         cnt = (widget_t **) list_next(cnt))
+    {
+        widget_t &cur = **cnt;
+
+        switch (cur.status)
+        {
+            case WIDGET_OPENED : break;
+
+            case WIDGET_CLOSED : list_erase(&subwidgets, ind);
+                                 return true;
+
+            case WIDGET_UPDATED: list_replace(&subwidgets, cnt, ind, 0);
+                                 cur.status = WIDGET_OPENED;
+                                 cur.update_struct();
+                                 return true;
+            default: break;
+        }
+
+        ++ind;
+    }
+
+    return false;
 }

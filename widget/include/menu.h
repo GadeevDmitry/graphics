@@ -9,57 +9,36 @@
 class menu_t: public widget_manager_t
 {
 ///////////////////////////////////////////////
-// TYPES
-///////////////////////////////////////////////
-public:
-    typedef bool (*menu_key_click_func)   (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    typedef bool (*menu_mouse_click_func) (menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    typedef void (*menu_mouse_move_func)  (menu_t *self, void *args, const vec2d             &off, widget_t *&active);
-
-///////////////////////////////////////////////
-// STATIC
-///////////////////////////////////////////////
-public:
-    static bool   activate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    static bool deactivate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    static bool   activate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    static bool deactivate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-
-///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
 protected:
-    menu_key_click_func   on_key_press_func;
-    menu_key_click_func   on_key_release_func;
+    widget_key_click_func   on_key_press_func;
+    widget_key_click_func   on_key_release_func;
 
-    menu_mouse_click_func on_mouse_press_func;
-    menu_mouse_click_func on_mouse_release_func;
-    menu_mouse_move_func  on_mouse_move_func;
+    widget_mouse_click_func on_mouse_press_func;
+    widget_mouse_click_func on_mouse_release_func;
+    widget_mouse_move_func  on_mouse_move_func;
 
-    rectangle_t region;
-    void        *args;
+    void *args;
+
+    bool virtual on_key_press    (const KEY_TYPE          &key) override;
+    bool virtual on_key_release  (const KEY_TYPE          &key) override;
+    bool virtual on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual on_mouse_move   (const vec2d             &off) override;
 
 public:
-    inline          menu_t(void (*delete_button)(void *el));
-    inline explicit menu_t(void (*delete_button)(void *el), const rectangle_t &region_);
-    inline         ~menu_t() {}
+    explicit inline  menu_t(void (*delete_button)(void *el));
+    explicit inline  menu_t(void (*delete_button)(void *el), const rectangle_t &region_);
+             inline ~menu_t() {}
 
-    inline void set_funcs (menu_key_click_func   on_key_press_func_,   menu_key_click_func   on_key_release_func_,
-                           menu_mouse_click_func on_mouse_press_func_, menu_mouse_click_func on_mouse_release_func_,
-                           menu_mouse_move_func  on_mouse_move_func_);
-    inline void set_args  (void *args_);
-    inline void set_region(const rectangle_t &region_);
+    void inline set_funcs (widget_key_click_func   on_key_press_func_,   widget_key_click_func   on_key_release_func_,
+                           widget_mouse_click_func on_mouse_press_func_, widget_mouse_click_func on_mouse_release_func_,
+                           widget_mouse_move_func  on_mouse_move_func_);
+    void inline set_args  (void *args_);
+    void inline set_region(const rectangle_t &region);
 
-    inline bool register_button(button_t *button);
-
-    virtual inline void        move      (const vec2d &offset) override;
-    virtual inline rectangle_t get_region() const              override;
-
-    virtual bool on_key_press    (const KEY_TYPE          &key) override;
-    virtual bool on_key_release  (const KEY_TYPE          &key) override;
-    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
-    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
-    virtual bool on_mouse_move   (const vec2d             &off) override;
+    bool inline register_button(button_t *button);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +52,6 @@ on_mouse_press_func  (nullptr),
 on_mouse_release_func(nullptr),
 on_mouse_move_func   (nullptr),
 
-region               (),
 args                 (nullptr)
 {}
 
@@ -88,15 +66,14 @@ on_mouse_press_func  (nullptr),
 on_mouse_release_func(nullptr),
 on_mouse_move_func   (nullptr),
 
-region               (region_),
 args                 (nullptr)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline void menu_t::set_funcs(menu_key_click_func   on_key_press_func_,   menu_key_click_func   on_key_release_func_,
-                              menu_mouse_click_func on_mouse_press_func_, menu_mouse_click_func on_mouse_release_func_,
-                              menu_mouse_move_func on_mouse_move_func_)
+inline void menu_t::set_funcs(widget_key_click_func   on_key_press_func_,   widget_key_click_func   on_key_release_func_,
+                              widget_mouse_click_func on_mouse_press_func_, widget_mouse_click_func on_mouse_release_func_,
+                              widget_mouse_move_func on_mouse_move_func_)
 {
     on_key_press_func     = on_key_press_func_;
     on_key_release_func   = on_key_release_func_;
@@ -115,32 +92,16 @@ inline void menu_t::set_args(void *args_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void menu_t::set_region(const rectangle_t &region_)
+inline void menu_t::set_region(const rectangle_t &region)
 {
-    region = region_;
-    visible.region = region_;
+    visible.region = region;
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline bool menu_t::register_button(button_t *button)
 {
-    return register_widget(button);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void menu_t::move(const vec2d &offset)
-{
-    region         += offset;
-    visible.region += offset;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline rectangle_t menu_t::get_region() const
-{
-    return region;
+    return register_subwidget(button);
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -153,11 +114,11 @@ class color_menu_t: public menu_t
 public:
     color_t color;
 
-    inline          color_menu_t(void (*delete_button)(void *el));
-    inline explicit color_menu_t(void (*delete_button)(void *el), const rectangle_t &region_, const color_t &color_);
-    inline         ~color_menu_t() {}
+    explicit inline  color_menu_t(void (*delete_button)(void *el));
+    explicit inline  color_menu_t(void (*delete_button)(void *el), const rectangle_t &region_, const color_t &color_);
+             inline ~color_menu_t() {}
 
-    virtual inline void render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -179,8 +140,8 @@ color (color_)
 inline void color_menu_t::render(render_texture_t &wnd) const
 {
 //  wnd.draw_region(visible);
-    wnd.draw_filled_rectangle(region, color, visible);
-    widgets_render(wnd);
+    wnd.draw_filled_rectangle(visible.region, color, visible);
+    subwidgets_render(wnd);
 }
 
 #endif // MENU_H

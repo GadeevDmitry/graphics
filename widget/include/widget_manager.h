@@ -3,6 +3,7 @@
 
 #include "list.h"
 #include "widget.h"
+#include <assert.h>
 
 //==================================================================================================
 
@@ -11,51 +12,43 @@ class widget_manager_t: public widget_t
 ///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
-private:
-    bool on_widgets_key_click_event  (on_key_click_event   event, const KEY_TYPE          &key);
-    bool on_widgets_mouse_click_event(on_mouse_click_event event, const MOUSE_BUTTON_TYPE &btn);
-
-    void on_widget_event_react       (widget_t **widget_, const size_t widget_pos);
-
 protected:
-    list widgets;
+    list subwidgets;
+    bool register_subwidget(widget_t *subwidget);
 
-    inline          widget_manager_t(void (*delete_widget) (void *el));
-    inline explicit widget_manager_t(void (*delete_widget) (void *el), const rectangle_t &region_);
-    inline         ~widget_manager_t();
+    void subwidgets_move         (const vec2d &offset);
+    bool subwidgets_update_struct();
+    void subwidgets_recalc_region();
+    void subwidgets_dump_region  ()                                 const;
+    void subwidgets_render       (render_texture_t &render_texture) const;
 
-    inline bool register_widget(widget_t *widget);
+    bool on_subwidgets_key_press    (const KEY_TYPE          &key);
+    bool on_subwidgets_mouse_press  (const MOUSE_BUTTON_TYPE &btn);
 
-    void widgets_move         (const vec2d &offset);
-    void widgets_render       (render_texture_t &render_texture) const;
-    void widgets_recalc_region();
-    void widgets_regions_dump () const;
+    void virtual inline move         (const vec2d &offset) override;
+    bool virtual inline update_struct()                    override;
+    void virtual inline recalc_region()                    override;
 
-    inline bool on_widgets_key_press    (const KEY_TYPE          &key);
-    inline bool on_widgets_key_release  (const KEY_TYPE          &key);
-    inline bool on_widgets_mouse_press  (const MOUSE_BUTTON_TYPE &btn);
-    inline bool on_widgets_mouse_release(const MOUSE_BUTTON_TYPE &btn);
-           bool on_widgets_mouse_move   (const vec2d             &off);
+    bool virtual inline on_key_press    (const KEY_TYPE          &key) override;
+    bool virtual inline on_key_release  (const KEY_TYPE          &key) override;
+    bool virtual inline on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual inline on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual inline on_mouse_move   (const vec2d             &off) override;
 
 public:
+             inline  widget_manager_t(void (*delete_widget) (void *el));
+    explicit inline  widget_manager_t(void (*delete_widget) (void *el), const rectangle_t &region_);
+             inline ~widget_manager_t();
 
-    virtual inline void move         (const vec2d &off)            override;
-    virtual inline void recalc_region()                            override;
-    virtual inline void dump_region  ()                      const override;
-    virtual inline void render       (render_texture_t &wnd) const override;
-
-    virtual inline bool on_key_press    (const KEY_TYPE          &key) override;
-    virtual inline bool on_key_release  (const KEY_TYPE          &key) override;
-    virtual inline bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
-    virtual inline bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
-    virtual inline bool on_mouse_move   (const vec2d             &off) override;
+    void virtual inline dump_region()                      const override;
+    void virtual inline render     (render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
 
 inline widget_manager_t::widget_manager_t(void (*delete_widget) (void *el))
 {
-    list_ctor(&widgets, sizeof(widget_t *), delete_widget);
+    list_ctor(&subwidgets, sizeof(widget_t *), delete_widget);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,112 +56,119 @@ inline widget_manager_t::widget_manager_t(void (*delete_widget) (void *el))
 inline widget_manager_t::widget_manager_t(void (*delete_widget) (void *el), const rectangle_t &region_):
 widget_t(region_)
 {
-    list_ctor(&widgets, sizeof(widget_t *), delete_widget);
+    list_ctor(&subwidgets, sizeof(widget_t *), delete_widget);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline widget_manager_t::~widget_manager_t()
 {
-    list_dtor(&widgets);
+    list_dtor(&subwidgets);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool widget_manager_t::register_widget(widget_t *widget)
+inline void widget_manager_t::move(const vec2d &offset)
 {
-    return list_push_front(&widgets, &widget);
+    visible.region += offset;
+    subwidgets_move(offset);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool widget_manager_t::on_widgets_key_press(const KEY_TYPE &key)
+inline bool widget_manager_t::update_struct()
 {
-    return on_widgets_key_click_event(&widget_t::on_key_press, key);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool widget_manager_t::on_widgets_key_release(const KEY_TYPE &key)
-{
-    return on_widgets_key_click_event(&widget_t::on_key_release, key);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool widget_manager_t::on_widgets_mouse_press(const MOUSE_BUTTON_TYPE &btn)
-{
-    return on_widgets_mouse_click_event(&widget_t::on_mouse_press, btn);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool widget_manager_t::on_widgets_mouse_release(const MOUSE_BUTTON_TYPE &btn)
-{
-    return on_widgets_mouse_click_event(&widget_t::on_mouse_release, btn);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void widget_manager_t::move(const vec2d &off)
-{
-    widgets_move(off);
+    return subwidgets_update_struct();
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline void widget_manager_t::recalc_region()
 {
-    widgets_recalc_region();
+    subwidgets_recalc_region();
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline void widget_manager_t::dump_region() const
 {
-    return widgets_regions_dump();
+    return subwidgets_dump_region();
 }
 
 //--------------------------------------------------------------------------------------------------
 
 inline void widget_manager_t::render(render_texture_t &wnd) const
 {
-    widgets_render(wnd);
+    subwidgets_render(wnd);
 }
 
 //--------------------------------------------------------------------------------------------------
 
+/**
+*   По умолчанию менеджер служит посредником между родительским виджетом и подвиджетами.
+*   Это означает, что он не может быть активен и в случае нажатия должен вызываться только тогда,
+*   когда активных виджетов нет, для передачи нажатия в подвиджеты.
+*
+*   Для производных классов функция должна быть переопределена, если утверждение выше нарушено.
+*/
 inline bool widget_manager_t::on_key_press(const KEY_TYPE &key)
 {
-    return on_widgets_key_press(key);
+    assert(active == nullptr);
+    return on_subwidgets_key_press(key);
 }
 
 //--------------------------------------------------------------------------------------------------
 
+/**
+*   По соглашению в случае отпускания должен вызываться обработчик активного виджета.
+*   Если активного виджета нет, отпускание игнорируется. Так как по умолчанию менеджер
+*   не может быть активен, то вызываться в случае отпускания не должен.
+*
+*   Для производных классов функция должна быть переопределена, если утверждение выше нарушено.
+*/
 inline bool widget_manager_t::on_key_release(const KEY_TYPE &key)
 {
-    return on_widgets_key_release(key);
+    assert("called key release from default widget manager\n");
+    (void) key;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
+/**
+*   Аналогично widget_manager_t::on_key_press(KEY_TYPE &key).
+*/
 inline bool widget_manager_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    return on_widgets_mouse_press(btn);
+    assert(active == nullptr);
+    return on_subwidgets_mouse_press(btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
+/**
+*   Аналогично widget_manager_t::on_key_release(KEY_TYPE &key).
+*/
 inline bool widget_manager_t::on_mouse_release(const MOUSE_BUTTON_TYPE &btn)
 {
-    return on_widgets_mouse_release(btn);
+    assert("called mouse release from default widget manager\n");
+    (void) btn;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
+/**
+*   По соглашению в случае движения мыши должен вызываться обработчик активного виджета.
+*   Если активного виджета нет, движение игнорируется.
+*
+*   Аналогично widget_manager_t::on_key_release(KEY_TYPE &key).
+*/
 inline bool widget_manager_t::on_mouse_move(const vec2d &off)
 {
-    return on_widgets_mouse_move(off);
+    assert("called mouse move from default widget manager\n");
+    (void) off;
+    return false;
 }
 
 #endif // WIDGET_MANAGER_H

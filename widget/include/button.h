@@ -1,6 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "log.h"
 #include "widget.h"
 
 //==================================================================================================
@@ -11,10 +12,6 @@ class button_t: public widget_t
 // TYPES
 ///////////////////////////////////////////////
 public:
-    typedef bool (*button_key_click_func)   (button_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    typedef void (*button_mouse_click_func) (button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    typedef void (*button_mouse_move_func)  (button_t *self, void *args, const vec2d             &off, widget_t *&active);
-
     enum BUTTON_TEXTURE_NAME_TYPE
     {
         BUTTON_TEXTURE_NAME_UNKNOWN = -1,
@@ -36,46 +33,38 @@ protected:
     static texture_t BUTTON_TEXTURES[];
 
 public:
-    static void   activate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    static void deactivate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    static void      close_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-
-    static        void load_textures();
-    static inline void button_delete(void *const button_);
+    static void        load_textures();
+    static void inline button_delete(void *const button_);
 
 ///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
 protected:
-    button_key_click_func   on_key_press_func;
-    button_key_click_func   on_key_release_func;
+    widget_key_click_func   on_key_press_func;
+    widget_key_click_func   on_key_release_func;
 
-    button_mouse_click_func on_mouse_press_func;
-    button_mouse_click_func on_mouse_release_func;
-    button_mouse_move_func  on_mouse_move_func;
+    widget_mouse_click_func on_mouse_press_func;
+    widget_mouse_click_func on_mouse_release_func;
+    widget_mouse_move_func  on_mouse_move_func;
 
-    rectangle_t region;
-    void        *args;
+    void *args;
+
+    bool virtual on_key_press    (const KEY_TYPE          &key) override;
+    bool virtual on_key_release  (const KEY_TYPE          &key) override;
+    bool virtual on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
+    bool virtual on_mouse_move   (const vec2d             &off) override;
 
 public:
-    inline          button_t();
-    inline explicit button_t(const rectangle_t &region_);
-    inline         ~button_t() {}
+             inline  button_t();
+    explicit inline  button_t(const rectangle_t &region_);
+             inline ~button_t() {}
 
-    inline void set_funcs(button_key_click_func   on_key_press_func_  , button_key_click_func   on_key_release_func_,
-                          button_mouse_click_func on_mouse_press_func_, button_mouse_click_func on_mouse_release_func_,
-                          button_mouse_move_func  on_mouse_move_func_);
-    inline void set_args  (void *args_);
-    inline void set_region(const rectangle_t &region_);
-
-    virtual inline void        move      (const vec2d &offset) override;
-    virtual inline rectangle_t get_region() const              override;
-
-    virtual bool on_key_press    (const KEY_TYPE          &key) override;
-    virtual bool on_key_release  (const KEY_TYPE          &key) override;
-    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
-    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
-    virtual bool on_mouse_move   (const vec2d             &off) override;
+    void inline set_funcs(widget_key_click_func   on_key_press_func_  , widget_key_click_func   on_key_release_func_,
+                          widget_mouse_click_func on_mouse_press_func_, widget_mouse_click_func on_mouse_release_func_,
+                          widget_mouse_move_func  on_mouse_move_func_);
+    void inline set_args  (void *args_);
+    void inline set_region(const rectangle_t &region);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -89,14 +78,13 @@ on_mouse_press_func  (nullptr),
 on_mouse_release_func(nullptr),
 on_mouse_move_func   (nullptr),
 
-region               (),
 args                 (nullptr)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline button_t::button_t(const rectangle_t &region_):
-widget_t             (region_),
+inline button_t::button_t(const rectangle_t &region):
+widget_t             (region),
 
 on_key_press_func    (nullptr),
 on_key_release_func  (nullptr),
@@ -104,15 +92,14 @@ on_mouse_press_func  (nullptr),
 on_mouse_release_func(nullptr),
 on_mouse_move_func   (nullptr),
 
-region               (region_),
 args                 (nullptr)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline void button_t::set_funcs(button_key_click_func   on_key_press_func_  , button_key_click_func   on_key_release_func_,
-                                button_mouse_click_func on_mouse_press_func_, button_mouse_click_func on_mouse_release_func_,
-                                button_mouse_move_func  on_mouse_move_func_)
+inline void button_t::set_funcs(widget_key_click_func   on_key_press_func_  , widget_key_click_func   on_key_release_func_,
+                                widget_mouse_click_func on_mouse_press_func_, widget_mouse_click_func on_mouse_release_func_,
+                                widget_mouse_move_func  on_mouse_move_func_)
 {
     on_key_press_func     = on_key_press_func_;
     on_key_release_func   = on_key_release_func_;
@@ -131,25 +118,9 @@ inline void button_t::set_args(void *args_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void button_t::set_region(const rectangle_t &region_)
+inline void button_t::set_region(const rectangle_t &region)
 {
-    region = region_;
-    visible.region = region_;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void button_t::move(const vec2d &offset)
-{
-    region         += offset;
-    visible.region += offset;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline rectangle_t button_t::get_region() const
-{
-    return region;
+    visible.region = region;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,11 +141,11 @@ class color_button_t: public button_t
 public:
     color_t color;
 
-    inline          color_button_t();
-    inline explicit color_button_t(const rectangle_t &region, const color_t &color_);
-    inline         ~color_button_t() {}
+             inline  color_button_t();
+    explicit inline  color_button_t(const rectangle_t &region, const color_t &color_);
+             inline ~color_button_t() {}
 
-    virtual inline void render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -195,7 +166,7 @@ color   (color_)
 inline void color_button_t::render(render_texture_t &wnd) const
 {
 //  wnd.draw_region(visible);
-    wnd.draw_filled_rectangle(region, color, visible);
+    wnd.draw_filled_rectangle(visible.region, color, visible);
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -208,11 +179,11 @@ class texture_button_t: public button_t
 public:
     const texture_t &texture;
 
-    inline explicit texture_button_t(const BUTTON_TEXTURE_NAME_TYPE name);
-    inline explicit texture_button_t(const BUTTON_TEXTURE_NAME_TYPE name, const rectangle_t &region_);
-    inline         ~texture_button_t() {}
+    explicit inline  texture_button_t(const BUTTON_TEXTURE_NAME_TYPE name);
+    explicit inline  texture_button_t(const BUTTON_TEXTURE_NAME_TYPE name, const rectangle_t &region_);
+             inline ~texture_button_t() {}
 
-    virtual inline void render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -233,7 +204,7 @@ texture (BUTTON_TEXTURES[name])
 
 inline void texture_button_t::render(render_texture_t &wnd) const
 {
-    wnd.draw_texture(texture, region.ld_corner, region.get_size(), visible);
+    wnd.draw_texture(texture, visible.region.ld_corner, visible.region.get_size());
 }
 
 #endif // BUTTON_H

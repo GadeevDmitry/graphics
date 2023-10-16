@@ -161,36 +161,105 @@ vec2d widget_t::refresh_context_on_mouse_move(const sf::Vector2i &pos_)
 
 //--------------------------------------------------------------------------------------------------
 
+bool widget_t::activate_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn)
+{
+    LOG_VERIFY(active == nullptr, false);
+    (void) args;
+    (void) btn;
+
+    active = self;
+    self->status = WIDGET_UPDATED;
+    self->update_ancestral_status(WIDGET_UPDATED);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool widget_t::deactivate_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn)
+{
+    LOG_VERIFY(active == self, false);
+    (void) self;
+    (void) args;
+    (void) btn;
+
+    active = nullptr;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool widget_t::close_by_mouse_click(widget_t *self, void *args, const MOUSE_BUTTON_TYPE &btn)
+{
+    LOG_VERIFY(active == nullptr || active == self, false);
+    (void) btn;
+
+    widget_t &arg = *(widget_t *) args;
+    arg.status = WIDGET_CLOSED;
+    arg.update_ancestral_status(WIDGET_UPDATED);
+
+    active = nullptr;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool widget_t::move_by_mouse_move(widget_t *self, void *args, const vec2d &off)
+{
+    LOG_VERIFY(active == self, false);
+    (void) self;
+    (void) active;
+
+    widget_t &arg = *(widget_t *) args;
+    arg.move(off);
+
+    arg.status = WIDGET_UPDATED;
+    arg.update_ancestral_status(WIDGET_UPDATED);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool widget_t::refresh()
+{
+    if (update_struct())
+    {
+        recalc_region();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 bool widget_t::process_key_press_event(widget_t &system, const KEY_TYPE &pressed_key)
 {
     if (!refresh_context_on_key_press(pressed_key))
         return false;
 
     bool res = false;
-
     if (active != nullptr) res = active->on_key_press(pressed_key);
     else                   res = system .on_key_press(pressed_key);
 
-    if (res) system.recalc_region();
+    if (res)
+        return system.refresh();
 
-    return res;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool widget_t::process_key_release_event(widget_t &system, const KEY_TYPE &released_key)
 {
-    if (!refresh_context_on_key_release(released_key))
-        return false;
+    if (!refresh_context_on_key_release(released_key)) return false;
+    if (active == nullptr)                             return false;
 
-    bool res = false;
+    if (active->on_key_release(released_key))
+        return system.refresh();
 
-    if (active != nullptr) res = active->on_key_release(released_key);
-    else                   res = system .on_key_release(released_key);
-
-    if (res) system.recalc_region();
-
-    return res;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -201,28 +270,26 @@ bool widget_t::process_mouse_press_event(widget_t &system, const MOUSE_BUTTON_TY
         return false;
 
     bool res = false;
-
     if (active != nullptr) res = active->on_mouse_press(pressed_btn);
     else                   res = system .on_mouse_press(pressed_btn);
 
-    if (res) system.recalc_region();
-    return res;
+    if (res)
+        return system.refresh();
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool widget_t::process_mouse_release_event(widget_t &system, const MOUSE_BUTTON_TYPE &released_btn)
 {
-    if (!refresh_context_on_mouse_release(released_btn))
-        return false;
+    if (!refresh_context_on_mouse_release(released_btn)) return false;
+    if (active == nullptr)                               return false;
 
-    bool res = false;
+    if (active->on_mouse_release(released_btn))
+        return system.refresh();
 
-    if (active != nullptr) res = active->on_mouse_release(released_btn);
-    else                   res = system .on_mouse_release(released_btn);
-
-    if (res) system.recalc_region();
-    return res;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -232,7 +299,16 @@ bool widget_t::process_mouse_move_event(widget_t &system, const sf::Vector2i &po
     vec2d off = refresh_context_on_mouse_move(pos);
     if (active == nullptr) return false;
 
-    bool res = active->on_mouse_move(off);
-    if (res) system.recalc_region();
-    return res;
+    if (active->on_mouse_move(off))
+        return system.refresh();
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void widget_t::update_ancestral_status(WIDGET_STATUS_TYPE upd_status)
+{
+    for (widget_t *cur = ancestor; cur != nullptr; cur = cur->ancestor)
+        cur->status = upd_status;
 }

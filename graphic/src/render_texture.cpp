@@ -26,9 +26,10 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
 {
     const list &regions = reg.get_areas();
 
-    sf::Vector2u tex_size = texture.data.getSize();
-    rectangle_t  tex_rect (vec2d(pos.x, pos.y), vec2d(pos.x + size.x, pos.y + size.y));
-    vec2d        tex_scale(size.x / tex_size.x, size.y / tex_size.y);
+    sf::Vector2u tex_size   = texture.data.getSize();
+    rectangle_t  tex_region = reg.region;
+    rectangle_t  tex_rect  (vec2d(pos.x, pos.y), vec2d(pos.x + size.x, pos.y + size.y));
+    vec2d        tex_scale (size.x / tex_size.x, size.y / tex_size.y);
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -44,9 +45,10 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
 
             spr.setPosition((float) pos.x      , (float) pos.y);
             spr.setScale   ((float) tex_scale.x, (float) tex_scale.y);
-            spr.setTextureRect(sf::IntRect((int) test_rect.ld_corner.x , (int) test_rect.ld_corner.y,
-                                           (int) test_rect.get_size().x, (int) test_rect.get_size().y));
-
+            spr.setTextureRect(sf::IntRect((int) (test_rect.ld_corner.x - tex_region.ld_corner.x),
+                                           (int) (test_rect.ld_corner.y - tex_region.ld_corner.y),
+                                           (int) (test_rect.get_size().x / tex_scale.x),
+                                           (int) (test_rect.get_size().y / tex_scale.y)));
             data.draw(spr);
         }
     }

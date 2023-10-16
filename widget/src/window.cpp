@@ -13,20 +13,14 @@ const color_t window_t::Red_theme    ( 0.533 , 0     , 0     );
 
 static const double HEADER_MENU_HEIGHT = 50;
 
-//--------------------------------------------------------------------------------------------------
-
-static void header_menu_mouse_move_func  (menu_t *self, void *args, const vec2d &off, widget_t *&active);
-static void header_menu_create_winapi_btn(menu_t &header_menu, widget_t *window);
-
 //==================================================================================================
 
 window_t::window_t(const rectangle_t &region_, const color_t &color_):
 widget_manager_t(nullptr, region_),
-region          (region_),
-header_menu     (button_t::button_delete),
-color           (color_)
+color           (color_),
+header_menu     (button_t::button_delete)
 {
-    vec2d wnd_size = region.ru_corner - region.ld_corner;
+    vec2d wnd_size = visible.region.ru_corner - visible.region.ld_corner;
     if (wnd_size.y < HEADER_MENU_HEIGHT)
     {
         LOG_ERROR("CAN'T CREATE WINDOW: it's height = %lg < %lg\n",
@@ -41,35 +35,30 @@ color           (color_)
 
 void window_t::create_header_menu()
 {
-    vec2d wnd_size = region.get_size();
+    vec2d wnd_size = visible.region.get_size();
 
-    rectangle_t header_menu_region(region.ld_corner,
-                                   region.rd_corner() + vec2d(0, HEADER_MENU_HEIGHT));
+    rectangle_t header_menu_region(visible.region.ld_corner,
+                                   visible.region.rd_corner() + vec2d(0, HEADER_MENU_HEIGHT));
 
     header_menu.set_region(header_menu_region);
     header_menu.set_funcs (nullptr, nullptr,
-                           menu_t::activate_by_mouse_click,
-                           menu_t::deactivate_by_mouse_click,
-                           header_menu_mouse_move_func);
+                           activate_by_mouse_click,
+                           deactivate_by_mouse_click,
+                           move_by_mouse_move);
     header_menu.set_args  (this);
     header_menu.color = color_t::White;
 
-    header_menu_create_winapi_btn(header_menu, this);
+    header_menu_create_winapi_btn();
 
-    register_widget(&header_menu);
+    register_subwidget(&header_menu);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-static void header_menu_create_winapi_btn(menu_t &header_menu, widget_t *window)
+void window_t::header_menu_create_winapi_btn()
 {
-    rectangle_t header_region = header_menu.get_region();
+    rectangle_t header_region = header_menu.visible.region;
     vec2d       header_size   = header_region.get_size();
-
-    LOG_TAB_SERVICE_MESSAGE("header_menu_create_winapi_btn", "\n");
-    LOG_TAB++;
-    LOG_TAB_SERVICE_MESSAGE("header_menu_region:", "\n");
-    rectangle_t::dump(&header_region);
 
     texture_button_t *winapi = new texture_button_t(button_t::GREEN_WINAPI);
 
@@ -80,39 +69,27 @@ static void header_menu_create_winapi_btn(menu_t &header_menu, widget_t *window)
     rectangle_t winapi_region(header_region.rd_corner() - vec2d(winapi_size.x, 0),
                               header_region.rd_corner() + vec2d(0, winapi_size.y));
 
-    LOG_TAB_MESSAGE("winapi size   = {%lg, %lg}\n", winapi_size.x, winapi_size.y);
-    LOG_TAB_MESSAGE("winapi region:\n");
-    rectangle_t::dump(&winapi_region);
-
     winapi->set_region(winapi_region);
     winapi->set_funcs(nullptr, nullptr, button_t::activate_by_mouse_click, button_t::close_by_mouse_click, nullptr);
-    winapi->set_args (window);
+    winapi->set_args (this);
 
     header_menu.register_button(winapi);
-
-    LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool window_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
-    const mouse_context_t &context = get_mouse_context();
+    LOG_ASSERT(active == nullptr);
 
-    if (!region.is_point_inside(context.pos))
+    const mouse_context_t &context = get_mouse_context();
+    if (!visible.region.is_point_inside(context.pos))
         return false;
 
-    on_widgets_mouse_press(btn);
+    if (on_subwidgets_mouse_press(btn))
+        return true;
+
+    status = WIDGET_UPDATED;
+    update_ancestral_status(WIDGET_UPDATED);
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-static void header_menu_mouse_move_func(menu_t *self, void *args, const vec2d &off, widget_t *&active)
-{
-    (void) self;
-    (void) active;
-
-    window_t *parent = (window_t *) args;
-    parent->move(off);
 }

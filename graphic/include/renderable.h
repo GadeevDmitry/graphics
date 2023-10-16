@@ -8,6 +8,9 @@
 
 class renderable
 {
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 protected:
     clipping_region_t visible;
 
@@ -16,9 +19,9 @@ public:
     inline explicit renderable(const rectangle_t &region_);
     virtual        ~renderable() {}
 
-    inline const clipping_region_t &get_visible() const;
-
+    virtual void   dump_region() const {};
     virtual void recalc_region() = 0;
+
     virtual void render(render_texture_t &wnd) const = 0;
 };
 
@@ -33,12 +36,5 @@ visible()
 inline renderable::renderable(const rectangle_t &region_):
 visible(region_)
 {}
-
-//--------------------------------------------------------------------------------------------------
-
-inline const clipping_region_t &renderable::get_visible() const
-{
-    return visible;
-}
 
 #endif // RANDERABLE_H

@@ -11,19 +11,20 @@ class window_manager_t: public widget_manager_t
 ///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
+protected:
+    void virtual inline move(const vec2d &offset)           override;
+    void virtual inline recalc_region()                     override;
+    void virtual inline render(render_texture_t &wnd) const override;
+
 public:
     color_t background;
 
-    inline          window_manager_t(void (*delete_window)(void *el),                             const color_t &background_ = color_t::Black);
-    inline explicit window_manager_t(void (*delete_window)(void *el), const rectangle_t &region_, const color_t &background_ = color_t::Black);
+             inline window_manager_t(void (*delete_window)(void *el),                             const color_t &background_ = color_t::Black);
+    explicit inline window_manager_t(void (*delete_window)(void *el), const rectangle_t &region_, const color_t &background_ = color_t::Black);
 
-    inline void set_region     (const rectangle_t &region);
-    inline bool register_window(window_t *window);
-
-    virtual inline rectangle_t get_region() const override;
-
-    virtual inline void recalc_region()                     override;
-    virtual inline void render(render_texture_t &wnd) const override;
+    bool inline register_window(window_t *window);
+    void inline set_region(const rectangle_t &region);
+    void inline init();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -51,14 +52,22 @@ inline void window_manager_t::set_region(const rectangle_t &region)
 
 inline bool window_manager_t::register_window(window_t *window)
 {
-    return register_widget(window);
+    return register_subwidget(window);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline rectangle_t window_manager_t::get_region() const
+inline void window_manager_t::init()
 {
-    return visible.region;
+    recalc_region();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_manager_t::move(const vec2d &offset)
+{
+    visible.region += offset;
+    subwidgets_move(offset);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -66,7 +75,7 @@ inline rectangle_t window_manager_t::get_region() const
 inline void window_manager_t::recalc_region()
 {
     visible.reset();
-    widgets_recalc_region();
+    subwidgets_recalc_region();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,7 +84,7 @@ inline void window_manager_t::render(render_texture_t &wnd) const
 {
 //  wnd.draw_region(visible);
     wnd.draw_filled_rectangle(visible.region, background, visible);
-    widgets_render(wnd);
+    subwidgets_render(wnd);
 }
 
 #endif // WINDOW_MANAGER_H

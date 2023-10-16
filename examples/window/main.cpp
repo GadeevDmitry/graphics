@@ -28,14 +28,11 @@ int main()
     window_t wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), window_t::Blue_theme);
     window_t wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), window_t::Dark_theme);
 
-    wnd_1.register_sub_window(&wnd_2);
-    wnd_1.register_sub_window(&wnd_3);
+    wnd_1.register_subwindow(&wnd_2);
+    wnd_1.register_subwindow(&wnd_3);
 
     manager.register_window(&wnd_1);
-    manager.recalc_region  ();
-
-    LOG_TAB_SERVICE_MESSAGE("DUMP REGIONS AFTER RECALCULATING", "\n");
-    manager.dump_region();
+    manager.init();
 
     render(sfml_wnd, manager, rend_texture);
 /*

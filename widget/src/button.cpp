@@ -23,8 +23,7 @@ void button_t::load_textures()
 {
     for (size_t i = 0; i * sizeof(char *) < sizeof(BUTTON_TEXTURES_FILENAMES); ++i)
     {
-        bool res = BUTTON_TEXTURES[i].load_from_file(BUTTON_TEXTURES_FILENAMES[i]);
-        LOG_TAB_MESSAGE("LOADING TEXTURE #%lu (%s) returned %d\n", i, BUTTON_TEXTURES_FILENAMES[i], res);
+        BUTTON_TEXTURES[i].load_from_file(BUTTON_TEXTURES_FILENAMES[i]);
     }
 };
 
@@ -32,87 +31,51 @@ void button_t::load_textures()
 
 bool button_t::on_key_press(const KEY_TYPE &key)
 {
+    LOG_ASSERT(active == nullptr || active == (widget_t *) this);
     if (on_key_press_func == nullptr) return false;
-    return on_key_press_func(this, args, key, active);
+
+    return on_key_press_func(this, args, key);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool button_t::on_key_release(const KEY_TYPE &key)
 {
+    LOG_ASSERT(active == (widget_t *) this);
     if (on_key_release_func == nullptr) return false;
-    return on_key_release_func(this, args, key, active);
+
+    return on_key_release_func(this, args, key);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool button_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
+    LOG_ASSERT(active == nullptr || active == (widget_t *) this);
+    if (on_mouse_press_func == nullptr) return false;
+
     const mouse_context_t &context = get_mouse_context();
+    if (!visible.region.is_point_inside(context.pos)) return false;
 
-    if (!region.is_point_inside(context.pos)) return false;
-    if (on_mouse_press_func != nullptr)
-        on_mouse_press_func(this, args, btn, active);
-
-    return true;
+    return on_mouse_press_func(this, args, btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool button_t::on_mouse_release(const MOUSE_BUTTON_TYPE &btn)
 {
+    LOG_ASSERT(active == (widget_t *) this);
     if (on_mouse_release_func == nullptr) return false;
 
-    on_mouse_release_func(this, args, btn, active);
-    return true;
+    return on_mouse_release_func(this, args, btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 bool button_t::on_mouse_move(const vec2d &off)
 {
-    LOG_VERIFY(active == this, false);
-
+    LOG_ASSERT(active == (widget_t *) this);
     if (on_mouse_move_func == nullptr) return false;
 
-    on_mouse_move_func(this, args, off, active);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void button_t::activate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
-{
-    LOG_VERIFY(active == nullptr, (void) 0);
-    (void) args;
-    (void) btn;
-
-    active = (widget_t *) self;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void button_t::deactivate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &key, widget_t *&active)
-{
-    LOG_VERIFY(active == (widget_t *) self, (void) 0);
-    (void) self;
-    (void) args;
-    (void) key;
-
-    active = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void button_t::close_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
-{
-    LOG_VERIFY(args != nullptr, (void) 0);
-    widget_t &arg = *(widget_t *) args;
-
-    (void) self;
-    (void) btn;
-    (void) active;
-
-    arg.status = WIDGET_CLOSED;
-    active     = nullptr;
+    return on_mouse_move_func(this, args, off);
 }
