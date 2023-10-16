@@ -23,8 +23,8 @@ void button_t::load_textures()
 {
     for (size_t i = 0; i * sizeof(char *) < sizeof(BUTTON_TEXTURES_FILENAMES); ++i)
     {
-        sf::Texture texture;
-        BUTTON_TEXTURES[i].load_from_file(BUTTON_TEXTURES_FILENAMES[i]);
+        bool res = BUTTON_TEXTURES[i].load_from_file(BUTTON_TEXTURES_FILENAMES[i]);
+        LOG_TAB_MESSAGE("LOADING TEXTURE #%lu (%s) returned %d\n", i, BUTTON_TEXTURES_FILENAMES[i], res);
     }
 };
 
@@ -114,4 +114,5 @@ void button_t::close_by_mouse_click(button_t *self, void *args, const MOUSE_BUTT
     (void) active;
 
     arg.status = WIDGET_CLOSED;
+    active     = nullptr;
 }

@@ -202,8 +202,10 @@ public:
     inline          widget_t();
     inline explicit widget_t(const rectangle_t &region_);
 
-    virtual void        move      (const vec2d &offset) = 0;
-    virtual rectangle_t get_region() const              = 0;
+    virtual void move(const vec2d &offset) = 0;
+
+    virtual rectangle_t  get_region() const = 0;
+    virtual void        dump_region() const {} ;
 
     virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
     virtual bool on_key_release  (const KEY_TYPE          &key) = 0;

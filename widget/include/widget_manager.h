@@ -27,8 +27,9 @@ protected:
     inline bool register_widget(widget_t *widget);
 
     void widgets_move         (const vec2d &offset);
-    void widgets_recalc_region();
     void widgets_render       (render_texture_t &render_texture) const;
+    void widgets_recalc_region();
+    void widgets_regions_dump () const;
 
     inline bool on_widgets_key_press    (const KEY_TYPE          &key);
     inline bool on_widgets_key_release  (const KEY_TYPE          &key);
@@ -37,10 +38,10 @@ protected:
            bool on_widgets_mouse_move   (const vec2d             &off);
 
 public:
-    void widgets_regions_dump () const;
 
     virtual inline void move         (const vec2d &off)            override;
     virtual inline void recalc_region()                            override;
+    virtual inline void dump_region  ()                      const override;
     virtual inline void render       (render_texture_t &wnd) const override;
 
     virtual inline bool on_key_press    (const KEY_TYPE          &key) override;
@@ -119,6 +120,13 @@ inline void widget_manager_t::move(const vec2d &off)
 inline void widget_manager_t::recalc_region()
 {
     widgets_recalc_region();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_manager_t::dump_region() const
+{
+    return widgets_regions_dump();
 }
 
 //--------------------------------------------------------------------------------------------------

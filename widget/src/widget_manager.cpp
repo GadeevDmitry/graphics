@@ -133,7 +133,7 @@ void widget_manager_t::widgets_recalc_region()
         }
 
         cur_1.recalc_region();
-        visible -= cur_1.visible;
+        visible -= cur_1.visible.region;
     }
 }
 
@@ -146,12 +146,16 @@ void widget_manager_t::widgets_regions_dump() const
     widget_t **front = (widget_t **) list_front(&widgets);
     widget_t **fict  = (widget_t **) list_fict (&widgets);
 
+    LOG_TAB++;
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
         widget_t &cur = **cnt;
+
         clipping_region_t::dump(&cur.visible);
+        cur.dump_region();
     }
+    LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------

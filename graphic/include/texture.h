@@ -19,9 +19,11 @@ public:
     inline explicit texture_t(const unsigned width_, const unsigned height_);
     inline explicit texture_t(const char *filename_);
 
+    inline const sf::Texture &get_sfml_texture() const;
+    inline       vec2d        get_size        () const;
+
     inline bool  create        (const unsigned width, const unsigned height);
     inline bool  load_from_file(const char *filename);
-    inline vec2d get_size      () const;
 
     friend render_texture_t;
 };
@@ -70,7 +72,14 @@ inline bool texture_t::load_from_file(const char *filename)
 
 //--------------------------------------------------------------------------------------------------
 
-inline vec2d  texture_t::get_size() const
+inline const sf::Texture &texture_t::get_sfml_texture() const
+{
+    return data;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d texture_t::get_size() const
 {
     return vec2d((double) data.getSize().x, (double) data.getSize().y);
 }

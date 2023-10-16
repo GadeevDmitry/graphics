@@ -34,14 +34,11 @@ int main()
     manager.register_window(&wnd_1);
     manager.recalc_region  ();
 
+    LOG_TAB_SERVICE_MESSAGE("DUMP REGIONS AFTER RECALCULATING", "\n");
+    manager.dump_region();
+
     render(sfml_wnd, manager, rend_texture);
-
 /*
-    sfml_wnd    .clear(sf::Color::Cyan);
-    rend_texture.clear();
-
-    manager.render(rend_texture);
-
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);
     sfml_wnd.display();    
@@ -82,26 +79,14 @@ int main()
             {
                 case sf::Event::MouseButtonPressed:
                 {
-                    LOG_TAB_SERVICE_MESSAGE("MOUSE BUTTON PRESSED {%u, %u}", "\n",
-                    sf::Mouse::getPosition().x,
-                    sf::Mouse::getPosition().y);
-                    LOG_TAB++;
-
                     rerender = widget_t::process_mouse_press_event
                                     (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
-
-                    LOG_TAB--;
                 } break;
 
                 case sf::Event::MouseButtonReleased:
                 {
-                    LOG_TAB_SERVICE_MESSAGE("MOUSE BUTTON RELEASED", "\n");
-                    LOG_TAB++;
-
                     rerender = widget_t::process_mouse_release_event
                                     (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
-
-                    LOG_TAB--;
                 } break;
 
                 case sf::Event::MouseMoved:
@@ -124,6 +109,7 @@ int main()
 
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos)
 {
+    return mouse_pos;
     return sf::Vector2i(mouse_pos.x, (int) sfml_wnd.getSize().y - mouse_pos.y);
 }
 
@@ -132,6 +118,7 @@ static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf:
 static void render(sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture)
 {
     system.render(rend_texture);
+    rend_texture.display();
 
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);

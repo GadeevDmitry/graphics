@@ -28,6 +28,7 @@ public:
 
     inline bool create               (const unsigned width, const unsigned height);
     inline void clear                (const color_t &col = color_t::Black);
+    inline void display              ();
 
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size);
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size, const clipping_region_t &reg);
@@ -99,6 +100,13 @@ inline bool render_texture_t::create(const unsigned width, const unsigned height
 inline void render_texture_t::clear(const color_t &col)
 {
     data.clear(col.get_sfml_color());
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void render_texture_t::display()
+{
+    data.display();
 }
 
 //--------------------------------------------------------------------------------------------------
