@@ -147,6 +147,7 @@ void widget_manager_t::widgets_recalc_region()
         }
 
         cur_1.recalc_region();
+        visible -= cur_1.visible;
     }
 }
 

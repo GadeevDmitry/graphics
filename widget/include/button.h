@@ -156,7 +156,8 @@ color   (color_)
 
 inline void color_button_t::render(render_texture_t &wnd) const
 {
-    wnd.draw_region(visible);
+//  wnd.draw_region(visible);
+    wnd.draw_filled_rectangle(region, color, visible);
 }
 
 #endif // BUTTON_H

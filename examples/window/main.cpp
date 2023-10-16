@@ -9,6 +9,8 @@
 
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos);
 
+static void         render          (sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture);
+
 //==================================================================================================
 
 int main()
@@ -22,11 +24,15 @@ int main()
     color_window_t wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), color_t::Green);
     color_window_t wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), color_t::Red);
 
+    manager.background = color_t::Blue;
     manager.register_window(&wnd_1);
     manager.register_window(&wnd_2);
     manager.register_window(&wnd_3);
     manager.recalc_region  ();
 
+    render(sfml_wnd, manager, rend_texture);
+
+/*
     sfml_wnd    .clear(sf::Color::Cyan);
     rend_texture.clear();
 
@@ -35,7 +41,7 @@ int main()
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);
     sfml_wnd.display();    
-/*
+
     while (sfml_wnd.isOpen())
     {
         sf::Event event;
@@ -104,18 +110,9 @@ int main()
             }
 
             if (!rerender) continue;
-
-            sfml_wnd    .clear();
-            rend_texture.clear(color_t::Blue);
-
-            manager.render(rend_texture);
-
-            sf::Sprite spr(rend_texture.get_sfml_texture());
-            sfml_wnd.draw(spr);
-            sfml_wnd.display();
+            render(sfml_wnd, manager, rend_texture);
         }
     }
-
 #pragma GCC diagnostic pop
 }
 
@@ -124,4 +121,15 @@ int main()
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos)
 {
     return sf::Vector2i(mouse_pos.x, (int) sfml_wnd.getSize().y - mouse_pos.y);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+static void render(sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture)
+{
+    system.render(rend_texture);
+
+    sf::Sprite spr(rend_texture.get_sfml_texture());
+    sfml_wnd.draw(spr);
+    sfml_wnd.display();
 }
