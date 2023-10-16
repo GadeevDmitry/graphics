@@ -4,6 +4,15 @@
 
 //==================================================================================================
 
+enum LINE_INTERS_TYPE
+{
+    NONE    ,
+    POINT   ,
+    SAME    ,
+};
+
+//==================================================================================================
+
 static rectangle_t      get_intersect_rectangle_rectangle(const rectangle_t &rect_1, const rectangle_t &rect_2);
 static bool             get_intersect_segment_rectangle  (const segment_t   &seg   , const rectangle_t &rect, segment_t &res);
 static LINE_INTERS_TYPE get_intersect_segment_segment    (const segment_t   &seg1  , const segment_t   &seg2, vec2d &inters_point);
@@ -15,6 +24,27 @@ static rectangle_t get_intersect_rectangle_rectangle(const rectangle_t &rect_1,
 {
     return rectangle_t(vec2d::max(rect_1.ld_corner, rect_2.ld_corner),
                        vec2d::min(rect_1.ru_corner, rect_2.ru_corner));
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool is_intersect_rectangle_rectangle(const rectangle_t &rect_1,
+                                      const rectangle_t &rect_2)
+{
+    rectangle_t intersect = get_intersect_rectangle_rectangle(rect_1, rect_2);
+    return      intersect.is_valid();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool intersect_rectangle_rectangle(      rectangle_t &rect_1,
+                                   const rectangle_t &rect_2)
+{
+    rectangle_t intersect = get_intersect_rectangle_rectangle(rect_1, rect_2);
+    if (!intersect.is_valid()) return false;
+
+    rect_1 = intersect;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -41,8 +71,8 @@ static LINE_INTERS_TYPE get_intersect_segment_segment(const segment_t &seg1, con
         inters_point = vec2d(0, 0);
 
         // lines are equal
-        if (seg1.endpoint_1.x == seg2.endpoint_1.x ||
-            seg2.endpoint_1.y == seg2.endpoint_1.y)
+        if (dblcmp(seg1.endpoint_1.x, seg2.endpoint_1.x) == 0 ||
+            dblcmp(seg2.endpoint_1.y, seg2.endpoint_1.y) == 0)
             return SAME;
 
         return NONE;
@@ -55,7 +85,7 @@ static LINE_INTERS_TYPE get_intersect_segment_segment(const segment_t &seg1, con
 
     // figure out that point is inside segment
     if (std::min(seg1.endpoint_1.x, seg1.endpoint_2.x) <= x && x <= std::max(seg1.endpoint_1.x, seg1.endpoint_2.x) &&
-        std::min(seg1.endpoint_1.y, seg1.endpoint_2.y) <= y && y <= std::max(seg1.endpoint_1.y, seg1.endpoint_2.y)) 
+        std::min(seg1.endpoint_1.y, seg1.endpoint_2.y) <= y && y <= std::max(seg1.endpoint_1.y, seg1.endpoint_2.y))
         return POINT;
 
     return NONE;
@@ -131,27 +161,6 @@ static bool get_intersect_segment_rectangle(const segment_t &seg, const rectangl
     }
 
     return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool is_intersect_rectangle_rectangle(const rectangle_t &rect_1,
-                                      const rectangle_t &rect_2)
-{
-    rectangle_t intersect = get_intersect_rectangle_rectangle(rect_1, rect_2);
-    return      intersect.is_valid();
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool intersect_rectangle_rectangle(      rectangle_t &rect_1,
-                                   const rectangle_t &rect_2)
-{
-    rectangle_t intersect = get_intersect_rectangle_rectangle(rect_1, rect_2);
-    if (!intersect.is_valid()) return false;
-
-    rect_1 = intersect;
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

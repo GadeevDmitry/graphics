@@ -5,15 +5,6 @@
 
 //==================================================================================================
 
-enum LINE_INTERS_TYPE
-{
-    NONE    ,
-    POINT   ,
-    SAME    ,
-};
-
-//--------------------------------------------------------------------------------------------------
-
 bool is_intersect_rectangle_rectangle(const rectangle_t &rect_1, const rectangle_t &rect_2);
 bool    intersect_rectangle_rectangle(      rectangle_t &rect_1, const rectangle_t &rect_2);
 
