@@ -23,7 +23,7 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(
 TOOLS_OBJS := tool
 TOOLS_OBJS := $(foreach OBJ, $(TOOLS_OBJS), $(TOOLS_BUILD_DIR)$(OBJ).o)
 
-WIDGET_OBJS := menu widget_manager widget window
+WIDGET_OBJS := button menu widget_manager widget window
 WIDGET_OBJS := $(foreach OBJ, $(WIDGET_OBJS), $(WIDGET_BUILD_DIR)$(OBJ).o)
 
 GRAPHIC_OBJS := color region render_texture

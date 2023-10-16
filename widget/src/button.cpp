@@ -1,8 +1,34 @@
 #include <stdio.h>
 #include "button.h"
 #include "log.h"
+#include "algorithm.h"
 
 //==================================================================================================
+
+const char *button_t::BUTTON_TEXTURES_FILENAMES[] =
+{
+    // relative to examples/exapmle_name
+    "../../widget/textures/button/red_winapi.png",
+    "../../widget/textures/button/blue_winapi.png",
+    "../../widget/textures/button/green_winapi.png"
+};
+
+//--------------------------------------------------------------------------------------------------
+
+texture_t button_t::BUTTON_TEXTURES[3] = {};
+
+//==================================================================================================
+
+void button_t::load_textures()
+{
+    for (size_t i = 0; i * sizeof(char *) < sizeof(BUTTON_TEXTURES_FILENAMES); ++i)
+    {
+        sf::Texture texture;
+        BUTTON_TEXTURES[i].load_from_file(BUTTON_TEXTURES_FILENAMES[i]);
+    }
+};
+
+//--------------------------------------------------------------------------------------------------
 
 bool button_t::on_key_press(const KEY_TYPE &key)
 {
@@ -55,50 +81,37 @@ bool button_t::on_mouse_move(const vec2d &off)
 
 //--------------------------------------------------------------------------------------------------
 
-bool button_t::activate_by_key_click(button_t *self, void *args, const KEY_TYPE &key, widget_t *&active)
+void button_t::activate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
 {
-    LOG_VERIFY(active == nullptr, false);
-    (void) args;
-    (void) key;
-
-    active = (widget_t *) self;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool button_t::deactivate_by_key_click(button_t *self, void *args, const KEY_TYPE &key, widget_t *&active)
-{
-    LOG_VERIFY(active == (widget_t *) self, false);
-    (void) self;
-    (void) args;
-    (void) key;
-
-    active = nullptr;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool button_t::activate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
-{
-    LOG_VERIFY(active == nullptr, false);
+    LOG_VERIFY(active == nullptr, (void) 0);
     (void) args;
     (void) btn;
 
     active = (widget_t *) self;
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-bool button_t::deactivate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &key, widget_t *&active)
+void button_t::deactivate_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &key, widget_t *&active)
 {
-    LOG_VERIFY(active == (widget_t *) self, false);
+    LOG_VERIFY(active == (widget_t *) self, (void) 0);
     (void) self;
     (void) args;
     (void) key;
 
     active = nullptr;
-    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void button_t::close_by_mouse_click(button_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active)
+{
+    LOG_VERIFY(args != nullptr, (void) 0);
+    widget_t &arg = *(widget_t *) args;
+
+    (void) self;
+    (void) btn;
+    (void) active;
+
+    arg.status = WIDGET_CLOSED;
 }

@@ -51,12 +51,6 @@ bool widget_manager_t::on_widgets_mouse_click_event(widget_t::on_mouse_click_eve
     widget_t **fict  = (widget_t **) list_fict (&widgets);
     size_t     ind   = 0;
 
-    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::ON_WIDGETS_MOUSE_CLICK_EVENT", "\n");
-    LOG_TAB++;
-    LOG_TAB_MESSAGE("size  = %lu\n"
-                    "front = %p\n", widgets.size, *front);
-
-
     for (widget_t **cnt = front; cnt != fict;
          cnt = (widget_t **) list_next(cnt))
     {
@@ -64,13 +58,11 @@ bool widget_manager_t::on_widgets_mouse_click_event(widget_t::on_mouse_click_eve
         if ((cur.*event)(btn))
         {
             on_widget_event_react(cnt, ind);
-            LOG_TAB--;
             return true;
         }
         ++ind;
     }
 
-    LOG_TAB--;
     return false;
 }
 
@@ -84,10 +76,6 @@ bool widget_manager_t::on_widgets_mouse_move(const vec2d &off)
     widget_t **fict  = (widget_t **) list_fict (&widgets);
     size_t     ind   = 0;
 
-    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::ON_WIDGETS_MOUSE_MOVE", "\n");
-    LOG_TAB++;
-    LOG_TAB_MESSAGE("size = %lu\n", widgets.size);
-
     for (widget_t **cnt = front; cnt != fict;
         cnt = (widget_t **) list_next(cnt))
     {
@@ -95,13 +83,11 @@ bool widget_manager_t::on_widgets_mouse_move(const vec2d &off)
         if ((cur.on_mouse_move(off)))
         {
             on_widget_event_react(cnt, ind);
-            LOG_TAB--;
             return true;
         }
         ++ind;
     }
 
-    LOG_TAB--;
     return false;
 }
 
@@ -155,14 +141,7 @@ void widget_manager_t::widgets_recalc_region()
 
 void widget_manager_t::widgets_regions_dump() const
 {
-    LOG_TAB_SERVICE_MESSAGE("WIDGET_MANAGER_T::WIDGET_REGIONS_DUMP", "\n");
-    LOG_TAB++;
-
-    if (widgets.size == 0)
-    {
-        LOG_TAB--;
-        return;
-    }
+    if (widgets.size == 0) return;
 
     widget_t **front = (widget_t **) list_front(&widgets);
     widget_t **fict  = (widget_t **) list_fict (&widgets);
@@ -173,8 +152,6 @@ void widget_manager_t::widgets_regions_dump() const
         widget_t &cur = **cnt;
         clipping_region_t::dump(&cur.visible);
     }
-
-    LOG_TAB--;
 }
 
 //--------------------------------------------------------------------------------------------------

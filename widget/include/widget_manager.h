@@ -8,6 +8,9 @@
 
 class widget_manager_t: public widget_t
 {
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 private:
     bool on_widgets_key_click_event  (on_key_click_event   event, const KEY_TYPE          &key);
     bool on_widgets_mouse_click_event(on_mouse_click_event event, const MOUSE_BUTTON_TYPE &btn);

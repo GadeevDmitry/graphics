@@ -28,30 +28,15 @@ bool menu_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
 {
     const mouse_context_t &context = get_mouse_context();
 
-    LOG_TAB_SERVICE_MESSAGE("MENU_T::ON_MOUSE_PRESS", "\n");
-    LOG_TAB++;
-    LOG_TAB_MESSAGE("activate = %p\n", active);
-
     if (active != this)
     {
-        if (!region.is_point_inside(context.pos))
-        {
-            LOG_TAB_MESSAGE("POINT IS NOT INSIDE", "\n");
-            LOG_TAB--;
-            return false;
-        }
-        if (on_widgets_mouse_press (btn))
-        {
-            LOG_TAB_MESSAGE("SUB-WIDGETS SUCCESS", "\n");
-            LOG_TAB--;
-            return true;
-        }
+        if (!region.is_point_inside(context.pos)) return false;
+        if (on_widgets_mouse_press (btn))         return true;
     }
 
     if (on_mouse_press_func != nullptr)
         on_mouse_press_func(this, args, btn, active);
 
-    LOG_TAB--;
     return true;
 }
 

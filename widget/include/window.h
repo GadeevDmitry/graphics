@@ -8,15 +8,37 @@
 
 class window_t: public widget_manager_t
 {
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
+public:
+    static const color_t Light_theme;
+    static const color_t Dark_theme;
+    static const color_t Blue_theme;
+    static const color_t Red_theme;
+
+    static inline void window_delete(void *const window_);
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
+private:
+    void create_header_menu();
+
 protected:
     rectangle_t  region;
     color_menu_t header_menu;
 
 public:
-    explicit window_t(const rectangle_t &region_);
+    color_t      color;
+
+    explicit window_t(const rectangle_t &region_, const color_t &color_ = Red_theme);
     inline  ~window_t() {}
 
-    virtual inline void move(const vec2d &offset) override;
+    inline bool register_sub_window(window_t *window);
+
+    virtual inline void        move      (const vec2d &offset) override;
+    virtual inline rectangle_t get_region() const              override;
 
     virtual inline bool on_key_press    (const KEY_TYPE          &key) override;
     virtual inline bool on_key_release  (const KEY_TYPE          &key) override;
@@ -24,7 +46,7 @@ public:
     virtual inline bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
     virtual inline bool on_mouse_move   (const vec2d             &off) override;
 
-    static inline void window_delete(void *const window_);
+    virtual inline void render(render_texture_t &wnd) const override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -39,6 +61,20 @@ inline void window_t::move(const vec2d &offset)
 
 //--------------------------------------------------------------------------------------------------
 
+inline bool window_t::register_sub_window(window_t *window)
+{
+    return register_widget(window);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline rectangle_t window_t::get_region() const
+{
+    return region;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 inline bool window_t::on_key_press  (const KEY_TYPE &key) { (void) key; return false; }
 inline bool window_t::on_key_release(const KEY_TYPE &key) { (void) key; return false; }
 
@@ -49,39 +85,18 @@ bool window_t::on_mouse_move   (const vec2d             &off) { return on_widget
 
 //--------------------------------------------------------------------------------------------------
 
+inline void window_t::render(render_texture_t &wnd) const
+{
+    wnd.draw_filled_rectangle(region, color, visible);
+    widgets_render(wnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+
 inline void window_t::window_delete(void *const window_)
 {
     window_t *window = *(window_t **) window_;
     delete    window;
-}
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-class color_window_t: public window_t
-{
-public:
-    color_t color;
-
-    inline explicit color_window_t(const rectangle_t &region_, const color_t &color_ = color_t::White);
-    inline         ~color_window_t() {}
-
-    virtual inline void render(render_texture_t &wnd) const override;
-};
-
-//--------------------------------------------------------------------------------------------------
-
-inline color_window_t::color_window_t(const rectangle_t &region_, const color_t &color_):
-window_t(region_),
-color   (color_)
-{}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void color_window_t::render(render_texture_t &wnd) const
-{
-//  wnd.draw_region(visible);
-    wnd.draw_filled_rectangle(region, color, visible);
-    widgets_render(wnd);
 }
 
 #endif // WINDOW_H

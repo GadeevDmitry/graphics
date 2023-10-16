@@ -140,9 +140,14 @@ middle(false)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class widget_manager_t;
+class button_t;
+class menu_t;
 
 class widget_t: public renderable
 {
+///////////////////////////////////////////////
+// TYPES
+///////////////////////////////////////////////
 public:
 
     enum WIDGET_STATUS_TYPE
@@ -155,6 +160,9 @@ protected:
     typedef bool (widget_t::*on_key_click_event)   (const KEY_TYPE          &key);
     typedef bool (widget_t::*on_mouse_click_event) (const MOUSE_BUTTON_TYPE &btn);
 
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
 private:
     static key_context_t   saved_key_context;
     static mouse_context_t saved_mouse_context;
@@ -166,22 +174,9 @@ private:
     static vec2d refresh_context_on_mouse_move   (const sf::Vector2i      &pos);
 
 protected:
-    WIDGET_STATUS_TYPE status;
-    static widget_t   *active;
+    static widget_t *active;
 
 public:
-    inline          widget_t();
-    inline explicit widget_t(const rectangle_t &region_);
-
-    virtual void move         (const vec2d &offset) = 0;
-    virtual void recalc_region() override {}
-
-    virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
-    virtual bool on_key_release  (const KEY_TYPE          &key) = 0;
-    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual bool on_mouse_move   (const vec2d             &off) = 0;
-
     static bool process_key_press_event    (widget_t &system, const KEY_TYPE          &pressed_key);
     static bool process_key_release_event  (widget_t &system, const KEY_TYPE          &released_key);
     static bool process_mouse_press_event  (widget_t &system, const MOUSE_BUTTON_TYPE &pressed_btn);
@@ -192,7 +187,34 @@ public:
     static inline const key_context_t   &get_key_context  ();
     static inline void                   widget_delete    (void *const widget_);
 
+///////////////////////////////////////////////
+// FRIENDS
+///////////////////////////////////////////////
+public:
     friend widget_manager_t;
+    friend button_t;
+    friend menu_t;
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
+public:
+    inline          widget_t();
+    inline explicit widget_t(const rectangle_t &region_);
+
+    virtual void        move      (const vec2d &offset) = 0;
+    virtual rectangle_t get_region() const              = 0;
+
+    virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
+    virtual bool on_key_release  (const KEY_TYPE          &key) = 0;
+    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) = 0;
+    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
+    virtual bool on_mouse_move   (const vec2d             &off) = 0;
+
+    virtual void recalc_region() override {}
+
+protected:
+    WIDGET_STATUS_TYPE status;
 };  
 
 //--------------------------------------------------------------------------------------------------

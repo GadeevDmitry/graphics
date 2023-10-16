@@ -8,11 +8,26 @@
 
 class menu_t: public widget_manager_t
 {
+///////////////////////////////////////////////
+// TYPES
+///////////////////////////////////////////////
 public:
     typedef bool (*menu_key_click_func)   (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
     typedef bool (*menu_mouse_click_func) (menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
     typedef void (*menu_mouse_move_func)  (menu_t *self, void *args, const vec2d             &off, widget_t *&active);
 
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
+public:
+    static bool   activate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
+    static bool deactivate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
+    static bool   activate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
+    static bool deactivate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 protected:
     menu_key_click_func   on_key_press_func;
     menu_key_click_func   on_key_release_func;
@@ -37,18 +52,14 @@ public:
 
     inline bool register_button(button_t *button);
 
-    virtual inline void move(const vec2d &offset) override;
+    virtual inline void        move      (const vec2d &offset) override;
+    virtual inline rectangle_t get_region() const              override;
 
     virtual bool on_key_press    (const KEY_TYPE          &key) override;
     virtual bool on_key_release  (const KEY_TYPE          &key) override;
     virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool on_mouse_move   (const vec2d             &off) override;
-
-    static bool   activate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    static bool deactivate_by_key_click  (menu_t *self, void *args, const KEY_TYPE          &key, widget_t *&active);
-    static bool   activate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
-    static bool deactivate_by_mouse_click(menu_t *self, void *args, const MOUSE_BUTTON_TYPE &btn, widget_t *&active);
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -125,10 +136,20 @@ inline void menu_t::move(const vec2d &offset)
     visible.region += offset;
 }
 
+//--------------------------------------------------------------------------------------------------
+
+inline rectangle_t menu_t::get_region() const
+{
+    return region;
+}
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class color_menu_t: public menu_t
 {
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 public:
     color_t color;
 

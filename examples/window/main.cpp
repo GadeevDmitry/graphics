@@ -10,24 +10,28 @@
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos);
 
 static void         render          (sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture);
+static void         load_textures   ();
 
 //==================================================================================================
 
 int main()
 {
+    load_textures();
+
     sf::RenderWindow sfml_wnd(sf::VideoMode(), "simple", sf::Style::Fullscreen);
+    vec2d            sfml_wnd_size((double) sfml_wnd.getSize().x, (double) sfml_wnd.getSize().y);
 
-    render_texture_t rend_texture(sfml_wnd.getSize().x, sfml_wnd.getSize().y);
-    window_manager_t manager     (nullptr, rectangle_t(vec2d(0, 0), vec2d((double) sfml_wnd.getSize().x, (double) sfml_wnd.getSize().y)));
+    render_texture_t rend_texture((unsigned) sfml_wnd_size.x, (unsigned) sfml_wnd_size.y);
+    window_manager_t manager     (nullptr, rectangle_t(vec2d(0, 0), sfml_wnd_size));
 
-    color_window_t wnd_1(rectangle_t(vec2d(100, 200), vec2d(1400, 900)), color_t::White);
-    color_window_t wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), color_t::Green);
-    color_window_t wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), color_t::Red);
+    window_t wnd_1(rectangle_t(vec2d(0  ,   0),    sfml_wnd_size), window_t::Red_theme);
+    window_t wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), window_t::Blue_theme);
+    window_t wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), window_t::Dark_theme);
 
-    manager.background = color_t::Blue;
+    wnd_1.register_sub_window(&wnd_2);
+    wnd_1.register_sub_window(&wnd_3);
+
     manager.register_window(&wnd_1);
-    manager.register_window(&wnd_2);
-    manager.register_window(&wnd_3);
     manager.recalc_region  ();
 
     render(sfml_wnd, manager, rend_texture);
@@ -132,4 +136,11 @@ static void render(sf::RenderWindow &sfml_wnd, const widget_t &system, render_te
     sf::Sprite spr(rend_texture.get_sfml_texture());
     sfml_wnd.draw(spr);
     sfml_wnd.display();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+static void load_textures()
+{
+    button_t::load_textures();
 }

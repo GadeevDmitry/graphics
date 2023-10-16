@@ -8,6 +8,9 @@
 
 class window_manager_t: public widget_manager_t
 {
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
 public:
     color_t background;
 
@@ -16,6 +19,8 @@ public:
 
     inline void set_region     (const rectangle_t &region);
     inline bool register_window(window_t *window);
+
+    virtual inline rectangle_t get_region() const override;
 
     virtual inline void recalc_region()                     override;
     virtual inline void render(render_texture_t &wnd) const override;
@@ -47,6 +52,13 @@ inline void window_manager_t::set_region(const rectangle_t &region)
 inline bool window_manager_t::register_window(window_t *window)
 {
     return register_widget(window);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline rectangle_t window_manager_t::get_region() const
+{
+    return visible.region;
 }
 
 //--------------------------------------------------------------------------------------------------

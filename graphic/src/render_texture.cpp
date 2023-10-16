@@ -65,8 +65,6 @@ void render_texture_t::draw_region(const clipping_region_t &region)
          cnt = (rectangle_t *) list_next(cnt))
     {
         color_t rand = color_t::get_rand_color();
-        LOG_TAB_SERVICE_MESSAGE("GENERATED_COLOR = {%lg, %lg, %lg}", "\n", rand.r, rand.g, rand.b);
-
         draw_filled_rectangle(*cnt, color_t::Black, rand);
     }
 }
