@@ -8,17 +8,32 @@
 
 class color_t
 {
+///////////////////////////////////////////////
+// STATIC
+///////////////////////////////////////////////
 public:
-    double r;
-    double g;
-    double b;
-
     static const color_t White;
     static const color_t Black;
     static const color_t Red;
     static const color_t Green;
     static const color_t Blue;
     static const color_t Orange;
+
+    static color_t get_rand_color();
+
+///////////////////////////////////////////////
+// FRIENDS
+///////////////////////////////////////////////
+public:
+    friend inline color_t operator *(const double mul, const color_t &col);
+
+///////////////////////////////////////////////
+// MEMBERS
+///////////////////////////////////////////////
+public:
+    double r;
+    double g;
+    double b;
 
     inline          color_t();
     inline explicit color_t(double r_, double g_, double b_);
@@ -36,10 +51,6 @@ public:
     inline color_t &operator -=(const color_t &sub);
     inline color_t &operator *=(const color_t &mul);
     inline color_t &operator *=(const double   mul);
-
-    friend inline color_t operator *(const double mul, const color_t &col);
-
-    static color_t get_rand_color();
 };
 
 //--------------------------------------------------------------------------------------------------
