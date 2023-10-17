@@ -22,7 +22,7 @@ public:
     virtual void   dump_region() const {};
     virtual void recalc_region() = 0;
 
-    virtual void render(render_texture_t &wnd) const = 0;
+    virtual void render(render_texture_t &wnd) = 0;
 };
 
 //--------------------------------------------------------------------------------------------------

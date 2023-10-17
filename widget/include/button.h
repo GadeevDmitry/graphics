@@ -20,6 +20,30 @@ public:
         BLUE_WINAPI,
         GREEN_WINAPI,
 
+        LINE_ON_TOOL,
+        LINE_OFF_TOOL,
+        PENCIL_ON_TOOL,
+        PENCIL_OFF_TOOL,
+        RUBBER_ON_TOOL,
+        RUBBER_OFF_TOOL,
+        ELLIPSE_ON_TOOL,
+        ELLIPSE_OFF_TOOL,
+        RECTANGLE_ON_TOOL,
+        RECTANGLE_OFF_TOOL,
+
+        WHITE_ON_COLOR,
+        WHITE_OFF_COLOR,
+        BLUE_ON_COLOR,
+        BLUE_OFF_COLOR,
+        RED_ON_COLOR,
+        RED_OFF_COLOR,
+        ORANGE_ON_COLOR,
+        ORANGE_OFF_COLOR,
+        GREEN_ON_COLOR,
+        GREEN_OFF_COLOR,
+        BLACK_ON_COLOR,
+        BLACK_OFF_COLOR,
+
         BUTTON_TEXTURE_NAME_COUNT,
     };
 
@@ -145,7 +169,7 @@ public:
     explicit inline  color_button_t(const rectangle_t &region, const color_t &color_);
              inline ~color_button_t() {}
 
-    void virtual inline render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -163,7 +187,7 @@ color   (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void color_button_t::render(render_texture_t &wnd) const
+inline void color_button_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
     wnd.draw_filled_rectangle(visible.region, color, visible);
@@ -183,7 +207,7 @@ public:
     explicit inline  texture_button_t(const BUTTON_TEXTURE_NAME_TYPE name, const rectangle_t &region_);
              inline ~texture_button_t() {}
 
-    void virtual inline render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +226,7 @@ texture (BUTTON_TEXTURES[name])
 
 //--------------------------------------------------------------------------------------------------
 
-inline void texture_button_t::render(render_texture_t &wnd) const
+inline void texture_button_t::render(render_texture_t &wnd)
 {
     wnd.draw_texture(texture, visible.region.ld_corner, visible.region.get_size());
 }

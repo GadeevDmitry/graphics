@@ -15,7 +15,7 @@ export TOOLS_PREFIX WIDGET_PREFIX GRAPHIC_PREFIX GEOMETRY_PREFIX EQUATION_SOLVER
 #--------------------------------------------------------------------------------------------------------------------------------
 
 SFML_INCLUDES            := -I$(ROOT_PREFIX)
-TOOLS_INCLUDES           := -I$(TOOLS_PREFIX)
+TOOLS_INCLUDES           := -I$(TOOLS_PREFIX)include/
 WIDGET_INCLUDES          := -I$(WIDGET_PREFIX)include/
 GRAPHIC_INCLUDES         := -I$(GRAPHIC_PREFIX)include/
 GEOMETRY_INCLUDES        := -I$(GEOMETRY_PREFIX)include/

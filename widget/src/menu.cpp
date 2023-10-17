@@ -36,7 +36,7 @@ bool menu_t::on_mouse_press(const MOUSE_BUTTON_TYPE &btn)
         return false;
 
     if (active == nullptr && on_subwidgets_mouse_press(btn))
-        return false;
+        return true;
 
     if (on_mouse_press_func == nullptr) return false;
     return on_mouse_press_func(this, args, btn);

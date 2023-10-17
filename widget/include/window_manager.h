@@ -12,9 +12,9 @@ class window_manager_t: public widget_manager_t
 // MEMBERS
 ///////////////////////////////////////////////
 protected:
-    void virtual inline move(const vec2d &offset)           override;
-    void virtual inline recalc_region()                     override;
-    void virtual inline render(render_texture_t &wnd) const override;
+    void virtual inline move(const vec2d &offset)     override;
+    void virtual inline recalc_region()               override;
+    void virtual inline render(render_texture_t &wnd) override;
 
 public:
     color_t background;
@@ -80,7 +80,7 @@ inline void window_manager_t::recalc_region()
 
 //--------------------------------------------------------------------------------------------------
 
-inline void window_manager_t::render(render_texture_t &wnd) const
+inline void window_manager_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
     wnd.draw_filled_rectangle(visible.region, background, visible);

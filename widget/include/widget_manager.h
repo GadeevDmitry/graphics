@@ -40,8 +40,8 @@ public:
     explicit inline  widget_manager_t(void (*delete_widget) (void *el), const rectangle_t &region_);
              inline ~widget_manager_t();
 
-    void virtual inline dump_region()                      const override;
-    void virtual inline render     (render_texture_t &wnd) const override;
+    void virtual inline dump_region()                const override;
+    void virtual inline render     (render_texture_t &wnd) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ inline void widget_manager_t::dump_region() const
 
 //--------------------------------------------------------------------------------------------------
 
-inline void widget_manager_t::render(render_texture_t &wnd) const
+inline void widget_manager_t::render(render_texture_t &wnd)
 {
     subwidgets_render(wnd);
 }

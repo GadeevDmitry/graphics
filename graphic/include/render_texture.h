@@ -25,6 +25,7 @@ public:
     inline         ~render_texture_t() {}
 
     inline const sf::Texture &get_sfml_texture() const;
+    inline       texture_t    get_texture     () const;
 
     inline bool create               (const unsigned width, const unsigned height);
     inline void clear                (const color_t &col = color_t::Black);
@@ -60,8 +61,8 @@ public:
 //  void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
     void        draw_filled_rectangle(const rectangle_t  &abs, const color_t &fill_col,                             const clipping_region_t &reg);
 
-    void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col);
-    inline void draw_filled_circle   (const circle_t     &abs, const color_t &   fill_col);
+    void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col, const vec2d &scale);
+    inline void draw_filled_circle   (const circle_t     &abs,                             const color_t &fill_col, const vec2d &scale);
 
     void        draw_filled_circle   (const circle_t     &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg);
     void        draw_filled_circle   (const circle_t     &abs, const color_t &   fill_col,                          const clipping_region_t &reg);
@@ -86,6 +87,13 @@ data()
 inline const sf::Texture &render_texture_t::get_sfml_texture() const
 {
     return data.getTexture();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline texture_t render_texture_t::get_texture() const
+{
+    return texture_t(get_sfml_texture());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -149,9 +157,9 @@ inline void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, cons
 
 //--------------------------------------------------------------------------------------------------
 
-inline void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &fill_col)
+inline void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &fill_col, const vec2d &scale)
 {
-    return draw_filled_circle(abs, fill_col, fill_col);
+    return draw_filled_circle(abs, fill_col, fill_col, scale);
 }
 
 #endif // RENDER_TEXTURE_H

@@ -13,10 +13,17 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(TOOLS_INCLUDES) $(GEOMETRY_INCLUDES) $(GR
 
 all:
 
-
-$(TOOLS_BUILD_DIR)tool.o: $(TOOLS_PREFIX)src/tool.cpp | $(TOOLS_BILD_DIR)
+$(TOOLS_BILD_DIR)ellipse_tool.o: $(TOOLS_PREFIX)src/ellipse_tool.cpp | $(TOOLS_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-all: $(TOOLS_BUILD_DIR)tool.o
+all: $(TOOLS_BUILD_DIR)ellipse_tool.o
+
+$(TOOLS_BILD_DIR)rectangle_tool.o: $(TOOLS_PREFIX)src/rectangle_tool.cpp | $(TOOLS_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(TOOLS_BILD_DIR)rectangle_tool.o
+
+$(TOOLS_BILD_DIR)shape_tool.o: $(TOOLS_PREFIX)src/shape_tool.cpp | $(TOOLS_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(TOOLS_BUILD_DIR)shape_tool.o
 
 $(TOOLS_BILD_DIR):
 	mkdir -p $@

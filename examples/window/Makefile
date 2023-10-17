@@ -16,14 +16,14 @@ ROOT_PREFIX := ../../
 BUILD_DIR   := build/
 include $(ROOT_PREFIX)include_paths.d
 
-INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(WIDGET_INCLUDES) $(SFML_INCLUDES)
+INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(WIDGET_INCLUDES) $(TOOLS_INCLUDES) $(SFML_INCLUDES)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-TOOLS_OBJS := tool
+TOOLS_OBJS := rectangle_tool ellipse_tool shape_tool
 TOOLS_OBJS := $(foreach OBJ, $(TOOLS_OBJS), $(TOOLS_BUILD_DIR)$(OBJ).o)
 
-WIDGET_OBJS := button menu widget_manager widget window
+WIDGET_OBJS := button canvas menu widget_manager widget window
 WIDGET_OBJS := $(foreach OBJ, $(WIDGET_OBJS), $(WIDGET_BUILD_DIR)$(OBJ).o)
 
 GRAPHIC_OBJS := color region render_texture
@@ -35,7 +35,7 @@ GEOMETRY_OBJS := $(foreach OBJ, $(GEOMETRY_OBJS), $(GEOMETRY_BUILD_DIR)$(OBJ).o)
 DATA_STRUCTS_OBJS := algorithm array list log trace stack
 DATA_STRUCTS_OBJS := $(foreach OBJ, $(DATA_STRUCTS_OBJS), $(DATA_STRUCTS_BUILD_DIR)$(OBJ).o)
 
-OBJS := $(WIDGET_OBJS) $(GRAPHIC_OBJS) $(GEOMETRY_OBJS) $(DATA_STRUCTS_OBJS)
+OBJS := $(TOOLS_OBJS) $(WIDGET_OBJS) $(GRAPHIC_OBJS) $(GEOMETRY_OBJS) $(DATA_STRUCTS_OBJS)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 

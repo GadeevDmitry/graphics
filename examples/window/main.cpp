@@ -7,9 +7,13 @@
 
 //==================================================================================================
 
+const vec2d MAIN_WINDOW_SIZE(1920, 1080);
+
+//==================================================================================================
+
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos);
 
-static void         render          (sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture);
+static void         render          (sf::RenderWindow &sfml_wnd, widget_t &system, render_texture_t &rend_texture);
 static void         load_textures   ();
 
 //==================================================================================================
@@ -24,9 +28,9 @@ int main()
     render_texture_t rend_texture((unsigned) sfml_wnd_size.x, (unsigned) sfml_wnd_size.y);
     window_manager_t manager     (nullptr, rectangle_t(vec2d(0, 0), sfml_wnd_size));
 
-    window_t wnd_1(rectangle_t(vec2d(0  ,   0),    sfml_wnd_size), window_t::Red_theme);
-    window_t wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), window_t::Blue_theme);
-    window_t wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), window_t::Dark_theme);
+    main_window_t wnd_1(rectangle_t(vec2d(0  ,   0), MAIN_WINDOW_SIZE));
+    window_t      wnd_2(rectangle_t(vec2d(400, 500), vec2d(1000, 800)), window_t::Light_theme);
+    window_t      wnd_3(rectangle_t(vec2d(200, 300), vec2d(800 ,1000)), window_t::Dark_theme);
 
     wnd_1.register_subwindow(&wnd_2);
     wnd_1.register_subwindow(&wnd_3);
@@ -76,14 +80,20 @@ int main()
             {
                 case sf::Event::MouseButtonPressed:
                 {
+                    LOG_TAB_MESSAGE("MOUSE_BUTTON_PRESSED: {%lu, %lu}\n", sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+                    LOG_TAB++;
                     rerender = widget_t::process_mouse_press_event
                                     (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
+                    LOG_TAB--;
                 } break;
 
                 case sf::Event::MouseButtonReleased:
                 {
+                    LOG_TAB_MESSAGE("MOUSE_BUTTON_RELEASED: {%lu, %lu}\n", sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+                    LOG_TAB++;
                     rerender = widget_t::process_mouse_release_event
                                     (manager, mouse_context_t::convert_sfml(event.mouseButton.button));
+                    LOG_TAB--;
                 } break;
 
                 case sf::Event::MouseMoved:
@@ -112,7 +122,7 @@ static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf:
 
 //--------------------------------------------------------------------------------------------------
 
-static void render(sf::RenderWindow &sfml_wnd, const widget_t &system, render_texture_t &rend_texture)
+static void render(sf::RenderWindow &sfml_wnd, widget_t &system, render_texture_t &rend_texture)
 {
     system.render(rend_texture);
     rend_texture.display();

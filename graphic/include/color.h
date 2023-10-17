@@ -34,9 +34,10 @@ public:
     double r;
     double g;
     double b;
+    double a;
 
     inline          color_t();
-    inline explicit color_t(double r_, double g_, double b_);
+    inline explicit color_t(double r_, double g_, double b_, double a_ = 1.0);
     inline         ~color_t();
 
     sf::Color get_sfml_color() const;
@@ -63,10 +64,11 @@ b(0)
 
 //--------------------------------------------------------------------------------------------------
 
-inline color_t::color_t(double r_, double g_, double b_):
+inline color_t::color_t(double r_, double g_, double b_, double a_):
 r(r_),
 g(g_),
-b(b_)
+b(b_),
+a(a_)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -76,6 +78,7 @@ inline color_t::~color_t()
     r = NAN;
     g = NAN;
     b = NAN;
+    a = NAN;
 }
 
 //--------------------------------------------------------------------------------------------------

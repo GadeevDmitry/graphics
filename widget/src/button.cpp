@@ -10,12 +10,36 @@ const char *button_t::BUTTON_TEXTURES_FILENAMES[] =
     // relative to examples/exapmle_name
     "../../widget/textures/button/red_winapi.png",
     "../../widget/textures/button/blue_winapi.png",
-    "../../widget/textures/button/green_winapi.png"
+    "../../widget/textures/button/green_winapi.png",
+
+    "../../widget/textures/button/line_on.png",
+    "../../widget/textures/button/line_off.png",
+    "../../widget/textures/button/pencil_on.png",
+    "../../widget/textures/button/pencil_off.png",
+    "../../widget/textures/button/rubber_on.png",
+    "../../widget/textures/button/rubber_off.png",
+    "../../widget/textures/button/ellipse_on.png",
+    "../../widget/textures/button/ellipse_off.png",
+    "../../widget/textures/button/rectangle_on.png",
+    "../../widget/textures/button/rectangle_off.png",
+
+    "../../widget/textures/button/white_on.png",
+    "../../widget/textures/button/white_off.png",
+    "../../widget/textures/button/blue_on.png",
+    "../../widget/textures/button/blue_off.png",
+    "../../widget/textures/button/red_on.png",
+    "../../widget/textures/button/red_off.png",
+    "../../widget/textures/button/orange_on.png",
+    "../../widget/textures/button/orange_off.png",
+    "../../widget/textures/button/green_on.png",
+    "../../widget/textures/button/green_off.png",
+    "../../widget/textures/button/black_on.png",
+    "../../widget/textures/button/black_off.png",
 };
 
 //--------------------------------------------------------------------------------------------------
 
-texture_t button_t::BUTTON_TEXTURES[3] = {};
+texture_t button_t::BUTTON_TEXTURES[sizeof(BUTTON_TEXTURES_FILENAMES) / sizeof(char *)] = {};
 
 //==================================================================================================
 

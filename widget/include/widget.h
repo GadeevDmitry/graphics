@@ -154,6 +154,7 @@ middle(false)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class widget_manager_t;
+class main_window_t;
 class window_t;
 class button_t;
 class menu_t;
@@ -213,8 +214,8 @@ public:
 ///////////////////////////////////////////////
 // FRIENDS
 ///////////////////////////////////////////////
-public:
     friend widget_manager_t;
+    friend main_window_t;
     friend window_t;
     friend button_t;
     friend menu_t;
@@ -233,36 +234,36 @@ protected:
 
     void update_ancestral_status(WIDGET_STATUS_TYPE upd_status);
 
-    virtual inline void move(const vec2d &offset);
-    virtual inline bool update_struct() { return false; }
-    virtual inline void recalc_region() override {}
+    void virtual inline move(const vec2d &offset);
+    bool virtual inline update_struct() { return false; }
+    void virtual inline recalc_region() override {}
 
-    virtual bool on_key_press    (const KEY_TYPE          &key) = 0;
-    virtual bool on_key_release  (const KEY_TYPE          &key) = 0;
-    virtual bool on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual bool on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual bool on_mouse_move   (const vec2d             &off) = 0;
+    bool virtual on_key_press    (const KEY_TYPE          &key) = 0;
+    bool virtual on_key_release  (const KEY_TYPE          &key) = 0;
+    bool virtual on_mouse_press  (const MOUSE_BUTTON_TYPE &btn) = 0;
+    bool virtual on_mouse_release(const MOUSE_BUTTON_TYPE &btn) = 0;
+    bool virtual on_mouse_move   (const vec2d             &off) = 0;
 
 public:
-    inline          widget_t(widget_t *ancestor_ = nullptr);
-    inline explicit widget_t(const rectangle_t &region_, widget_t *ancestor_ = nullptr);
+             inline widget_t();
+    explicit inline widget_t(const rectangle_t &region_);
 
-    virtual void dump_region() const override {}
+    void virtual dump_region() const override {}
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t(widget_t *ancestor_):
+inline widget_t::widget_t():
 status  (WIDGET_OPENED),
-ancestor(ancestor_)
+ancestor(nullptr)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t(const rectangle_t &region_, widget_t *ancestor_):
+inline widget_t::widget_t(const rectangle_t &region_):
 renderable(region_),
 status    (WIDGET_OPENED),
-ancestor  (ancestor_)
+ancestor  (nullptr)
 {}
 
 //--------------------------------------------------------------------------------------------------

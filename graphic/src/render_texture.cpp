@@ -284,13 +284,16 @@ void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col)
+void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col, const vec2d &scale)
 {
     sf::CircleShape circle((float) abs.radius);
 
-    circle.setPosition    ((float) (abs.center.x - abs.radius), (float) (abs.center.y - abs.radius));
-    circle.setOutlineColor(outline_col.get_sfml_color());
-    circle.setFillColor   (   fill_col.get_sfml_color());
+    circle.setPosition    ((float) (abs.center.x - abs.radius*scale.x), (float) (abs.center.y - abs.radius*scale.y));
+    circle.setScale       ((float) scale.x, (float) scale.y);
+
+    circle.setOutlineColor    (outline_col.get_sfml_color());
+    circle.setFillColor       (fill_col   .get_sfml_color());
+    circle.setOutlineThickness(1);
 
     data.draw(circle);
 }

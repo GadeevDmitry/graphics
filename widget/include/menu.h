@@ -6,8 +6,15 @@
 
 //==================================================================================================
 
+class window_t;
+
 class menu_t: public widget_manager_t
 {
+///////////////////////////////////////////////
+// FRIENDS
+///////////////////////////////////////////////
+friend window_t;
+
 ///////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////
@@ -118,7 +125,7 @@ public:
     explicit inline  color_menu_t(void (*delete_button)(void *el), const rectangle_t &region_, const color_t &color_);
              inline ~color_menu_t() {}
 
-    void virtual inline render(render_texture_t &wnd) const override;
+    void virtual inline render(render_texture_t &wnd) override;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -137,7 +144,7 @@ color (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void color_menu_t::render(render_texture_t &wnd) const
+inline void color_menu_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
     wnd.draw_filled_rectangle(visible.region, color, visible);
