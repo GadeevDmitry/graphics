@@ -83,7 +83,7 @@ inline void window_manager_t::recalc_region()
 inline void window_manager_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
-    wnd.draw_filled_rectangle(visible.region, background, visible);
+    wnd.draw_rectangle(background, visible);
     subwidgets_render(wnd);
 }
 

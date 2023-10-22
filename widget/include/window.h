@@ -74,7 +74,7 @@ inline bool window_t::register_subwindow(window_t *window)
 
 inline void window_t::render(render_texture_t &wnd)
 {
-    wnd.draw_filled_rectangle(visible.region, color, visible);
+    wnd.draw_rectangle(color, visible);
     subwidgets_render(wnd);
 }
 

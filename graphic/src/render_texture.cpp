@@ -63,7 +63,7 @@ void render_texture_t::draw_region(const clipping_region_t &region)
          cnt = (rectangle_t *) list_next(cnt))
     {
         color_t rand = color_t::get_rand_color();
-        draw_filled_rectangle(*cnt, color_t::Black, rand);
+        draw_rectangle(*cnt, rand, color_t::Black, 3);
     }
 }
 
@@ -192,147 +192,59 @@ void render_texture_t::draw_point(const vec2d &abs, const color_t &col, const cl
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col)
+void render_texture_t::draw_rectangle(const rectangle_t &abs, const color_t &fill_col, const color_t &out_col, const double out_thickness)
 {
-    sf::Color sfml_outline_col = outline_col.get_sfml_color();
-    sf::Vertex lines[] = {sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ld_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f((float) abs.ru_corner.x, (float) abs.ld_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f((float) abs.ru_corner.x, (float) abs.ru_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ru_corner.y), sfml_outline_col),
-                          sf::Vertex(sf::Vector2f((float) abs.ld_corner.x, (float) abs.ld_corner.y), sfml_outline_col)};
+    sf::RectangleShape rectangle(sf::Vector2f((float) abs.get_size().x, (float) abs.get_size().y));
 
-    data.draw(lines, 5, sf::LineStrip);
+    rectangle.setPosition        ((float) abs.ld_corner.x, (float) abs.ld_corner.y);
+    rectangle.setFillColor       (fill_col.get_sfml_color());
+    rectangle.setOutlineColor    (out_col .get_sfml_color());
+    rectangle.setOutlineThickness((float) out_thickness);
+
+    data.draw(rectangle);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col)
+void render_texture_t::draw_rectangle(const color_t &fill_col, const clipping_region_t &reg)
 {
-    vec2d size = abs.ru_corner - abs.ld_corner;
-    sf::RectangleShape rect(sf::Vector2f((float) size.x, (float) size.y));
+    const list &areas = reg.get_areas();
 
-    rect.setPosition    ((float) abs.ld_corner.x, (float) abs.ld_corner.y);
-    rect.setOutlineColor(outline_col.get_sfml_color());
-    rect.setFillColor   (   fill_col.get_sfml_color());
-
-    data.draw(rect);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void render_texture_t::draw_hollow_rectangle(const rectangle_t &abs, const color_t &outline_col, const clipping_region_t &reg)
-{
-    const list &regions = reg.get_areas();
-
-    rectangle_t *front = (rectangle_t *) list_front(&regions);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
 
     for (rectangle_t *cur = front; cur != fict;
          cur = (rectangle_t *) list_next(cur))
     {
-        if (cur)
-        {
-            rectangle_t draw_zone = abs;
-            if (intersect_rectangle_rectangle(draw_zone, *cur))
-                draw_hollow_rectangle(draw_zone, outline_col);
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-/*
-void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg)
-{
-    const list &regions = reg.get_areas();
-
-    rectangle_t *front = (rectangle_t *) list_front(&regions);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
-
-    for (rectangle_t *cur = front; cur != fict;
-         cur = (rectangle_t *) list_next(cur))
-    {
-        if (cur) {
-            rectangle_t draw_zone = abs;
-            if (intersect_rectangle_rectangle(draw_zone, *cur)) {
-                draw_filled_rectangle(draw_zone, outline_col, fill_col);
-            }
-        }
-    }
-}
-*/
-//--------------------------------------------------------------------------------------------------
-
-void render_texture_t::draw_filled_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg)
-{
-    const list &regions = reg.get_areas();
-
-    rectangle_t *front = (rectangle_t *) list_front(&regions);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
-
-    for (rectangle_t *cur = front; cur != fict;
-         cur = (rectangle_t *) list_next(cur))
-    {
-        rectangle_t draw_zone = abs;
-        if (intersect_rectangle_rectangle(draw_zone, *cur))
-            draw_filled_rectangle(draw_zone, fill_col);
+        draw_rectangle(*cur, fill_col, fill_col, 0);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col, const vec2d &scale)
+void render_texture_t::draw_circle(const circle_t &abs, const color_t &fill_col, const color_t &out_col,
+                                   const double out_thickness, const vec2d &scale)
 {
-    sf::CircleShape circle((float) abs.radius);
+    sf::CircleShape circle((float) abs.radius, 50);
 
-    circle.setPosition    ((float) (abs.center.x - abs.radius*scale.x), (float) (abs.center.y - abs.radius*scale.y));
-    circle.setScale       ((float) scale.x, (float) scale.y);
+    circle.setPosition
+        ((float) (abs.center.x - abs.radius*scale.x),
+         (float) (abs.center.y - abs.radius*scale.y));
 
-    circle.setOutlineColor    (outline_col.get_sfml_color());
-    circle.setFillColor       (fill_col   .get_sfml_color());
-    circle.setOutlineThickness(1);
+    circle.setFillColor       (fill_col.get_sfml_color());
+    circle.setOutlineColor    (out_col .get_sfml_color());
+    circle.setOutlineThickness((float) out_thickness);
+    circle.setScale           ((float) scale.x, (float) scale.y);
 
     data.draw(circle);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &outline_col, const color_t &fill_col, const clipping_region_t &reg)
+void render_texture_t::draw_circle(const circle_t &abs, const color_t &fill_col, const clipping_region_t &reg, const vec2d &scale)
 {
-    sf::CircleShape sfml_circle = sf::CircleShape((float) abs.radius);
+    render_texture_t temp((unsigned) (2 * abs.radius*scale.x), (unsigned) (2 * abs.radius*scale.y));
+    temp.draw_circle(abs, fill_col, fill_col, 0, scale);
 
-    vec2d circle_pos = vec2d(abs.center.x - abs.radius, abs.center.y - abs.radius);
-    vec2d tex_size   = vec2d(data.getSize().x, data.getSize().y);
-
-    sfml_circle.setPosition    ((float) circle_pos.x, (float) circle_pos.y);
-    sfml_circle.setFillColor   (fill_col.get_sfml_color());
-    sfml_circle.setOutlineColor(outline_col.get_sfml_color());
-
-    sf::RenderTexture tmp_render_texture;
-    tmp_render_texture.create ((unsigned) tex_size.x, (unsigned) tex_size.y);
-    tmp_render_texture.draw   (sfml_circle);
-    tmp_render_texture.display();
-
-    texture_t circle_texture = texture_t(tmp_render_texture.getTexture());
-    draw_texture(circle_texture, reg);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void render_texture_t::draw_filled_circle(const circle_t &abs, const color_t &fill_col, const clipping_region_t &reg)
-{
-    sf::CircleShape sfml_circle = sf::CircleShape((float) abs.radius);
-
-    vec2d circle_pos = vec2d(abs.center.x - abs.radius, abs.center.y - abs.radius);
-    vec2d tex_size   = vec2d(data.getSize().x, data.getSize().y);
-
-    sfml_circle.setPosition ((float) circle_pos.x, (float) circle_pos.y);
-    sfml_circle.setFillColor(fill_col.get_sfml_color());
-
-    sf::RenderTexture tmp_render_texture;
-    tmp_render_texture.create ((unsigned) tex_size.x, (unsigned) tex_size.y);
-    tmp_render_texture.draw   (sfml_circle);
-    tmp_render_texture.display();
-
-    texture_t circle_texture = texture_t(tmp_render_texture.getTexture());
-    draw_texture(circle_texture, reg);
+    draw_texture(temp.get_texture(), reg);
 }

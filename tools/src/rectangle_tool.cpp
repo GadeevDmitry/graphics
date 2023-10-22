@@ -8,5 +8,5 @@
 void rectangle_tool_t::draw_temp(render_texture_t &temp, const color_t &color)
 {
     temp.clear(color_t(0, 0, 0, 0));
-    temp.draw_hollow_rectangle(rectangle_t(start, last), color);
+    temp.draw_rectangle(rectangle_t(start, last), color_t::Transparent, color, 4);
 }

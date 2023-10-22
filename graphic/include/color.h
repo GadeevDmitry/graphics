@@ -18,6 +18,7 @@ public:
     static const color_t Green;
     static const color_t Blue;
     static const color_t Orange;
+    static const color_t Transparent;
 
     static color_t get_rand_color();
 
