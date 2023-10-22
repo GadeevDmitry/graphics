@@ -5,6 +5,7 @@
 #include "canvas.h"
 #include "widget_manager.h"
 
+#include "line_tool.h"
 #include "ellipse_tool.h"
 #include "rectangle_tool.h"
 #include "tool_manager.h"
@@ -125,6 +126,7 @@ private:
 protected:
     rectangle_tool_t *rectangle_tool;
     ellipse_tool_t   *ellipse_tool;
+    line_tool_t      *line_tool;
     tool_manager_t   tool_manager;
 
     color_menu_t     toolbar;

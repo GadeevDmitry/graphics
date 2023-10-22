@@ -152,6 +152,7 @@ color_button_args_arr(nullptr),
 
 rectangle_tool       (new rectangle_tool_t),
 ellipse_tool         (new ellipse_tool_t),
+line_tool            (new line_tool_t),
 tool_manager         (rectangle_tool, color_t::Black),
 
 toolbar              (button_t::button_delete),
@@ -161,9 +162,6 @@ canvas               (&tool_manager)
     toolbar_create();
     palette_create();
     canvas_create ();
-
-    LOG_TAB_SERVICE_MESSAGE("MAIN TOOL_MANAGER = %p", "\n"    , &tool_manager);
-    LOG_TAB_SERVICE_MESSAGE("RECTANGLE_TOOL    = %p", "\n\n\n", rectangle_tool);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,6 +173,7 @@ main_window_t::~main_window_t()
 
     delete rectangle_tool;
     delete ellipse_tool;
+    delete line_tool;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -200,7 +199,7 @@ void main_window_t::toolbar_create_tool_btns()
     // порядок инструментов в массиве должен соответствовать порядку имен текстур
     // инструментов в button_t::BUTTON_TEXTURE_NAME_TYPE.
     tool_button_args_arr = new tool_button_args[TOOLBAR_BTN_NUMS];
-    tool_button_args_arr[0] = {.window = this, .tool = nullptr};
+    tool_button_args_arr[0] = {.window = this, .tool = line_tool};
     tool_button_args_arr[1] = {.window = this, .tool = nullptr};
     tool_button_args_arr[2] = {.window = this, .tool = nullptr};
     tool_button_args_arr[3] = {.window = this, .tool = ellipse_tool};

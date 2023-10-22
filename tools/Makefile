@@ -17,6 +17,10 @@ $(TOOLS_BILD_DIR)ellipse_tool.o: $(TOOLS_PREFIX)src/ellipse_tool.cpp | $(TOOLS_B
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(TOOLS_BUILD_DIR)ellipse_tool.o
 
+$(TOOLS_BILD_DIR)line_tool.o: $(TOOLS_PREFIX)src/line_tool.cpp | $(TOOLS_BILD_DIR)
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+all: $(TOOLS_BUILD_DIR)line_tool.o
+
 $(TOOLS_BILD_DIR)rectangle_tool.o: $(TOOLS_PREFIX)src/rectangle_tool.cpp | $(TOOLS_BILD_DIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 all: $(TOOLS_BILD_DIR)rectangle_tool.o

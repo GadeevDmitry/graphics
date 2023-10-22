@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "widget.h"
 #include "ellipse_tool.h"
 #include "log.h"
 
@@ -18,13 +17,13 @@ void ellipse_tool_t::draw_temp(render_texture_t &temp, const color_t &color)
         circle_t circle(vec2d((start.x + last.x) / 2, (start.y + last.y) / 2), x_size / 2);
 
         temp.clear(color_t::Transparent);
-        temp.draw_circle(circle, color_t::Transparent, color, 4, vec2d(1, y_scale));
+        temp.draw_circle(circle, color_t::Transparent, color, 1, vec2d(1, y_scale));
     }
     else
     {
         circle_t circle(vec2d((start.x + last.x) / 2, (start.y + last.y) / 2), y_size / 2);
 
         temp.clear(color_t::Transparent);
-        temp.draw_circle(circle, color_t::Transparent, color, 4, vec2d(x_scale, 1));
+        temp.draw_circle(circle, color_t::Transparent, color, 1, vec2d(x_scale, 1));
     }
 }

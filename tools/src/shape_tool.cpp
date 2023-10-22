@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "widget.h"
 #include "shape_tool.h"
 #include "log.h"
 

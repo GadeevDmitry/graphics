@@ -20,7 +20,7 @@ INCLUDES := $(DATA_STRUCTS_INCLUDES) $(GRAPHIC_INCLUDES) $(GEOMETRY_INCLUDES) $(
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-TOOLS_OBJS := rectangle_tool ellipse_tool shape_tool
+TOOLS_OBJS := rectangle_tool ellipse_tool shape_tool line_tool
 TOOLS_OBJS := $(foreach OBJ, $(TOOLS_OBJS), $(TOOLS_BUILD_DIR)$(OBJ).o)
 
 WIDGET_OBJS := button canvas menu widget_manager widget window
