@@ -15,7 +15,7 @@ static const double HEADER_MENU_HEIGHT = 50;
 
 static const vec2d  TOOLBAR_SIZE    (250, 515);
 static const vec2d  TOOLBAR_BTN_SIZE(100, 100);
-static const size_t TOOLBAR_BTN_NUMS = 5;
+static const size_t TOOLBAR_BTN_NUMS = 8;
 
 static const vec2d  PALETTE_SIZE    (250, 515);
 static const vec2d  PALETTE_BTN_SIZE(100, 100);
@@ -199,17 +199,20 @@ void main_window_t::toolbar_create_tool_btns()
     // порядок инструментов в массиве должен соответствовать порядку имен текстур
     // инструментов в button_t::BUTTON_TEXTURE_NAME_TYPE.
     tool_button_args_arr = new tool_button_args[TOOLBAR_BTN_NUMS];
-    tool_button_args_arr[0] = {.window = this, .tool = line_tool};
-    tool_button_args_arr[1] = {.window = this, .tool = nullptr};
-    tool_button_args_arr[2] = {.window = this, .tool = nullptr};
-    tool_button_args_arr[3] = {.window = this, .tool = ellipse_tool};
-    tool_button_args_arr[4] = {.window = this, .tool = rectangle_tool};
+    tool_button_args_arr[0] = {.window = this, .tool = nullptr};
+    tool_button_args_arr[1] = {.window = this, .tool = rectangle_tool};
+    tool_button_args_arr[2] = {.window = this, .tool = ellipse_tool};
+    tool_button_args_arr[3] = {.window = this, .tool = nullptr};
+    tool_button_args_arr[4] = {.window = this, .tool = nullptr};
+    tool_button_args_arr[5] = {.window = this, .tool = line_tool};
+    tool_button_args_arr[6] = {.window = this, .tool = nullptr};
+    tool_button_args_arr[7] = {.window = this, .tool = nullptr};
 
     vec2d l_column_off(20, 10);
     vec2d r_column_off(TOOLBAR_SIZE.x - 20 - TOOLBAR_BTN_SIZE.x, 10);
 
     size_t tool_cnt = 0;
-    size_t texture  = button_t::LINE_OFF_TOOL;
+    size_t texture  = button_t::FILL_OFF_TOOL;
 
     for (; tool_cnt < TOOLBAR_BTN_NUMS / 2; ++tool_cnt)
     {
