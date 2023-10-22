@@ -80,6 +80,6 @@ void canvas_t::render(render_texture_t &wnd)
 
     LOG_TAB_MESSAGE("CANVAS_T::RENDER\n");
 
-    wnd.draw_texture(perm.get_texture(), visible.region.ld_corner, visible.region.get_size());
-    wnd.draw_texture(temp.get_texture(), visible.region.ld_corner, visible.region.get_size());
+    wnd.draw_texture(perm.get_texture(), visible);
+    wnd.draw_texture(temp.get_texture(), visible);
 }

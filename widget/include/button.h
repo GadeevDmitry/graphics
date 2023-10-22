@@ -228,7 +228,7 @@ texture (BUTTON_TEXTURES[name])
 
 inline void texture_button_t::render(render_texture_t &wnd)
 {
-    wnd.draw_texture(texture, visible.region.ld_corner, visible.region.get_size());
+    wnd.draw_texture(texture, visible);
 }
 
 #endif // BUTTON_H

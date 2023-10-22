@@ -32,7 +32,7 @@ public:
     inline void display              ();
 
     void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size);
-    void        draw_texture         (const texture_t &texture, const vec2d &pos, const vec2d &size, const clipping_region_t &reg);
+    void        draw_texture         (const texture_t &texture, const clipping_region_t &reg);
 
     void        draw_region          (const clipping_region_t &reg);
 
