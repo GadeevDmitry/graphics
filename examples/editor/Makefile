@@ -18,10 +18,12 @@ OBJS      := $(shell find $(BUILD_DIR) -name "*.o")
 INCLUDES  := -I$(ROOT_PREFIX) -I$(ROOT_PREFIX)include/
 SFML_LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 
+.PHONY: all
 all:
 	$(CC) $(CFLAGS) $(INCLUDES) src/application.cpp src/main.cpp $(OBJS) $(SFML_LIBS) -o $(BUILD_DIR)editor
 
-objs:
+.PHONY: components
+components:
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/event/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/geometry/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/graphic/Makefile
@@ -33,10 +35,18 @@ else
 	$(MAKE) -f $(ROOT_PREFIX)data_structs/Makefile mode=release PREFIX=$(ROOT_PREFIX)data_structs/
 endif
 
+.PHONY: objects
+objects:
+	$(MAKE) components
+	$(CC) src/application.cpp $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)application.o
+	$(CC) src/main.cpp        $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)main.o
+
 .PHONY: compilation_database
 compilation_database:
 	$(MAKE) clean
-	bear -- $(MAKE) objs -k
+	bear -- $(MAKE) objects -k
+	rm $(BUILD_DIR)application.o
+	rm $(BUILD_DIR)main.o
 
 .PHONY: clean
 clean:
