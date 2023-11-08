@@ -1,7 +1,7 @@
 #ifndef TOOL_BUTTON_H
 #define TOOL_BUTTON_H
 
-#include "widget/button.h"
+#include "widget/button/texture_button.h"
 #include "tool/tool_manager.h"
 
 //==================================================================================================
@@ -40,7 +40,7 @@ inline bool tool_button_controller_t::on_mouse_release(widget_t *handle, const e
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class tool_button_t: public button_t
+class tool_button_t: public texture_button_t
 {
 // types
 public:
@@ -78,8 +78,8 @@ private:
 
 // member functions
 public:
-    explicit inline tool_button_t(tool_button_controller_t &controller,                               tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
-    explicit inline tool_button_t(tool_button_controller_t &controller, const rectangle_t &enclosing, tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
+    explicit inline tool_button_t(widget_controller_t &controller,                               tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
+    explicit inline tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
 
 // member data
 public:
@@ -91,9 +91,9 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline tool_button_t::tool_button_t(tool_button_controller_t &controller_, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_),
-tool    (tool_)
+inline tool_button_t::tool_button_t(widget_controller_t &controller_, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_),
+tool            (tool_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
@@ -102,9 +102,9 @@ tool    (tool_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline tool_button_t::tool_button_t(tool_button_controller_t &controller_, const rectangle_t &enclosing, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_, enclosing),
-tool    (tool_)
+inline tool_button_t::tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing),
+tool            (tool_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);

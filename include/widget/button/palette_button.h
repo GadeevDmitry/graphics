@@ -1,7 +1,7 @@
 #ifndef PALETTE_BUTTON_H
 #define PALETTE_BUTTON_H
 
-#include "widget/button.h"
+#include "widget/button/texture_button.h"
 #include "tool/tool_manager.h"
 
 //==================================================================================================
@@ -40,7 +40,7 @@ inline bool palette_button_controller_t::on_mouse_release(widget_t *handle, cons
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class palette_button_t: public button_t
+class palette_button_t: public texture_button_t
 {
 // types
 public:
@@ -74,8 +74,8 @@ private:
 
 // member functions
 public:
-    explicit inline palette_button_t(palette_button_controller_t &controller,                               const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
-    explicit inline palette_button_t(palette_button_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
+    explicit inline palette_button_t(widget_controller_t &controller,                               const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
+    explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
 
 // member data
 public:
@@ -87,9 +87,9 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline palette_button_t::palette_button_t(palette_button_controller_t &controller_, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_),
-color   (color_)
+inline palette_button_t::palette_button_t(widget_controller_t &controller_, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_),
+color           (color_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
@@ -98,9 +98,9 @@ color   (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline palette_button_t::palette_button_t(palette_button_controller_t &controller_, const rectangle_t &enclosing, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_, enclosing),
-color   (color_)
+inline palette_button_t::palette_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing),
+color           (color_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);

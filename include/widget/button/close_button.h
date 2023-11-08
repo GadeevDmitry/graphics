@@ -1,7 +1,7 @@
 #ifndef CLOSE_BUTTON_H
 #define CLOSE_BUTTON_H
 
-#include "widget/button.h"
+#include "widget/button/texture_button.h"
 
 //==================================================================================================
 
@@ -39,7 +39,7 @@ inline bool close_button_controller_t::on_mouse_release(widget_t *handle, const 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class close_button_t: public button_t
+class close_button_t: public texture_button_t
 {
 // types
 public:
@@ -63,14 +63,14 @@ private:
 
 // member functions
 public:
-    explicit inline close_button_t(close_button_controller_t &controller,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
-    explicit inline close_button_t(close_button_controller_t &controller, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_controller_t &controller,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(close_button_controller_t &controller_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_)
+inline close_button_t::close_button_t(widget_controller_t &controller_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
@@ -79,8 +79,8 @@ button_t(controller_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(close_button_controller_t &controller_, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-button_t(controller_, enclosing)
+inline close_button_t::close_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);

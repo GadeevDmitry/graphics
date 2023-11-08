@@ -66,18 +66,6 @@ void canvas_t::create_textures(const color_t &background)
 
 //--------------------------------------------------------------------------------------------------
 
-bool canvas_t::on_mouse_press(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn)
-{
-    LOG_VERIFY(active == nullptr, false);
-
-    if (!visible.enclosing.is_point_inside(context.pos))
-        return false;
-
-    return controller.on_mouse_press(this, context, btn);
-}
-
-//--------------------------------------------------------------------------------------------------
-
 void canvas_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
