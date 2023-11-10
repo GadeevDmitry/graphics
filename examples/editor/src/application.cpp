@@ -20,6 +20,13 @@ void application_t::load_textures()
 
 //--------------------------------------------------------------------------------------------------
 
+void application_t::load_fonts()
+{
+    font_t::load_fonts();
+}
+
+//--------------------------------------------------------------------------------------------------
+
 application_t::application_t(const vec2d &wnd_size):
 event_manager    (),
 
@@ -40,6 +47,11 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
     toolbar_window.set_tools(
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
         nullptr, &line_tool     , nullptr      , nullptr);
+
+    canvas_window .set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Canvas" );
+    palette_window.set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Palette");
+    toolbar_window.set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Toolbar");
+    main_window   .set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Main"   );
 
     main_window.register_subwindow(&canvas_window);
     main_window.register_subwindow(&palette_window);
@@ -73,13 +85,34 @@ void application_t::create()
 
 //--------------------------------------------------------------------------------------------------
 
+void application_t::show(sf::RenderWindow &sfml_wnd, render_texture_t &rend_tex)
+{
+    sf::Sprite spr(rend_tex.get_sfml_texture());
+    sfml_wnd.draw(spr);
+    sfml_wnd.display();
+
+    while (sfml_wnd.isOpen())
+    {
+        sf::Event event;
+        while (sfml_wnd.pollEvent(event))
+        {
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::Escape)
+            {
+                sfml_wnd.close();
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 
 void application_t::process(sf::RenderWindow &sfml_wnd, render_texture_t &rend_tex)
 {
-
     render(sfml_wnd, rend_tex);
     while (sfml_wnd.isOpen())
     {

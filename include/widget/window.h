@@ -43,6 +43,7 @@ public:
     explicit window_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = Red_theme);
 
     bool inline register_subwindow(window_t *window);
+    void inline set_window_name   (const font_t *font, const char *string);
     void inline create            (const rectangle_t &enclosing);
 private:
     void        create_header_menu();
@@ -58,6 +59,13 @@ private:
 inline bool window_t::register_subwindow(window_t *window)
 {
     return register_subwidget(window);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_t::set_window_name(const font_t *font, const char *string)
+{
+    return header_menu.set_window_name(font, string);
 }
 
 //--------------------------------------------------------------------------------------------------

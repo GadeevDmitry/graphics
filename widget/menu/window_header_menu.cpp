@@ -21,20 +21,24 @@ bool window_header_menu_controller_t::on_mouse_move(widget_t *handle, const even
 window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const color_t &color_):
 menu_t              (menu_controller, color_),
 close_btn_controller(),
-close_btn           (close_btn_controller, to_close, close_button_t::GREEN)
+close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
+window_name         ()
 {
     register_subwidget(&close_btn);
+    register_subwidget(&window_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color_):
-menu_t              (menu_controller, enclosing, color_),
+menu_t              (menu_controller, color_),
 close_btn_controller(),
-close_btn           (close_btn_controller, to_close, close_button_t::GREEN)
+close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
+window_name         ()
 {
     register_subwidget(&close_btn);
-    create_close_btn();
+    register_subwidget(&window_name);
+    create(enclosing);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -51,4 +55,20 @@ void window_header_menu_t::create_close_btn()
     close_btn.visible.enclosing = rectangle_t(
         menu_enclosing.rd_corner() - vec2d(close_btn_size.x, 0),
         menu_enclosing.rd_corner() + vec2d(0, close_btn_size.y));
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void window_header_menu_t::create_window_name()
+{
+    rectangle_t menu_enclosing = visible.enclosing;
+    vec2d       menu_size      = menu_enclosing.get_size();
+
+    window_name.text.color          = color_t::Black;
+    window_name.text.character_size = 15;
+    window_name.background          = color;
+
+    window_name.visible.enclosing = rectangle_t(
+        menu_enclosing.ld_corner + vec2d(5, 5),
+        close_btn.visible.enclosing.lu_corner());
 }

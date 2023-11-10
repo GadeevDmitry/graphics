@@ -12,6 +12,7 @@
 int main()
 {
     application_t::load_textures();
+    application_t::load_fonts();
 
     sf::RenderWindow sfml_wnd(sf::VideoMode(), "graphic editor", sf::Style::Fullscreen);
     render_texture_t rend_texture(sfml_wnd.getSize().x, sfml_wnd.getSize().y);

@@ -4,6 +4,7 @@
 #include "color.h"
 #include "region.h"
 #include "texture.h"
+#include "text.h"
 #include "geometry/intersect.h"
 #include "geometry/shape_types.h"
 
@@ -26,10 +27,13 @@ public:
     void inline clear         (const color_t &col = color_t::Black);
     void inline display       ();
 
+    void        draw_region   (const clipping_region_t &reg);
+
     void        draw_texture  (const texture_t &texture, const vec2d &pos, const vec2d &size);
     void        draw_texture  (const texture_t &texture, const clipping_region_t &reg);
 
-    void        draw_region   (const clipping_region_t &reg);
+    void        draw_text     (const text_t    &text   , const vec2d &pos);
+    void        draw_text     (const text_t    &text   , const clipping_region_t &reg);
 
     void        draw_coord_sys(const coord_system &sys, const rectangle_t &area, const color_t &col);
 

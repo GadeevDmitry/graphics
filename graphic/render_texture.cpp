@@ -9,6 +9,23 @@ static const unsigned POINT_RADIUS  = 3;
 
 //==================================================================================================
 
+void render_texture_t::draw_region(const clipping_region_t &region)
+{
+    const list &areas = region.get_areas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *cnt = front; cnt != fict;
+         cnt = (rectangle_t *) list_next(cnt))
+    {
+        color_t rand = color_t::get_rand_color();
+        draw_rectangle(*cnt, rand, color_t::Black, 3);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, const vec2d &size)
 {
     sf::Vector2u tex_size = texture.data.getSize();
@@ -52,19 +69,31 @@ void render_texture_t::draw_texture(const texture_t &texture, const clipping_reg
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_region(const clipping_region_t &region)
+void render_texture_t::draw_text(const text_t &text, const vec2d &pos)
 {
-    const list &areas = region.get_areas();
+    sf::Text sf_text(text.text, text.font->data, (unsigned int) text.character_size);
 
-    rectangle_t *front = (rectangle_t *) list_front(&areas);
-    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+    sf_text.setFont         (text.font->data);
+    sf_text.setString       (text.text);
+    sf_text.setPosition     ((float) pos.x, (float) pos.y);
+    sf_text.setFillColor    (text.color.get_sfml_color());
+    sf_text.setCharacterSize((unsigned int) text.character_size);
 
-    for (rectangle_t *cnt = front; cnt != fict;
-         cnt = (rectangle_t *) list_next(cnt))
-    {
-        color_t rand = color_t::get_rand_color();
-        draw_rectangle(*cnt, rand, color_t::Black, 3);
-    }
+    data.draw(sf_text);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_text(const text_t &text, const clipping_region_t &reg)
+{
+    render_texture_t temp_texture(
+        (unsigned int) reg.enclosing.get_size().x,
+        (unsigned int) reg.enclosing.get_size().y);
+    temp_texture.clear(color_t::Transparent);
+    temp_texture.draw_text(text, vec2d(0, 0));
+    temp_texture.display();
+
+    draw_texture(temp_texture.get_texture(), reg);
 }
 
 //--------------------------------------------------------------------------------------------------

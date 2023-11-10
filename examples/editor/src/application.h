@@ -22,6 +22,8 @@ class application_t
 // static
 public:
     static void load_textures();
+    static void load_fonts   ();
+    static void show         (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
 
 // member functions
 public:

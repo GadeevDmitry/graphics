@@ -2,6 +2,7 @@
 #define WINDOW_HEADER_MENU_H
 
 #include "widget/menu.h"
+#include "widget/label.h"
 #include "widget/button/close_button.h"
 
 //==================================================================================================
@@ -38,15 +39,26 @@ public:
     explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const color_t &color = color_t::White);
     explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color = color_t::White);
 
-    void inline create(const rectangle_t &enclosing);
+    void inline set_window_name   (const font_t *font, const char *string);
+    void inline create            (const rectangle_t &enclosing);
 private:
-    void        create_close_btn();
+    void        create_close_btn  ();
+    void        create_window_name();
 
 // member data
 private:
     close_button_controller_t close_btn_controller;
     close_button_t            close_btn;
+    label_t                   window_name;
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_header_menu_t::set_window_name(const font_t *font, const char *string)
+{
+    window_name.text.font = font;
+    window_name.text.text = string;
+}
 
 //--------------------------------------------------------------------------------------------------
 
@@ -54,6 +66,7 @@ inline void window_header_menu_t::create(const rectangle_t &enclosing)
 {
     visible.enclosing = enclosing;
     create_close_btn();
+    create_window_name();
 }
 
 #endif // WINDOW_HEADER_MENU_H

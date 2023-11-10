@@ -26,7 +26,7 @@ canvas           (canvas_controller)
 
 void canvas_window_t::create_canvas()
 {
-    const vec2d canvas_off(5, 5);
+    const vec2d canvas_off(20, 20);
     const vec2d wnd_size = visible.enclosing.get_size();
 
     if ((wnd_size.y < header_menu_height + 2 * canvas_off.y) ||

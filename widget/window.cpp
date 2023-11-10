@@ -39,12 +39,12 @@ header_menu           (header_menu_controller, *this, color_t::White)
 //--------------------------------------------------------------------------------------------------
 
 window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing, const color_t &color_):
-menu_t                (controller_, enclosing, color_),
+menu_t                (controller_, color_),
 header_menu_controller(*this),
 header_menu           (header_menu_controller, *this, color_t::White)
 {
     register_subwidget(&header_menu);
-    create_header_menu();
+    create(enclosing);
 }
 
 //--------------------------------------------------------------------------------------------------
