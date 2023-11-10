@@ -39,8 +39,8 @@ public:
 
 // member functions
 public:
-    explicit window_t(window_controller_t &window_controller,                               const color_t &color = Red_theme);
-    explicit window_t(window_controller_t &window_controller, const rectangle_t &enclosing, const color_t &color = Red_theme);
+    explicit window_t(widget_controller_t &controller,                               const color_t &color = Red_theme);
+    explicit window_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = Red_theme);
 
     bool inline register_subwindow(window_t *window);
     void inline create            (const rectangle_t &enclosing);

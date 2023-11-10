@@ -7,25 +7,11 @@
 
 class close_button_controller_t: public widget_controller_t
 {
-// member functions
-public:
-    explicit inline close_button_controller_t(widget_t &to_close);
-
 // virtual
 public:
     virtual bool        on_mouse_press  (widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_release(widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
-
-// member data
-private:
-    widget_t &to_close;
 };
-
-//--------------------------------------------------------------------------------------------------
-
-inline close_button_controller_t::close_button_controller_t(widget_t &to_close_):
-to_close(to_close_)
-{}
 
 //--------------------------------------------------------------------------------------------------
 
@@ -63,14 +49,19 @@ private:
 
 // member functions
 public:
-    explicit inline close_button_t(widget_controller_t &controller,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
-    explicit inline close_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+
+// member data
+public:
+    widget_t &to_close;
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(widget_controller_t &controller_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_)
+inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_),
+to_close        (to_close_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
@@ -79,8 +70,9 @@ texture_button_t(controller_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_, enclosing)
+inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing),
+to_close        (to_close_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);

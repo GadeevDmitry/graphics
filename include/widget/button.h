@@ -10,8 +10,8 @@ class button_t: public widget_t
 {
 // member functions
 public:
-    explicit inline  button_t(widget_controller_t &controller);
-    explicit inline  button_t(widget_controller_t &controller, const rectangle_t &enclosing);
+    explicit inline button_t(widget_controller_t &controller);
+    explicit inline button_t(widget_controller_t &controller, const rectangle_t &enclosing);
 
 // virtual
 public:

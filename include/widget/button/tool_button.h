@@ -84,9 +84,6 @@ public:
 // member data
 public:
     tool_t *tool;
-
-// friends
-    friend tool_button_controller_t;
 };
 
 //--------------------------------------------------------------------------------------------------

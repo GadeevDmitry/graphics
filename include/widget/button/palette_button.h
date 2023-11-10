@@ -74,15 +74,12 @@ private:
 
 // member functions
 public:
-    explicit inline palette_button_t(widget_controller_t &controller,                               const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
-    explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t(), const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
+    explicit inline palette_button_t(widget_controller_t &controller,                               const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
+    explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
 
 // member data
 public:
     color_t color;
-
-// friends
-    friend palette_button_controller_t;
 };
 
 //--------------------------------------------------------------------------------------------------

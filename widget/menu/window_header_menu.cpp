@@ -20,8 +20,8 @@ bool window_header_menu_controller_t::on_mouse_move(widget_t *handle, const even
 
 window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const color_t &color_):
 menu_t              (menu_controller, color_),
-close_btn_controller(to_close),
-close_btn           (close_btn_controller, close_button_t::GREEN)
+close_btn_controller(),
+close_btn           (close_btn_controller, to_close, close_button_t::GREEN)
 {
     register_subwidget(&close_btn);
 }
@@ -30,8 +30,8 @@ close_btn           (close_btn_controller, close_button_t::GREEN)
 
 window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color_):
 menu_t              (menu_controller, enclosing, color_),
-close_btn_controller(to_close),
-close_btn           (close_btn_controller, close_button_t::GREEN)
+close_btn_controller(),
+close_btn           (close_btn_controller, to_close, close_button_t::GREEN)
 {
     register_subwidget(&close_btn);
     create_close_btn();

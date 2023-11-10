@@ -35,8 +35,8 @@ class window_header_menu_t: public menu_t
 {
 // member functions
 public:
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const color_t &color = color_t());
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color = color_t());
+    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const color_t &color = color_t::White);
+    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color = color_t::White);
 
     void inline create(const rectangle_t &enclosing);
 private:

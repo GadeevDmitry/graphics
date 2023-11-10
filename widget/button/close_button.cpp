@@ -20,8 +20,10 @@ bool close_button_controller_t::on_mouse_press(widget_t *handle, const eventable
     (void) context;
     (void) btn;
 
-    to_close.status = widget_t::WIDGET_CLOSED;
-    to_close.update_ancestral_status(widget_t::WIDGET_ACTIVATED);
+    close_button_t *close_btn = (close_button_t *) handle;
+
+    close_btn->to_close.status = widget_t::WIDGET_CLOSED;
+    close_btn->to_close.update_ancestral_status(widget_t::WIDGET_ACTIVATED);
 
     return true;
 }
