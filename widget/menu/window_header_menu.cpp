@@ -24,8 +24,8 @@ close_btn_controller(),
 close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
 window_name         ()
 {
-    register_subwidget(&close_btn);
     register_subwidget(&window_name);
+    register_subwidget(&close_btn);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ close_btn_controller(),
 close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
 window_name         ()
 {
-    register_subwidget(&close_btn);
     register_subwidget(&window_name);
+    register_subwidget(&close_btn);
     create(enclosing);
 }
 
@@ -65,7 +65,7 @@ void window_header_menu_t::create_window_name()
     vec2d       menu_size      = menu_enclosing.get_size();
 
     window_name.text.color          = color_t::Black;
-    window_name.text.character_size = 15;
+    window_name.text.character_size = 30;
     window_name.background          = color;
 
     window_name.visible.enclosing = rectangle_t(

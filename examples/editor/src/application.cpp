@@ -48,10 +48,10 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
         nullptr, &line_tool     , nullptr      , nullptr);
 
-    canvas_window .set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Canvas" );
-    palette_window.set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Palette");
-    toolbar_window.set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Toolbar");
-    main_window   .set_window_name(&font_t::get_font_by_name(font_t::RED_SEVEN), "Main"   );
+    canvas_window .set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Canvas" );
+    palette_window.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Palette");
+    toolbar_window.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Toolbar");
+    main_window   .set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Main"   );
 
     main_window.register_subwindow(&canvas_window);
     main_window.register_subwindow(&palette_window);

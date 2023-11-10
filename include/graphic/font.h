@@ -16,7 +16,9 @@ public:
     {
         FONT_NAME_TYPE_UNKNOWN = -1,
 
+        EDU_QLD,
         RED_SEVEN,
+        TUPO_VYAZ,
 
         FONT_NAME_TYPE_COUNT
     };
