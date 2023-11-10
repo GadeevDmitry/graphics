@@ -35,8 +35,8 @@ else
 	$(MAKE) -f $(ROOT_PREFIX)data_structs/Makefile mode=release PREFIX=$(ROOT_PREFIX)data_structs/
 endif
 
-.PHONY: objects
-objects:
+.PHONY: compilation_database_rule
+compilation_database_rule:
 	$(MAKE) components
 	$(CC) src/application.cpp $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)application.o
 	$(CC) src/main.cpp        $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)main.o
@@ -44,7 +44,7 @@ objects:
 .PHONY: compilation_database
 compilation_database:
 	$(MAKE) clean
-	bear -- $(MAKE) objects -k
+	bear -- $(MAKE) compilation_database_rule -k
 	rm $(BUILD_DIR)application.o
 	rm $(BUILD_DIR)main.o
 
