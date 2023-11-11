@@ -38,7 +38,8 @@ public:
     explicit inline font_t(const sf::Font &data);
     explicit inline font_t(const char *filename);
 
-    bool inline load_from_file(const char *filename);
+    const sf::Font inline &get_sfml_font () const;
+    bool           inline  load_from_file(const char *filename);
 
 // member data
 private:
@@ -76,6 +77,13 @@ inline font_t::font_t(const char *filename):
 data()
 {
     data.loadFromFile(filename);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline const sf::Font &font_t::get_sfml_font() const
+{
+    return data;
 }
 
 //--------------------------------------------------------------------------------------------------
