@@ -9,6 +9,7 @@
 #include "tool/shape_tool/rectangle_tool.h"
 
 #include "widget/desktop.h"
+#include "widget/window/main_window.h"
 #include "widget/window/canvas_window.h"
 #include "widget/window/palette_window.h"
 #include "widget/window/toolbar_window.h"
@@ -49,7 +50,7 @@ private:
     canvas_window_t     canvas_window;
     palette_window_t    palette_window;
     toolbar_window_t    toolbar_window;
-    window_t            main_window;
+    main_window_t       main_window;
     desktop_t           desktop;
 };
 

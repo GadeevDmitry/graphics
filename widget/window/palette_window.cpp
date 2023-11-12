@@ -41,7 +41,7 @@ palette_window_data_init(tool_manager)
 
 void palette_window_t::register_buttons()
 {
-    // reverse order
+    // reverse order for right create_buttons() work
     register_subwidget(&btn_black );
     register_subwidget(&btn_green );
     register_subwidget(&btn_orange);

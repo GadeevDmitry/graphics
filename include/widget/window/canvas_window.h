@@ -19,7 +19,7 @@ private:
 
 // virtual
 protected:
-    void inline dump_class_name() const override;
+    virtual void inline dump_class_name() const override;
 
 // member data
 private:

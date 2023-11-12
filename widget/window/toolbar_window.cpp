@@ -43,7 +43,7 @@ toolbar_window_data_init(tool_manager)
 
 void toolbar_window_t::register_buttons()
 {
-    // reverse order
+    // reverse order for right create_buttons() work
     register_subwidget(&btn_spline   );
     register_subwidget(&btn_rubber   );
     register_subwidget(&btn_line     );

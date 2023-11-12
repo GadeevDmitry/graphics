@@ -63,7 +63,7 @@ void application_t::create()
     main_window.create(desktop.enclosing);
 
     toolbar_window.create(rectangle_t(
-        main_window.enclosing.ld_corner + vec2d(0, window_t::header_menu_height + 10),
+        main_window.enclosing.ld_corner + vec2d(0, window_t::header_menu_height + main_window_t::main_menu_height + 10),
         toolbar_window_t::toolbar_size.x, window_t::header_menu_height + toolbar_window_t::toolbar_size.y));
 
     palette_window.create(rectangle_t(

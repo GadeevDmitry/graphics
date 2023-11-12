@@ -51,9 +51,8 @@ void widget_t::dump() const
     USUAL_FIELD_DUMP("status  ", "%d", status);
     USUAL_FIELD_DUMP("ancestor", "%p", ancestor);
 
-    LOG_TAB_MESSAGE("\n");
     renderable::dump();
 
     LOG_TAB--;
-    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+    LOG_TAB_SERVICE_MESSAGE("}", "\n\n");
 }

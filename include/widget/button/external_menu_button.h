@@ -1,0 +1,108 @@
+#ifndef EXTERNAL_MENU_BUTTON_H
+#define EXTERNAL_MENU_BUTTON_H
+
+#include "widget/menu.h"
+#include "widget/button/label_button.h"
+
+//==================================================================================================
+
+class external_menu_button_controller_t: public widget_controller_t
+{
+// virtual
+public:
+    virtual bool        on_mouse_press  (widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
+    virtual bool inline on_mouse_release(widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
+};
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool external_menu_button_controller_t::on_mouse_release(widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn)
+{
+    (void) handle;
+    (void) context;
+    (void) btn;
+    return false;
+}
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class external_menu_button_t: public label_button_t
+{
+// member functions
+public:
+    explicit inline external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name, const color_t &background);
+    explicit inline external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name, const color_t &background);
+
+// virtual
+public:
+    virtual void inline move          (const vec2d &offset)         override;
+    virtual void        dump          ()                      const override;
+    virtual void inline graphic_dump  (render_texture_t &wnd) const override;
+    virtual bool        update_struct ()                            override;
+    virtual void        recalc_regions()                            override;
+
+    virtual bool        on_key_press  (const key_context_t   &context, const KEY_TYPE          &key) override;
+    virtual bool        on_mouse_press(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
+
+    virtual void inline render        (render_texture_t &wnd) override;
+protected:
+    virtual void inline dump_class_name() const override;
+
+// member data
+public:
+    bool    is_menu_hidden;
+    menu_t &external_menu;
+};
+
+//--------------------------------------------------------------------------------------------------
+
+inline external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu, const char *btn_name, const color_t &background_):
+label_button_t(controller_, btn_name, background_),
+is_menu_hidden(true),
+external_menu (external_menu)
+{
+    external_menu.ancestor = this;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu_, const rectangle_t &enclosing_, const char *btn_name, const color_t &background_):
+label_button_t(controller_, enclosing_, btn_name, background_),
+is_menu_hidden(true),
+external_menu (external_menu_)
+{
+    external_menu.ancestor = this;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void external_menu_button_t::move(const vec2d &offset)
+{
+    enclosing += offset;
+    external_menu.move(offset);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void external_menu_button_t::graphic_dump(render_texture_t &wnd) const
+{
+    wnd.draw_region(              own_visible);
+    wnd.draw_region(external_menu.own_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void external_menu_button_t::render(render_texture_t &wnd)
+{
+    label_button_t::render(wnd);
+    if (!is_menu_hidden) external_menu.render(wnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void external_menu_button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("external_menu_button_t", "");
+}
+
+#endif // EXTERNAL_MENU_BUTTON_H

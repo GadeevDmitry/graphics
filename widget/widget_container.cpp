@@ -127,9 +127,7 @@ void widget_container_t::subwidgets_recalc_regions()
         }
 
         cur_1.recalc_regions();
-
-        own_visible   -= cur_1.sub_enclosing;
-        sub_enclosing |= cur_1.sub_enclosing;
+        own_visible -= cur_1.sub_enclosing;
     }
 }
 
@@ -199,14 +197,14 @@ void widget_container_t::dump() const
     USUAL_FIELD_DUMP("status  ", "%d", status);
     USUAL_FIELD_DUMP("ancestor", "%p", ancestor);
 
+    renderable::dump();
+
     LOG_TAB_SERVICE_MESSAGE("subwidgets:\n{", "\n");
     LOG_TAB++;
     subwidgets_dump();
     LOG_TAB--;
-    LOG_TAB_SERVICE_MESSAGE("}", "\n\n");
-
-    renderable::dump();
+    LOG_TAB_SERVICE_MESSAGE("}", "\n");
 
     LOG_TAB--;
-    LOG_TAB_SERVICE_MESSAGE("}", "\n");
+    LOG_TAB_SERVICE_MESSAGE("}", "\n\n");
 }
