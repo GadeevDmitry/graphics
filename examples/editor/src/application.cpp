@@ -36,10 +36,10 @@ rectangle_tool   (),
 tool_manager     (&line_tool, color_t::Black),
 
 window_controller(),
-canvas_window    (window_controller, tool_manager, window_t::Dark_theme ),
-palette_window   (window_controller, tool_manager, window_t::Light_theme),
-toolbar_window   (window_controller, tool_manager, window_t::Blue_theme ),
-main_window      (window_controller,               window_t::Red_theme  ),
+canvas_window    (window_controller, tool_manager, "Canvas" , window_t::Dark_theme ),
+palette_window   (window_controller, tool_manager, "Palette", window_t::Light_theme),
+toolbar_window   (window_controller, tool_manager, "Toolbar", window_t::Blue_theme ),
+main_window      (window_controller,               "Main"   , window_t::Red_theme  ),
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
     event_manager.register_child(&desktop);
@@ -47,11 +47,6 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
     toolbar_window.set_tools(
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
         nullptr, &line_tool     , nullptr      , nullptr);
-
-    canvas_window .set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Canvas" );
-    palette_window.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Palette");
-    toolbar_window.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Toolbar");
-    main_window   .set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), "Main"   );
 
     main_window.register_subwindow(&canvas_window);
     main_window.register_subwindow(&palette_window);

@@ -10,7 +10,8 @@ class renderable
 {
 // member functions
 public:
-    explicit inline  renderable(const rectangle_t &enclosing = rectangle_t());
+             inline  renderable();
+    explicit inline  renderable(const rectangle_t &enclosing);
     virtual  inline ~renderable() {}
 
 // virtual
@@ -22,6 +23,12 @@ public:
 public:
     clipping_region_t visible;
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline renderable::renderable():
+visible()
+{}
 
 //--------------------------------------------------------------------------------------------------
 

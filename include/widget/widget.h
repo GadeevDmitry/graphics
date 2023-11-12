@@ -72,7 +72,8 @@ public:
 
 // member functions
 public:
-    explicit inline widget_t(const rectangle_t &enclosing = rectangle_t());
+             inline widget_t();
+    explicit inline widget_t(const rectangle_t &enclosing);
 
 public:
     void update_ancestral_status(WIDGET_STATUS_TYPE upd_status);
@@ -90,6 +91,14 @@ public:
     WIDGET_STATUS_TYPE status;
     widget_t          *ancestor;
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline widget_t::widget_t():
+renderable(),
+status    (WIDGET_OPENED),
+ancestor  (nullptr)
+{}
 
 //--------------------------------------------------------------------------------------------------
 

@@ -10,10 +10,11 @@ class clipping_region_t
 {
 // member functions
 public:
-    explicit inline  clipping_region_t(const rectangle_t &enclosing = rectangle_t());
+             inline  clipping_region_t();
+    explicit inline  clipping_region_t(const rectangle_t &enclosing);
              inline ~clipping_region_t();
 
-    const list inline &get_areas  () const;
+    const list inline &  get_areas() const;
     void       inline  reset_areas();
 
 private:
@@ -35,6 +36,14 @@ private:
     friend clipping_region_t  operator + (const clipping_region_t &op_1, const vec2d &op_2);
     friend clipping_region_t  operator - (const clipping_region_t &op_1, const vec2d &op_2);
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline clipping_region_t::clipping_region_t():
+enclosing()
+{
+    list_ctor(&areas, sizeof(rectangle_t));
+}
 
 //--------------------------------------------------------------------------------------------------
 
