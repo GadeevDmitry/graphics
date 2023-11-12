@@ -29,7 +29,9 @@ public:
 public:
     explicit application_t(const vec2d &wnd_size);
 
-    void process(sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
+    void dump        () const;
+    void graphic_dump(                            render_texture_t &render_tex) const;
+    void process     (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
 private:
     void render (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
     void create ();

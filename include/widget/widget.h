@@ -75,16 +75,17 @@ public:
              inline widget_t();
     explicit inline widget_t(const rectangle_t &enclosing);
 
-public:
     void update_ancestral_status(WIDGET_STATUS_TYPE upd_status);
 
 // virtual
 public:
-    virtual void inline move         (const vec2d &offset);
-    virtual void        dump         () const;
-    virtual bool inline update_struct();
-
-    virtual void inline recalc_areas () override {}
+    virtual void inline move           (const vec2d &offset);
+    virtual void        dump           () const;
+    virtual void inline graphic_dump   (render_texture_t &wnd) const;
+    virtual bool inline update_struct  ();
+    virtual void inline recalc_regions () override {}
+protected:
+    virtual void inline dump_class_name() const;
 
 // member data
 public:
@@ -112,7 +113,14 @@ ancestor  (nullptr)
 
 inline void widget_t::move(const vec2d &offset)
 {
-    visible.enclosing += offset;
+    enclosing += offset;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_t::graphic_dump(render_texture_t &wnd) const
+{
+    wnd.draw_region(own_visible);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,6 +128,13 @@ inline void widget_t::move(const vec2d &offset)
 inline bool widget_t::update_struct()
 {
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("widget_t", "");
 }
 
 #endif // WIDGET_H

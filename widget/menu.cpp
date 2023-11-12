@@ -18,7 +18,7 @@ bool menu_t::on_mouse_press(const mouse_context_t &context, const MOUSE_BUTTON_T
 {
     LOG_VERIFY(active == nullptr, false);
 
-    if (!visible.enclosing.is_point_inside(context.pos))
+    if (!sub_enclosing.is_point_inside(context.pos))
         return false;
 
     if (on_subwidgets_mouse_press(context, btn))

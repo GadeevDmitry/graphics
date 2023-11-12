@@ -25,6 +25,10 @@ private:
     void        create_buttons();
     void      register_buttons();
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 private:
     palette_button_controller_t buttons_controller;
@@ -42,6 +46,13 @@ inline void palette_window_t::create(const rectangle_t &enclosing)
 {
     window_t::create(enclosing);
     create_buttons();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void palette_window_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("palette_window_t", "");
 }
 
 #endif // PALETTE_WINDOW_H

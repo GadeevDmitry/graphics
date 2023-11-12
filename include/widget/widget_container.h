@@ -17,26 +17,31 @@ public:
     bool register_subwidget       (widget_t *subwidget);
 protected:
     void subwidgets_move          (const vec2d &offset);
+    void subwidgets_dump          () const;
+    void subwidgets_graphic_dump  (render_texture_t &wnd) const;
     bool subwidgets_update_struct ();
-    void subwidgets_recalc_areas  ();
-    void subwidgets_dump          ()                                 const;
-    void subwidgets_render        (render_texture_t &render_texture) const;
+    void subwidgets_recalc_regions();
 
     bool on_subwidgets_key_press  (const key_context_t   &context, const KEY_TYPE          &key);
     bool on_subwidgets_mouse_press(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn);
 
+    void subwidgets_render        (render_texture_t &render_texture) const;
+
 // virtual
 public:
-    virtual void inline move            (const vec2d &offset) override;
-    virtual void        dump            () const              override;
-    virtual bool inline update_struct   ()                    override;
-    virtual void inline recalc_areas    ()                    override;
+    virtual void inline move            (const vec2d &offset)         override;
+    virtual void        dump            ()                      const override;
+    virtual void inline graphic_dump    (render_texture_t &wnd) const override;
+    virtual bool inline update_struct   ()                            override;
+    virtual void inline recalc_regions  ()                            override;
 
     virtual bool inline on_key_press    (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool inline on_key_release  (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool inline on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_move   (const mouse_context_t &context, const vec2d             &off) override;
+protected:
+    virtual void inline dump_class_name () const override;
 
 // member data
 protected:
@@ -61,8 +66,16 @@ inline widget_container_t::~widget_container_t()
 
 inline void widget_container_t::move(const vec2d &offset)
 {
-    visible.enclosing += offset;
+    enclosing += offset;
     subwidgets_move(offset);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_container_t::graphic_dump(render_texture_t &wnd) const
+{
+    wnd.draw_region(own_visible);
+    subwidgets_graphic_dump(wnd);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,9 +87,9 @@ inline bool widget_container_t::update_struct()
 
 //--------------------------------------------------------------------------------------------------
 
-inline void widget_container_t::recalc_areas()
+inline void widget_container_t::recalc_regions()
 {
-    subwidgets_recalc_areas();
+    subwidgets_recalc_regions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,6 +159,13 @@ inline bool widget_container_t::on_mouse_move(const mouse_context_t &context, co
     (void) context;
     (void) off;
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_container_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("widget_container_t", "");
 }
 
 #endif // WIDGET_MANAGER_H

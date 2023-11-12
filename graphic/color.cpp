@@ -46,7 +46,7 @@ color_t color_t::get_rand_color()
     double r = (double) (abs(rand()) % 255) / 255.0;
     double g = (double) (abs(rand()) % 255) / 255.0;
     double b = (double) (abs(rand()) % 255) / 255.0;
-    double a = (double) (abs(rand()) % 255) / 255.0;
+//  double a = (double) (abs(rand()) % 255) / 255.0;
 
-    return color_t(r, g, b, a);
+    return color_t(r, g, b, 1);
 }

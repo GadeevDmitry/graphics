@@ -45,6 +45,10 @@ private:
     void        create_close_btn  ();
     void        create_window_name();
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 private:
     close_button_controller_t close_btn_controller;
@@ -62,11 +66,18 @@ inline void window_header_menu_t::set_window_name(const font_t *font, const char
 
 //--------------------------------------------------------------------------------------------------
 
-inline void window_header_menu_t::create(const rectangle_t &enclosing)
+inline void window_header_menu_t::create(const rectangle_t &enclosing_)
 {
-    visible.enclosing = enclosing;
+    enclosing = enclosing_;
     create_close_btn();
     create_window_name();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_header_menu_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("window_header_menu", "");
 }
 
 #endif // WINDOW_HEADER_MENU_H

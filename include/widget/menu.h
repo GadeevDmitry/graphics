@@ -23,6 +23,8 @@ public:
     virtual bool        on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_move   (const mouse_context_t &context, const vec2d             &off) override;
+protected:
+    virtual void inline dump_class_name () const override;
 
 // member data
 public:
@@ -51,8 +53,7 @@ controller        (controller_)
 
 inline void menu_t::render(render_texture_t &wnd)
 {
-//  wnd.draw_region(visible);
-    wnd.draw_rectangle(color, visible);
+    wnd.draw_rectangle(color, own_visible);
     subwidgets_render(wnd);
 }
 
@@ -78,6 +79,13 @@ bool menu_t::on_mouse_move(const mouse_context_t &context, const vec2d &off)
 {
     LOG_VERIFY(active == this, false);
     return controller.on_mouse_move(this, context, off);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void menu_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("menu_t", "");
 }
 
 #endif // MENU_H

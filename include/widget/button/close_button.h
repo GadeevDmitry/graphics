@@ -52,6 +52,10 @@ public:
     explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
     explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 public:
     widget_t &to_close;
@@ -77,6 +81,13 @@ to_close        (to_close_)
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
     texture = BUTTON_TEXTURES + texture_;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void close_button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("close_button_t", "");
 }
 
 #endif // CLOSE_BUTTON_H

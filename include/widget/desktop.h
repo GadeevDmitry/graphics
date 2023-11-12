@@ -14,19 +14,21 @@ public:
     explicit inline desktop_t(const rectangle_t &enclosing, const color_t &background = color_t::Black);
 
     bool inline register_window    (window_t *window);
-    void inline init_areas         ();
+    void inline init_regions       ();
 private:
     bool        refresh_after_event();
 
 // virtual
 public:
     virtual void inline render          (render_texture_t &wnd)                                        override;
-    virtual void inline recalc_areas    ()                                                             override;
+    virtual void inline recalc_regions  ()                                                             override;
     virtual bool        on_key_press    (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool        on_key_release  (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool        on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool        on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool        on_mouse_move   (const mouse_context_t &context, const vec2d             &off) override;
+protected:
+    virtual void inline dump_class_name () const override;
 
 // member data
 public:
@@ -56,17 +58,17 @@ inline bool desktop_t::register_window(window_t *window)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void desktop_t::init_areas()
+inline void desktop_t::init_regions()
 {
-    recalc_areas();
+    recalc_regions();
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline void desktop_t::recalc_areas()
+inline void desktop_t::recalc_regions()
 {
-    visible.reset_areas();
-    subwidgets_recalc_areas();
+    reset_regions();
+    subwidgets_recalc_regions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,8 +76,15 @@ inline void desktop_t::recalc_areas()
 inline void desktop_t::render(render_texture_t &wnd)
 {
 //  wnd.draw_region(visible);
-    wnd.draw_rectangle(background, visible);
+    wnd.draw_rectangle(background, own_visible);
     subwidgets_render(wnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void desktop_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("desktop_t", "");
 }
 
 #endif // DESKTOP_H

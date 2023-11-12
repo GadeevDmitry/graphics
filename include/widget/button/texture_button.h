@@ -15,6 +15,8 @@ public:
 // virtual
 public:
     virtual void inline render(render_texture_t &wnd) override;
+protected:
+    virtual void inline dump_class_name() const override;
 
 // member data
 public:
@@ -39,8 +41,14 @@ texture (texture_)
 
 inline void texture_button_t::render(render_texture_t &wnd)
 {
-//  wnd.draw_region(visible);
-    wnd.draw_texture(*texture, visible);
+    wnd.draw_texture(*texture, enclosing, own_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void texture_button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("texture_button_t", "");
 }
 
 #endif // TEXTURE_BUTTON_H

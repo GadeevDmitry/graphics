@@ -20,6 +20,8 @@ public:
     virtual bool        on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_move   (const mouse_context_t &context, const vec2d             &off) override;
+protected:
+    virtual void inline dump_class_name () const override;
 
 // member data
 protected:
@@ -70,6 +72,13 @@ inline bool button_t::on_mouse_move(const mouse_context_t &context, const vec2d 
 {
     LOG_VERIFY(active == this, false);
     return controller.on_mouse_move(this, context, off);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("button_t", "");
 }
 
 #endif // BUTTON_H

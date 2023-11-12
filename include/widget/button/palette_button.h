@@ -77,6 +77,10 @@ public:
     explicit inline palette_button_t(widget_controller_t &controller,                               const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
     explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 public:
     color_t color;
@@ -102,6 +106,13 @@ color           (color_)
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
     texture = BUTTON_TEXTURES + texture_;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void palette_button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("palette_button_t", "");
 }
 
 #endif // PALETTE_BUTTON_H

@@ -17,6 +17,10 @@ public:
 private:
     void        create_canvas();
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 private:
     canvas_controller_t canvas_controller;
@@ -29,6 +33,13 @@ inline void canvas_window_t::create(const rectangle_t &enclosing)
 {
     window_t::create(enclosing);
     create_canvas();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void canvas_window_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("canvas_window_t", "");
 }
 
 #endif // CANVAS_WINDOW_H

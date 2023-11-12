@@ -47,6 +47,10 @@ public:
 private:
     void        create_header_menu();
 
+// virtual
+protected:
+    void inline dump_class_name() const override;
+
 // member data
 private:
     window_header_menu_controller_t header_menu_controller;
@@ -62,10 +66,17 @@ inline bool window_t::register_subwindow(window_t *window)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void window_t::create(const rectangle_t &enclosing)
+inline void window_t::create(const rectangle_t &enclosing_)
 {
-    visible.enclosing = enclosing;
+    enclosing = enclosing_;
     create_header_menu();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void window_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("window_t", "");
 }
 
 #endif // WINDOW_H

@@ -81,6 +81,10 @@ public:
     explicit inline tool_button_t(widget_controller_t &controller,                               tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
     explicit inline tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
 
+// virtual
+protected:
+    virtual void inline dump_class_name() const override;
+
 // member data
 public:
     tool_t *tool;
@@ -106,6 +110,13 @@ tool            (tool_)
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
     LOG_VERIFY(texture_ < BUTTON_TEXTURE_NAME_COUNT       , ;);
     texture = BUTTON_TEXTURES + texture_;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void tool_button_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("tool_button_t", "");
 }
 
 #endif // TOOL_BUTTON_H

@@ -10,25 +10,30 @@ class clipping_region_t
 {
 // member functions
 public:
-             inline  clipping_region_t();
-    explicit inline  clipping_region_t(const rectangle_t &enclosing);
-             inline ~clipping_region_t();
+    inline  clipping_region_t();
+    inline ~clipping_region_t();
 
-    const list inline &  get_areas() const;
-    void       inline  reset_areas();
+    const list inline &  get_areas    () const;
+    void       inline  reset_areas    (const rectangle_t &enclosing);
+
+    void               dump           () const;
+    bool               is_point_inside(const vec2d &point) const;
 
 private:
     void set_areas(const list *const areas);
 
 // member data
-public:
-    rectangle_t enclosing;
 private:
-    list        areas;
+    list areas;
 
 // friends
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t &op_2);
     friend clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2);
+
+    // оператор += использовать, когда op_1 и op_2 не пересекаются
+    friend clipping_region_t &operator +=(clipping_region_t &op_1, const clipping_region_t &op_2);
+    // оператор |= использовать, когда op_1 и op_2 пересекаются
+    friend clipping_region_t &operator |=(clipping_region_t &op_1, const clipping_region_t &op_2);
 
     friend clipping_region_t &operator -=(clipping_region_t &op_1, const rectangle_t &op_2);
     friend clipping_region_t &operator *=(clipping_region_t &op_1, const rectangle_t &op_2);
@@ -39,16 +44,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 
-inline clipping_region_t::clipping_region_t():
-enclosing()
-{
-    list_ctor(&areas, sizeof(rectangle_t));
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline clipping_region_t::clipping_region_t(const rectangle_t &enclosing_):
-enclosing(enclosing_)
+inline clipping_region_t::clipping_region_t()
 {
     list_ctor(&areas, sizeof(rectangle_t));
 }
@@ -69,7 +65,7 @@ inline const list &clipping_region_t::get_areas() const
 
 //--------------------------------------------------------------------------------------------------
 
-inline void clipping_region_t::reset_areas()
+inline void clipping_region_t::reset_areas(const rectangle_t &enclosing)
 {
     list_clear    (&areas);
     list_push_back(&areas, &enclosing);

@@ -27,7 +27,7 @@ canvas           (canvas_controller)
 void canvas_window_t::create_canvas()
 {
     const vec2d canvas_off(20, 20);
-    const vec2d wnd_size = visible.enclosing.get_size();
+    const vec2d wnd_size = enclosing.get_size();
 
     if ((wnd_size.y < header_menu_height + 2 * canvas_off.y) ||
         (wnd_size.x <                      2 * canvas_off.x))
@@ -37,6 +37,6 @@ void canvas_window_t::create_canvas()
     }
 
     canvas.create(rectangle_t(
-        visible.enclosing.ld_corner + vec2d(0, header_menu_height) + canvas_off,
-        visible.enclosing.ru_corner                                - canvas_off));
+        enclosing.ld_corner + vec2d(0, header_menu_height) + canvas_off,
+        enclosing.ru_corner                                - canvas_off));
 }

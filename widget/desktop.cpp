@@ -7,7 +7,7 @@ bool desktop_t::refresh_after_event()
 {
     if (update_struct())
     {
-        recalc_areas();
+        recalc_regions();
         return true;
     }
 

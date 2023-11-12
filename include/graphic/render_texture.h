@@ -30,10 +30,10 @@ public:
     void        draw_region   (const clipping_region_t &reg);
 
     void        draw_texture  (const texture_t &texture, const vec2d &pos, const vec2d &size);
-    void        draw_texture  (const texture_t &texture, const clipping_region_t &reg);
+    void        draw_texture  (const texture_t &texture, const rectangle_t &enclosing, const clipping_region_t &reg);
 
     void        draw_text     (const text_t    &text   , const vec2d &pos);
-    void        draw_text     (const text_t    &text   , const clipping_region_t &reg);
+    void        draw_text     (const text_t    &text   , const rectangle_t &enclosing, const clipping_region_t &reg);
 
     void        draw_coord_sys(const coord_system &sys, const rectangle_t &area, const color_t &col);
 
@@ -56,7 +56,7 @@ public:
     void        draw_rectangle(                         const color_t &fill_col, const clipping_region_t &reg);
 
     void        draw_circle   (const circle_t     &abs, const color_t &fiil_col, const color_t &out_col, const double out_thickness, const vec2d &scale);
-    void        draw_circle   (const circle_t     &abs, const color_t &fill_col, const clipping_region_t &reg, const vec2d &scale);
+    void        draw_circle   (const circle_t     &abs, const color_t &fill_col, const rectangle_t &enclosing, const clipping_region_t &reg, const vec2d &scale);
 
 // member data
 private:

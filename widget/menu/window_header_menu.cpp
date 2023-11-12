@@ -45,14 +45,14 @@ window_name         ()
 
 void window_header_menu_t::create_close_btn()
 {
-    rectangle_t menu_enclosing = visible.enclosing;
+    rectangle_t menu_enclosing = enclosing;
     vec2d       menu_size      = menu_enclosing.get_size();
 
     vec2d  close_btn_size  = close_btn.texture->get_size();
     double close_btn_scale = menu_size.y / close_btn_size.y;
 
     close_btn_size = vec2d(close_btn_size.x * close_btn_scale, menu_size.y);
-    close_btn.visible.enclosing = rectangle_t(
+    close_btn.enclosing = rectangle_t(
         menu_enclosing.rd_corner() - vec2d(close_btn_size.x, 0),
         menu_enclosing.rd_corner() + vec2d(0, close_btn_size.y));
 }
@@ -61,14 +61,14 @@ void window_header_menu_t::create_close_btn()
 
 void window_header_menu_t::create_window_name()
 {
-    rectangle_t menu_enclosing = visible.enclosing;
+    rectangle_t menu_enclosing = enclosing;
     vec2d       menu_size      = menu_enclosing.get_size();
 
     window_name.text.color          = color_t::Black;
     window_name.text.character_size = 30;
     window_name.background          = color;
 
-    window_name.visible.enclosing = rectangle_t(
+    window_name.enclosing = rectangle_t(
         menu_enclosing.ld_corner + vec2d(5, 5),
-        close_btn.visible.enclosing.lu_corner());
+        close_btn.enclosing.lu_corner());
 }

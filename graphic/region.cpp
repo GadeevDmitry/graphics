@@ -15,6 +15,41 @@ static bool intersect_area_area    (rectangle_t &op_1, const rectangle_t &op_2);
 
 //==================================================================================================
 
+bool clipping_region_t::is_point_inside(const vec2d &point) const
+{
+    if (areas.size == 0) return false;
+
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        if (cur->is_point_inside(point)) return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void clipping_region_t::dump() const
+{
+    LOG_TAB_SERVICE_MESSAGE("clipping_region\n{", "\n");
+    LOG_TAB++;
+
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *cur = front; cur != fict;
+         cur = (rectangle_t *) list_next(cur))
+    {
+        cur->dump();
+    }
+
+    LOG_TAB--;
+    LOG_TAB_SERVICE_MESSAGE("}", "\n\n");
+}
 
 //--------------------------------------------------------------------------------------------------
 
@@ -76,6 +111,29 @@ clipping_region_t &operator -=(clipping_region_t &op_1, const clipping_region_t 
 
 //--------------------------------------------------------------------------------------------------
 
+clipping_region_t &operator +=(clipping_region_t &op_1, const clipping_region_t &op_2)
+{
+    if (op_2.areas.size == 0) return op_1;
+    if (op_1.areas.size == 0)
+    {
+        op_1.set_areas(&op_2.areas);
+        return op_1;
+    }
+
+    rectangle_t *op_2_front = (rectangle_t *) list_front(&op_2.areas);
+    rectangle_t *op_2_fict  = (rectangle_t *) list_fict (&op_2.areas);
+
+    for (rectangle_t *op_2_cnt = op_2_front; op_2_cnt != op_2_fict;
+         op_2_cnt = (rectangle_t *) list_next(op_2_cnt))
+    {
+        list_push_back(&op_1.areas, op_2_cnt);
+    }
+
+    return op_1;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t &op_2)
 {
     if (op_1.areas.size == 0) return op_1;
@@ -86,6 +144,25 @@ clipping_region_t &operator *=(clipping_region_t &op_1, const clipping_region_t 
     }
 
     intersect_region_region(&op_1.areas, &op_2.areas);
+    return op_1;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+clipping_region_t &operator |=(clipping_region_t &op_1, const clipping_region_t &op_2)
+{
+    if (op_2.areas.size == 0) return op_1;
+    if (op_1.areas.size == 0)
+    {
+        op_1.set_areas(&op_2.areas);
+        return op_1;
+    }
+
+    clipping_region_t temp;
+    temp.set_areas(&op_2.areas);
+    temp -= op_1;
+
+    op_1 += temp;
     return op_1;
 }
 

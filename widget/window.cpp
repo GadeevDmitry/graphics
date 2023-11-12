@@ -54,7 +54,7 @@ header_menu           (header_menu_controller, *this, color_t::White)
 
 void window_t::create_header_menu()
 {
-    vec2d wnd_size = visible.enclosing.get_size();
+    vec2d wnd_size = enclosing.get_size();
     if (wnd_size.y < header_menu_height)
     {
         LOG_ERROR("CAN'T CREATE WINDOW: height is too small for header menu (%lg < %lg)\n",
@@ -63,6 +63,6 @@ void window_t::create_header_menu()
     }
 
     header_menu.create(rectangle_t(
-        visible.enclosing.ld_corner,
-        visible.enclosing.rd_corner() + vec2d(0, header_menu_height)));
+        enclosing.ld_corner,
+        enclosing.rd_corner() + vec2d(0, header_menu_height)));
 }

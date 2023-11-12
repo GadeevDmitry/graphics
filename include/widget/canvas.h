@@ -47,6 +47,8 @@ private:
 // virtual
 public:
     virtual void render(render_texture_t &wnd) override;
+protected:
+    virtual void inline dump_class_name() const override;
 
 // member data
 protected:
@@ -77,10 +79,17 @@ temp      ()
 
 //--------------------------------------------------------------------------------------------------
 
-inline void canvas_t::create(const rectangle_t &enclosing, const color_t &background)
+inline void canvas_t::create(const rectangle_t &enclosing_, const color_t &background)
 {
-    visible.enclosing = enclosing;
+    enclosing = enclosing_;
     create_textures(background);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void canvas_t::dump_class_name() const
+{
+    LOG_TAB_SERVICE_MESSAGE("canvas_t", "");
 }
 
 #endif // CANVAS_H

@@ -9,7 +9,7 @@ bool button_t::on_mouse_press(const mouse_context_t &context, const MOUSE_BUTTON
 {
     LOG_VERIFY(active == nullptr, false);
 
-    if (!visible.enclosing.is_point_inside(context.pos))
+    if (!sub_enclosing.is_point_inside(context.pos))
         return false;
 
     return controller.on_mouse_press(this, context, btn);

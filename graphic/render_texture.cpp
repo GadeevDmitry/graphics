@@ -39,14 +39,14 @@ void render_texture_t::draw_texture(const texture_t &texture, const vec2d &pos, 
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_texture(const texture_t &texture, const clipping_region_t &reg)
+void render_texture_t::draw_texture(const texture_t &texture, const rectangle_t &enclosing, const clipping_region_t &reg)
 {
     const list &regions = reg.get_areas();
 
     sf::Vector2u tex_size   = texture.data.getSize();
     vec2d        tex_scale
-        (reg.enclosing.get_size().x / tex_size.x,
-         reg.enclosing.get_size().y / tex_size.y);
+        (enclosing.get_size().x / tex_size.x,
+         enclosing.get_size().y / tex_size.y);
 
     rectangle_t *front = (rectangle_t *) list_front(&regions);
     rectangle_t *fict  = (rectangle_t *) list_fict (&regions);
@@ -59,8 +59,8 @@ void render_texture_t::draw_texture(const texture_t &texture, const clipping_reg
 
         spr.setPosition((float) area.ld_corner.x, (float) area.ld_corner.y);
         spr.setScale   ((float) tex_scale.x, (float) tex_scale.y);
-        spr.setTextureRect(sf::IntRect((int) ((area.ld_corner.x - reg.enclosing.ld_corner.x) / tex_scale.x),
-                                       (int) ((area.ld_corner.y - reg.enclosing.ld_corner.y) / tex_scale.y),
+        spr.setTextureRect(sf::IntRect((int) ((area.ld_corner.x - enclosing.ld_corner.x) / tex_scale.x),
+                                       (int) ((area.ld_corner.y - enclosing.ld_corner.y) / tex_scale.y),
                                        (int) (area.get_size().x / tex_scale.x),
                                        (int) (area.get_size().y / tex_scale.y)));
         data.draw(spr);
@@ -84,16 +84,16 @@ void render_texture_t::draw_text(const text_t &text, const vec2d &pos)
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_text(const text_t &text, const clipping_region_t &reg)
+void render_texture_t::draw_text(const text_t &text, const rectangle_t &enclosing, const clipping_region_t &reg)
 {
     render_texture_t temp_texture(
-        (unsigned int) reg.enclosing.get_size().x,
-        (unsigned int) reg.enclosing.get_size().y);
+        (unsigned int) enclosing.get_size().x,
+        (unsigned int) enclosing.get_size().y);
     temp_texture.clear(color_t::Transparent);
     temp_texture.draw_text(text, vec2d(0, 0));
     temp_texture.display();
 
-    draw_texture(temp_texture.get_texture(), reg);
+    draw_texture(temp_texture.get_texture(), enclosing, reg);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -270,10 +270,10 @@ void render_texture_t::draw_circle(const circle_t &abs, const color_t &fill_col,
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_circle(const circle_t &abs, const color_t &fill_col, const clipping_region_t &reg, const vec2d &scale)
+void render_texture_t::draw_circle(const circle_t &abs, const color_t &fill_col, const rectangle_t &enclosing, const clipping_region_t &reg, const vec2d &scale)
 {
     render_texture_t temp((unsigned) (2 * abs.radius*scale.x), (unsigned) (2 * abs.radius*scale.y));
     temp.draw_circle(abs, fill_col, fill_col, 0, scale);
 
-    draw_texture(temp.get_texture(), reg);
+    draw_texture(temp.get_texture(), enclosing, reg);
 }

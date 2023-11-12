@@ -73,7 +73,7 @@ void toolbar_window_t::set_tools(tool_t *fill  , tool_t *rectnagle, tool_t *elli
 
 void toolbar_window_t::create_buttons()
 {
-    const vec2d wnd_size = visible.enclosing.get_size();
+    const vec2d wnd_size = enclosing.get_size();
     if ((wnd_size.y < toolbar_size.y + header_menu_height) ||
         (wnd_size.x < toolbar_size.x))
     {
@@ -89,9 +89,9 @@ void toolbar_window_t::create_buttons()
 
     for (; cnt < toolbar_btns_num / 2; ++cnt)
     {
-        (**cnt_btn).visible.enclosing = rectangle_t(
-            visible.enclosing.ld_corner + l_column_off,
-            visible.enclosing.ld_corner + l_column_off + toolbar_btn_size
+        (**cnt_btn).enclosing = rectangle_t(
+            enclosing.ld_corner + l_column_off,
+            enclosing.ld_corner + l_column_off + toolbar_btn_size
         );
 
         l_column_off.y += toolbar_btn_size.y + 10;
@@ -100,9 +100,9 @@ void toolbar_window_t::create_buttons()
 
     for (; cnt < toolbar_btns_num; ++cnt)
     {
-        (**cnt_btn).visible.enclosing = rectangle_t(
-            visible.enclosing.ld_corner + r_column_off,
-            visible.enclosing.ld_corner + r_column_off + toolbar_btn_size
+        (**cnt_btn).enclosing = rectangle_t(
+            enclosing.ld_corner + r_column_off,
+            enclosing.ld_corner + r_column_off + toolbar_btn_size
         );
 
         r_column_off.y += toolbar_btn_size.y + 10;

@@ -60,22 +60,22 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 
 void application_t::create()
 {
-    main_window.create(desktop.visible.enclosing);
+    main_window.create(desktop.enclosing);
 
     toolbar_window.create(rectangle_t(
-        main_window.visible.enclosing.ld_corner + vec2d(0, window_t::header_menu_height + 10),
+        main_window.enclosing.ld_corner + vec2d(0, window_t::header_menu_height + 10),
         toolbar_window_t::toolbar_size.x, window_t::header_menu_height + toolbar_window_t::toolbar_size.y));
 
     palette_window.create(rectangle_t(
-        toolbar_window.visible.enclosing.lu_corner() + vec2d(0, 10),
+        toolbar_window.enclosing.lu_corner() + vec2d(0, 10),
         palette_window_t::palette_size.x, window_t::header_menu_height + palette_window_t::palette_size.y));
 
     canvas_window.create(rectangle_t(
-        toolbar_window.visible.enclosing.rd_corner() + vec2d(30, 30),
-        main_window   .visible.enclosing.ru_corner   - vec2d(30, 30)
+        toolbar_window.enclosing.rd_corner() + vec2d(30, 30),
+        main_window   .enclosing.ru_corner   - vec2d(30, 30)
     ));
 
-    desktop.init_areas();
+    desktop.init_regions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,12 +154,27 @@ void application_t::process(sf::RenderWindow &sfml_wnd, render_texture_t &rend_t
 
 //--------------------------------------------------------------------------------------------------
 
-void application_t::render(sf::RenderWindow &sfml_wnd, render_texture_t &rend_tex)
+void application_t::dump() const
 {
-    desktop.render(rend_tex);
-    rend_tex.display();
+    desktop.dump();
+}
 
-    sf::Sprite spr(rend_tex.get_sfml_texture());
+//--------------------------------------------------------------------------------------------------
+
+void application_t::graphic_dump(render_texture_t &render_tex) const
+{
+    desktop.graphic_dump(render_tex);
+    render_tex.display();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void application_t::render(sf::RenderWindow &sfml_wnd, render_texture_t &render_tex)
+{
+    desktop.render(render_tex);
+    render_tex.display();
+
+    sf::Sprite spr(render_tex.get_sfml_texture());
     sfml_wnd.draw(spr);
     sfml_wnd.display();
 }

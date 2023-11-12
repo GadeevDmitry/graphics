@@ -44,11 +44,15 @@ void widget_t::update_ancestral_status(WIDGET_STATUS_TYPE upd_status)
 
 void widget_t::dump() const
 {
-    LOG_TAB_SERVICE_MESSAGE("widget_t (address: %p)\n{", "\n", this);
+    dump_class_name();
+    LOG_SERVICE_MESSAGE(" (address: %p)\n{", "\n", this);
     LOG_TAB++;
 
     USUAL_FIELD_DUMP("status  ", "%d", status);
     USUAL_FIELD_DUMP("ancestor", "%p", ancestor);
+
+    LOG_TAB_MESSAGE("\n");
+    renderable::dump();
 
     LOG_TAB--;
     LOG_TAB_SERVICE_MESSAGE("}", "\n");
