@@ -30,8 +30,8 @@ class external_menu_button_t: public label_button_t
 {
 // member functions
 public:
-    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name, const color_t &background);
-    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name, const color_t &background);
+    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name);
+    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name);
 
 // virtual
 public:

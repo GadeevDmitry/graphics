@@ -25,6 +25,7 @@ all:
 .PHONY: components
 components:
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/event/Makefile
+	$(MAKE) -f $(ROOT_PREFIX)makefiles/filter/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/geometry/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/graphic/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/tool/Makefile

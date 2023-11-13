@@ -8,6 +8,9 @@
 #include "tool/shape_tool/ellipse_tool.h"
 #include "tool/shape_tool/rectangle_tool.h"
 
+#include "filter/filter_manager.h"
+#include "filter/brightness_filter.h"
+
 #include "widget/desktop.h"
 #include "widget/window/main_window.h"
 #include "widget/window/canvas_window.h"
@@ -45,6 +48,9 @@ private:
     ellipse_tool_t      ellipse_tool;
     rectangle_tool_t    rectangle_tool;
     tool_manager_t      tool_manager;
+
+    brightness_filter_t brightness_filter;
+    filter_manager_t    filter_manager;
 
     window_controller_t window_controller;
     canvas_window_t     canvas_window;

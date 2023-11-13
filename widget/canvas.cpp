@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include "canvas.h"
 #include "tool/tool_manager.h"
+#include "filter/filter_manager.h"
 #include "data_structs/include/log.h"
+
+//==================================================================================================
+
+canvas_t::CANVAS_INSTRUMENT_TYPE canvas_t::active_instrument = TOOL;
 
 //==================================================================================================
 
@@ -9,11 +14,24 @@ bool canvas_controller_t::on_mouse_press(widget_t *handle, const eventable::mous
 {
     canvas_t *canvas = (canvas_t *) handle;
 
-    eventable::mouse_context_t local_context = context;
-    local_context.pos -= canvas->enclosing.ld_corner;
-    tool_manager.paint_on_mouse_press(canvas->perm, canvas->temp, local_context, btn);
+    switch (canvas_t::active_instrument)
+    {
+        case canvas_t::TOOL:
+        {
+            eventable::mouse_context_t local_context = context;
+            local_context.pos -= canvas->enclosing.ld_corner;
+            tool_manager.paint_on_mouse_press(canvas->perm, canvas->temp, local_context, btn);
 
-    widget_t::active = handle;
+            widget_t::active = handle;
+        } break;
+        case canvas_t::FILTER:
+        {
+            filter_manager.apply_last_filter(canvas->perm);
+        } break;
+
+        default: LOG_ASSERT_VERBOSE(false, "unknown CANVAS_INSTRUMENT_TYPE\n"); break;
+    }
+
     canvas->status = widget_t::WIDGET_ACTIVATED;
     canvas->update_ancestral_status(widget_t::WIDGET_ACTIVATED);
 
@@ -24,6 +42,8 @@ bool canvas_controller_t::on_mouse_press(widget_t *handle, const eventable::mous
 
 bool canvas_controller_t::on_mouse_release(widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn)
 {
+    LOG_ASSERT(canvas_t::active_instrument == canvas_t::TOOL);
+
     canvas_t *canvas = (canvas_t *) handle;
 
     eventable::mouse_context_t local_context = context;
@@ -41,6 +61,8 @@ bool canvas_controller_t::on_mouse_release(widget_t *handle, const eventable::mo
 
 bool canvas_controller_t::on_mouse_move(widget_t *handle, const eventable::mouse_context_t &context, const vec2d &off)
 {
+    LOG_ASSERT(canvas_t::active_instrument == canvas_t::TOOL);
+
     canvas_t *canvas = (canvas_t *) handle;
 
     eventable::mouse_context_t local_context = context;

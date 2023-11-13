@@ -18,11 +18,11 @@ bool window_header_menu_controller_t::on_mouse_move(widget_t *handle, const even
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const color_t &color_):
-menu_t              (menu_controller, color_),
+window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const char *menu_name):
+menu_t              (menu_controller, color_t::White),
 close_btn_controller(),
 close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
-window_name         ()
+window_name         (text_t(&font_t::get_font_by_name(font_t::EDU_QLD), menu_name, color_t::Black, 30), color_t::White, vec2d(5, 5))
 {
     register_subwidget(&window_name);
     register_subwidget(&close_btn);
@@ -30,11 +30,11 @@ window_name         ()
 
 //--------------------------------------------------------------------------------------------------
 
-window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color_):
-menu_t              (menu_controller, color_),
+window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing, const char *menu_name):
+menu_t              (menu_controller, color_t::White),
 close_btn_controller(),
 close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
-window_name         ()
+window_name         (text_t(&font_t::get_font_by_name(font_t::EDU_QLD), menu_name, color_t::Black, 30), color_t::White, vec2d(5, 5))
 {
     register_subwidget(&window_name);
     register_subwidget(&close_btn);
@@ -63,10 +63,6 @@ void window_header_menu_t::create_window_name()
 {
     rectangle_t menu_enclosing = enclosing;
     vec2d       menu_size      = menu_enclosing.get_size();
-
-    window_name.text.color          = color_t::Black;
-    window_name.text.character_size = 30;
-    window_name.background          = color;
 
     window_name.enclosing = rectangle_t(
         menu_enclosing.ld_corner,

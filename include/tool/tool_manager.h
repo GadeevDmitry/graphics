@@ -2,6 +2,7 @@
 #define TOOL_MANAGER_H
 
 #include "tool.h"
+#include "widget/canvas.h"
 #include "data_structs/include/log.h"
 
 //==================================================================================================
@@ -53,6 +54,7 @@ inline void tool_manager_t::set_color(const color_t &color_)
 inline void tool_manager_t::set_tool(tool_t *active_tool_)
 {
     active_tool = active_tool_;
+    canvas_t::active_instrument = canvas_t::TOOL;
 }
 
 //--------------------------------------------------------------------------------------------------

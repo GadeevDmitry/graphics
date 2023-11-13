@@ -3,8 +3,11 @@
 
 #include "color.h"
 #include "region.h"
-#include "texture.h"
+
 #include "text.h"
+#include "image.h"
+#include "texture.h"
+
 #include "geometry/intersect.h"
 #include "geometry/shape_types.h"
 
@@ -22,6 +25,7 @@ public:
 
     const sf::Texture inline &get_sfml_texture() const;
     texture_t         inline  get_texture     () const;
+    image_t           inline  get_image       () const;
 
     bool inline create        (const unsigned width, const unsigned height);
     void inline clear         (const color_t &col = color_t::Black);
@@ -89,6 +93,13 @@ inline const sf::Texture &render_texture_t::get_sfml_texture() const
 inline texture_t render_texture_t::get_texture() const
 {
     return texture_t(get_sfml_texture());
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline image_t render_texture_t::get_image() const
+{
+    return image_t(data.getTexture().copyToImage());
 }
 
 //--------------------------------------------------------------------------------------------------

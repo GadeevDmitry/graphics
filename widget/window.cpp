@@ -28,24 +28,21 @@ bool window_controller_t::on_mouse_press(widget_t *handle, const eventable::mous
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-window_t::window_t(widget_controller_t &controller_, const char *header_name, const color_t &color_):
+window_t::window_t(widget_controller_t &controller_, const char *window_name, const color_t &color_):
 menu_t                (controller_, color_),
 header_menu_controller(*this),
-header_menu           (header_menu_controller, *this, color_t::White)
+header_menu           (header_menu_controller, *this, window_name)
 {
-    header_menu.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), header_name);
     register_subwidget(&header_menu);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing, const char *header_name, const color_t &color_):
+window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing, const char *window_name, const color_t &color_):
 menu_t                (controller_, color_),
 header_menu_controller(*this),
-header_menu           (header_menu_controller, *this, color_t::White)
+header_menu           (header_menu_controller, *this, window_name)
 {
-    header_menu.set_window_name(&font_t::get_font_by_name(font_t::EDU_QLD), header_name);
-
     register_subwidget(&header_menu);
     create(enclosing);
 }

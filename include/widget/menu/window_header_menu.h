@@ -36,10 +36,9 @@ class window_header_menu_t: public menu_t
 {
 // member functions
 public:
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const color_t &color = color_t::White);
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const color_t &color = color_t::White);
+    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const char *menu_name);
+    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const char *menu_name);
 
-    void inline set_window_name   (const font_t *font, const char *string);
     void inline create            (const rectangle_t &enclosing);
 private:
     void        create_close_btn  ();
@@ -55,15 +54,6 @@ private:
     close_button_t            close_btn;
     label_t                   window_name;
 };
-
-//--------------------------------------------------------------------------------------------------
-
-inline void window_header_menu_t::set_window_name(const font_t *font, const char *string)
-{
-    window_name.text.font    = font;
-    window_name.text.text    = string;
-    window_name.text_rel_off = vec2d(5, 5);
-}
 
 //--------------------------------------------------------------------------------------------------
 

@@ -10,7 +10,7 @@ class tool_t
 {
 // member functions
 public:
-    explicit inline  tool_t();
+             inline  tool_t();
     virtual  inline ~tool_t() {}
 
 // virtual

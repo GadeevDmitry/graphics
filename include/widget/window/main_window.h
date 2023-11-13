@@ -14,10 +14,11 @@ public:
 
 // member functions
 public:
-    explicit main_window_t(window_controller_t &controller,                               const char *header_name, const color_t &color = Red_theme);
-    explicit main_window_t(window_controller_t &controller, const rectangle_t &enclosing, const char *header_name, const color_t &color = Red_theme);
+    explicit main_window_t(window_controller_t &controller, filter_manager_t &filter_manager,                               const char *header_name, const color_t &color = Red_theme);
+    explicit main_window_t(window_controller_t &controller, filter_manager_t &filter_manager, const rectangle_t &enclosing, const char *header_name, const color_t &color = Red_theme);
 
-    void create(const rectangle_t &enclosing);
+    void        create     (const rectangle_t &enclosing);
+    void inline set_filters(filter_t *brightness);
 
 // virtual
 protected:
@@ -27,6 +28,13 @@ protected:
 public:
     main_window_menu_t main_menu;
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::set_filters(filter_t *brightness)
+{
+    main_menu.set_filters(brightness);
+}
 
 //--------------------------------------------------------------------------------------------------
 

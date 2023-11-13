@@ -7,12 +7,13 @@
 //==================================================================================================
 
 class tool_manager_t;
+class filter_manager_t;
 
 class canvas_controller_t: public widget_controller_t
 {
 // member functions
 public:
-    explicit inline canvas_controller_t(tool_manager_t &tool_manager);
+    explicit inline canvas_controller_t(tool_manager_t &tool_manager, filter_manager_t &filter_manager);
 
 // virtual
 public:
@@ -22,19 +23,33 @@ public:
 
 // member data
 private:
-    tool_manager_t &tool_manager;
+    tool_manager_t   &tool_manager;
+    filter_manager_t &filter_manager;
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline canvas_controller_t::canvas_controller_t(tool_manager_t &tool_manager_):
-tool_manager(tool_manager_)
+inline canvas_controller_t::canvas_controller_t(tool_manager_t &tool_manager_, filter_manager_t &filter_manager_):
+tool_manager  (tool_manager_),
+filter_manager(filter_manager_)
 {}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class canvas_t: public button_t
 {
+// types
+public:
+    enum CANVAS_INSTRUMENT_TYPE
+    {
+        TOOL,
+        FILTER,
+    };
+
+// static
+public:
+    static CANVAS_INSTRUMENT_TYPE active_instrument;
+
 // member functions
 public:
     explicit inline canvas_t(widget_controller_t &controller);

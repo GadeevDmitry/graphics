@@ -24,6 +24,7 @@ public:
 public:
              inline  color_t();
     explicit inline  color_t(double r, double g, double b, double a = 1.0);
+    explicit inline  color_t(const sf::Color &sf_color);
              inline ~color_t();
 
     sf::Color get_sfml_color     () const;
@@ -53,6 +54,15 @@ r(r_),
 g(g_),
 b(b_),
 a(a_)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline color_t::color_t(const sf::Color &sf_color):
+r((double) sf_color.r / 255.0),
+g((double) sf_color.g / 255.0),
+b((double) sf_color.b / 255.0),
+a((double) sf_color.a / 255.0)
 {}
 
 //--------------------------------------------------------------------------------------------------

@@ -16,10 +16,11 @@ private:
 
 // member functions
 public:
-    explicit main_window_menu_t(window_controller_t &controller,                               const color_t &color = color_t::White);
-    explicit main_window_menu_t(window_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t::White);
+    explicit main_window_menu_t(window_controller_t &controller, filter_manager_t &filter_manager);
+    explicit main_window_menu_t(window_controller_t &controller, filter_manager_t &filter_manager, const rectangle_t &enclosing);
 
     void inline create        (const rectangle_t &enclosing);
+    void inline set_filters   (filter_t *brightness);
 private:
     void        create_buttons();
 
@@ -43,6 +44,13 @@ inline void main_window_menu_t::create(const rectangle_t &enclosing_)
 {
     enclosing = enclosing_;
     create_buttons();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_menu_t::set_filters(filter_t *brightness)
+{
+    filter_menu.set_filters(brightness);
 }
 
 //--------------------------------------------------------------------------------------------------
