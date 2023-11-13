@@ -30,8 +30,8 @@ class external_menu_button_t: public label_button_t
 {
 // member functions
 public:
-    explicit inline external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name, const color_t &background);
-    explicit inline external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name, const color_t &background);
+    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name, const color_t &background);
+    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name, const color_t &background);
 
 // virtual
 public:
@@ -53,26 +53,6 @@ public:
     bool    is_menu_hidden;
     menu_t &external_menu;
 };
-
-//--------------------------------------------------------------------------------------------------
-
-inline external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu, const char *btn_name, const color_t &background_):
-label_button_t(controller_, btn_name, background_),
-is_menu_hidden(true),
-external_menu (external_menu)
-{
-    external_menu.ancestor = this;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu_, const rectangle_t &enclosing_, const char *btn_name, const color_t &background_):
-label_button_t(controller_, enclosing_, btn_name, background_),
-is_menu_hidden(true),
-external_menu (external_menu_)
-{
-    external_menu.ancestor = this;
-}
 
 //--------------------------------------------------------------------------------------------------
 

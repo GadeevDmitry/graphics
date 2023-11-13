@@ -60,8 +60,9 @@ private:
 
 inline void window_header_menu_t::set_window_name(const font_t *font, const char *string)
 {
-    window_name.text.font = font;
-    window_name.text.text = string;
+    window_name.text.font    = font;
+    window_name.text.text    = string;
+    window_name.text_rel_off = vec2d(5, 5);
 }
 
 //--------------------------------------------------------------------------------------------------

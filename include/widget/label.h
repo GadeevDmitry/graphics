@@ -11,8 +11,8 @@ class label_t: public widget_t
 // member functions
 public:
              inline label_t();
-    explicit inline label_t(                              const text_t &text, const color_t &background);
-    explicit inline label_t(const rectangle_t &enclosing, const text_t &text, const color_t &background);
+    explicit inline label_t(                              const text_t &text, const color_t &background, const vec2d &text_rel_off = vec2d(0, 0));
+    explicit inline label_t(const rectangle_t &enclosing, const text_t &text, const color_t &background, const vec2d &text_rel_off = vec2d(0, 0));
 
 // virtual
 public:
@@ -29,6 +29,7 @@ protected:
 // member data
 public:
     text_t  text;
+    vec2d   text_rel_off;
     color_t background;
 };
 
@@ -42,26 +43,28 @@ background()
 
 //--------------------------------------------------------------------------------------------------
 
-inline label_t::label_t(const text_t &text_, const color_t &background_):
-widget_t  (),
-text      (text_),
-background(background_)
+inline label_t::label_t(const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
+widget_t    (),
+text        (text_),
+text_rel_off(text_rel_off_),
+background  (background_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline label_t::label_t(const rectangle_t &enclosing, const text_t &text_, const color_t &background_):
-widget_t  (enclosing),
-text      (text_),
-background(background_)
+inline label_t::label_t(const rectangle_t &enclosing, const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
+widget_t    (enclosing),
+text        (text_),
+text_rel_off(text_rel_off_),
+background  (background_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
 inline void label_t::render(render_texture_t &wnd)
 {
-    wnd.draw_rectangle(background,            own_visible);
-    wnd.draw_text     (text      , enclosing, own_visible);
+    wnd.draw_rectangle(background,                          own_visible);
+    wnd.draw_text     (text      , text_rel_off, enclosing, own_visible);
 }
 
 //--------------------------------------------------------------------------------------------------

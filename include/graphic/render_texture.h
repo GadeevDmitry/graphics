@@ -33,7 +33,7 @@ public:
     void        draw_texture  (const texture_t &texture, const rectangle_t &enclosing, const clipping_region_t &reg);
 
     void        draw_text     (const text_t    &text   , const vec2d &pos);
-    void        draw_text     (const text_t    &text   , const rectangle_t &enclosing, const clipping_region_t &reg);
+    void        draw_text     (const text_t    &text   , const vec2d &text_rel_off, const rectangle_t &enclosing, const clipping_region_t &reg);
 
     void        draw_coord_sys(const coord_system &sys, const rectangle_t &area, const color_t &col);
 

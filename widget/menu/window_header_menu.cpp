@@ -69,6 +69,6 @@ void window_header_menu_t::create_window_name()
     window_name.background          = color;
 
     window_name.enclosing = rectangle_t(
-        menu_enclosing.ld_corner + vec2d(5, 5),
+        menu_enclosing.ld_corner,
         close_btn.enclosing.lu_corner());
 }

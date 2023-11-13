@@ -23,6 +23,28 @@ bool external_menu_button_controller_t::on_mouse_press(widget_t *handle, const e
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu, const char *btn_name, const color_t &background_):
+label_button_t(controller_, text_t(&font_t::get_font_by_name(font_t::EDU_QLD), btn_name), background_),
+is_menu_hidden(true),
+external_menu (external_menu)
+{
+    text_rel_off = vec2d(5, 5);
+    external_menu.ancestor = this;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu_, const rectangle_t &enclosing_, const char *btn_name, const color_t &background_):
+label_button_t(controller_, enclosing_, text_t(&font_t::get_font_by_name(font_t::EDU_QLD), btn_name), background_),
+is_menu_hidden(true),
+external_menu (external_menu_)
+{
+    text_rel_off = vec2d(5, 5);
+    external_menu.ancestor = this;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void external_menu_button_t::dump() const
 {
     dump_class_name();

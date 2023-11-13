@@ -84,13 +84,13 @@ void render_texture_t::draw_text(const text_t &text, const vec2d &pos)
 
 //--------------------------------------------------------------------------------------------------
 
-void render_texture_t::draw_text(const text_t &text, const rectangle_t &enclosing, const clipping_region_t &reg)
+void render_texture_t::draw_text(const text_t &text, const vec2d &text_rel_off, const rectangle_t &enclosing, const clipping_region_t &reg)
 {
     render_texture_t temp_texture(
         (unsigned int) enclosing.get_size().x,
         (unsigned int) enclosing.get_size().y);
     temp_texture.clear(color_t::Transparent);
-    temp_texture.draw_text(text, vec2d(0, 0));
+    temp_texture.draw_text(text, text_rel_off);
     temp_texture.display();
 
     draw_texture(temp_texture.get_texture(), enclosing, reg);

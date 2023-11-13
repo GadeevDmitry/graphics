@@ -36,7 +36,7 @@ void main_window_menu_t::create_buttons()
     vec2d       menu_size      = menu_enclosing.get_size();
 
     filter_btn.text.color          = color_t::Black;
-    filter_btn.text.character_size = 15;
+    filter_btn.text.character_size = 20;
     filter_btn.background          = color;
 
     filter_btn.enclosing = rectangle_t(
