@@ -9,6 +9,25 @@ eventable::mouse_context_t event_manager_t::global_mouse_context;
 
 //==================================================================================================
 
+event_manager_t::event_manager_t()
+{
+    list_ctor(&childs, sizeof(eventable *), nullptr);
+
+    unsigned char init_value = 0;
+    array_ctor(&pass_priorities, eventable::EVENT_TYPE_COUNT, sizeof(unsigned char));
+    array_init(&pass_priorities, &init_value);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+event_manager_t::~event_manager_t()
+{
+    list_dtor (&childs);
+    array_dtor(&pass_priorities);
+}
+
+//--------------------------------------------------------------------------------------------------
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 
@@ -144,6 +163,9 @@ bool event_manager_t::process_key_press_event(const KEY_TYPE &key)
 
     for (; child != fict; child = (eventable **) list_next(child))
     {
+        unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_KEY_PRESS);
+
+        if ((**child).event_priority < pass_priority) continue;
         if ((**child).on_key_press(local_context, key)) res = true;
     }
 
@@ -164,6 +186,9 @@ bool event_manager_t::process_key_release_event(const KEY_TYPE &key)
 
     for (; child != fict; child = (eventable **) list_next(child))
     {
+        unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_KEY_RELEASE);
+
+        if ((**child).event_priority < pass_priority) continue;
         if ((**child).on_key_release(local_context, key)) res = true;
     }
 
@@ -184,6 +209,9 @@ bool event_manager_t::process_mouse_press_event(const MOUSE_BUTTON_TYPE &btn)
 
     for (; child != fict; child = (eventable **) list_next(child))
     {
+        unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_PRESS);
+
+        if ((**child).event_priority < pass_priority) continue;
         if ((**child).on_mouse_press(local_context, btn)) res = true;
     }
 
@@ -204,6 +232,9 @@ bool event_manager_t::process_mouse_release_event(const MOUSE_BUTTON_TYPE &btn)
 
     for (; child != fict; child = (eventable **) list_next(child))
     {
+        unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_RELEASE);
+
+        if ((**child).event_priority < pass_priority) continue;
         if ((**child).on_mouse_release(local_context, btn)) res = true;
     }
 
@@ -224,6 +255,9 @@ bool event_manager_t::process_mouse_move_event(const vec2d &pos)
 
     for (; child != fict; child = (eventable **) list_next(child))
     {
+        unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_MOVE);
+
+        if ((**child).event_priority < pass_priority) continue;
         if ((**child).on_mouse_move(local_context, off)) res = true;
     }
 

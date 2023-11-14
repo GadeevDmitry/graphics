@@ -2,7 +2,9 @@
 #define EVENT_MANAGER_H
 
 #include "eventable.h"
+#include "data_structs/include/log.h"
 #include "data_structs/include/list.h"
+#include "data_structs/include/array.h"
 
 //==================================================================================================
 
@@ -25,10 +27,14 @@ private:
 
 // member functions
 public:
-    inline  event_manager_t();
-    inline ~event_manager_t();
+     event_manager_t();
+    ~event_manager_t();
 
-    bool inline register_child             (eventable *child);
+    bool inline   register_child           (eventable *child);
+    bool inline unregister_child           (eventable *child);
+
+    void inline set_all_priorities         (const unsigned char pass_priority);
+    void inline set_event_priority         (const unsigned char pass_priority, const eventable::EVENT_TYPE event);
 
     bool        process_key_press_event    (const KEY_TYPE          &key);
     bool        process_key_release_event  (const KEY_TYPE          &key);
@@ -38,7 +44,8 @@ public:
 
 // member data
 protected:
-    list childs;
+    list  childs;
+    array pass_priorities;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -57,23 +64,32 @@ inline const eventable::mouse_context_t &event_manager_t::get_global_mouse_conte
 
 //--------------------------------------------------------------------------------------------------
 
-inline event_manager_t::event_manager_t()
-{
-    list_ctor(&childs, sizeof(eventable *), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline event_manager_t::~event_manager_t()
-{
-    list_dtor(&childs);
-}
-
-//--------------------------------------------------------------------------------------------------
-
 inline bool event_manager_t::register_child(eventable *child)
 {
     return list_push_back(&childs, &child);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline bool event_manager_t::unregister_child(eventable *child)
+{
+    return list_erase(&childs, &child);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void event_manager_t::set_all_priorities(const unsigned char pass_priority)
+{
+    array_init(&pass_priorities, &pass_priority);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void event_manager_t::set_event_priority(const unsigned char pass_priority, const eventable::EVENT_TYPE event)
+{
+    LOG_VERIFY(event > eventable::EVENT_TYPE_UNKNOWN, (void) 0);
+    LOG_VERIFY(event < eventable::EVENT_TYPE_COUNT  , (void) 0);
+    array_set(&pass_priorities, (size_t) event, &pass_priority);
 }
 
 #endif // EVENT_MANAGER_H

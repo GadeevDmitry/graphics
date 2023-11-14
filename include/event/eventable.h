@@ -111,10 +111,24 @@ public:
         inline ~mouse_context_t() {}
     };
 
+    enum EVENT_TYPE
+    {
+        EVENT_TYPE_UNKNOWN = -1,
+
+        EVENT_KEY_PRESS     ,
+        EVENT_KEY_RELEASE   ,
+        EVENT_MOUSE_PRESS   ,
+        EVENT_MOUSE_RELEASE ,
+        EVENT_MOUSE_MOVE    ,
+
+        EVENT_TYPE_COUNT,
+    };
+
 // member functions
 public:
-            inline  eventable() {}
-    virtual inline ~eventable() {}
+             inline  eventable();
+    explicit inline  eventable(const unsigned char event_priority);
+    virtual  inline ~eventable() {}
 
 // virtual
 public:
@@ -123,6 +137,10 @@ public:
     virtual bool on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) = 0;
     virtual bool on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) = 0;
     virtual bool on_mouse_move   (const mouse_context_t &context, const vec2d             &off) = 0;
+
+// member data
+public:
+    unsigned char event_priority;
 
 // friends
     friend event_manager_t;
@@ -147,5 +165,16 @@ right (false),
 middle(false)
 {}
 
+//--------------------------------------------------------------------------------------------------
+
+inline eventable::eventable():
+event_priority(0)
+{}
+
+//--------------------------------------------------------------------------------------------------
+
+inline eventable::eventable(const unsigned char event_priority_):
+event_priority(event_priority_)
+{}
 
 #endif // EVENTABLE_H

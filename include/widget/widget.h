@@ -96,6 +96,7 @@ public:
 //--------------------------------------------------------------------------------------------------
 
 inline widget_t::widget_t():
+eventable (),
 renderable(),
 status    (WIDGET_OPENED),
 ancestor  (nullptr)
@@ -104,6 +105,7 @@ ancestor  (nullptr)
 //--------------------------------------------------------------------------------------------------
 
 inline widget_t::widget_t(const rectangle_t &enclosing):
+eventable (),
 renderable(enclosing),
 status    (WIDGET_OPENED),
 ancestor  (nullptr)
