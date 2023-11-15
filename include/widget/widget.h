@@ -69,6 +69,7 @@ public:
 // static
 public:
     static widget_t *active;
+    static void inline widget_delete(void *widget_ptr);
 
 // member functions
 public:
@@ -92,6 +93,14 @@ public:
     WIDGET_STATUS_TYPE status;
     widget_t          *ancestor;
 };
+
+//--------------------------------------------------------------------------------------------------
+
+inline void widget_t::widget_delete(void *widget_ptr)
+{
+    widget_t *widget = *(widget_t **) widget_ptr;
+    delete widget;
+}
 
 //--------------------------------------------------------------------------------------------------
 

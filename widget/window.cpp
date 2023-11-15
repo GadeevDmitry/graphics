@@ -28,20 +28,20 @@ bool window_controller_t::on_mouse_press(widget_t *handle, const eventable::mous
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-window_t::window_t(widget_controller_t &controller_, const char *window_name, const color_t &color_):
+window_t::window_t(widget_controller_t &controller_, const color_t &color_, const char *wnd_name):
 menu_t                (controller_, color_),
 header_menu_controller(*this),
-header_menu           (header_menu_controller, *this, window_name)
+header_menu           (header_menu_controller, *this, wnd_name)
 {
     register_subwidget(&header_menu);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *window_name, const color_t &color_):
+window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_, const char *wnd_name):
 menu_t                (controller_, color_),
 header_menu_controller(*this),
-header_menu           (header_menu_controller, *this, window_name)
+header_menu           (header_menu_controller, *this, wnd_name)
 {
     register_subwidget(&header_menu);
     create(enclosing_);

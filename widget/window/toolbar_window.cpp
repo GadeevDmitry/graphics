@@ -11,19 +11,19 @@ const size_t toolbar_window_t::toolbar_btns_num = 8;
 
 #define toolbar_window_data_init(tool_manager)                                  \
 buttons_controller(tool_manager),                                               \
-btn_fill          (buttons_controller, nullptr, tool_button_t::FILL_OFF     ),  \
-btn_rectangle     (buttons_controller, nullptr, tool_button_t::RECTANGLE_OFF),  \
-btn_ellipse       (buttons_controller, nullptr, tool_button_t::ELLIPSE_OFF  ),  \
-btn_polyline      (buttons_controller, nullptr, tool_button_t::POLYLINE_OFF ),  \
-btn_pencil        (buttons_controller, nullptr, tool_button_t::PENCIL_OFF   ),  \
-btn_line          (buttons_controller, nullptr, tool_button_t::LINE_OFF     ),  \
-btn_rubber        (buttons_controller, nullptr, tool_button_t::RUBBER_OFF   ),  \
-btn_spline        (buttons_controller, nullptr, tool_button_t::SPLINE_OFF   )
+btn_fill          (buttons_controller, tool_button_t::FILL_OFF     ),  \
+btn_rectangle     (buttons_controller, tool_button_t::RECTANGLE_OFF),  \
+btn_ellipse       (buttons_controller, tool_button_t::ELLIPSE_OFF  ),  \
+btn_polyline      (buttons_controller, tool_button_t::POLYLINE_OFF ),  \
+btn_pencil        (buttons_controller, tool_button_t::PENCIL_OFF   ),  \
+btn_line          (buttons_controller, tool_button_t::LINE_OFF     ),  \
+btn_rubber        (buttons_controller, tool_button_t::RUBBER_OFF   ),  \
+btn_spline        (buttons_controller, tool_button_t::SPLINE_OFF   )
 
 //==================================================================================================
 
-toolbar_window_t::toolbar_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const char *header_name, const color_t &color_):
-window_t                (controller_, header_name, color_),
+toolbar_window_t::toolbar_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (controller_, color_, wnd_name),
 toolbar_window_data_init(tool_manager)
 {
     register_buttons();
@@ -31,8 +31,8 @@ toolbar_window_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-toolbar_window_t::toolbar_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const rectangle_t &enclosing_, const char *header_name, const color_t &color_):
-window_t                (controller_, header_name, color_),
+toolbar_window_t::toolbar_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (controller_, color_, wnd_name),
 toolbar_window_data_init(tool_manager)
 {
     register_buttons();

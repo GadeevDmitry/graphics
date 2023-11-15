@@ -74,8 +74,8 @@ private:
 
 // member functions
 public:
-    explicit inline palette_button_t(widget_controller_t &controller,                               const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
-    explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t::White, const BUTTON_TEXTURE_NAME_TYPE &texture = WHITE_OFF);
+    explicit inline palette_button_t(widget_controller_t &controller,                               const BUTTON_TEXTURE_NAME_TYPE &texture, const color_t &color);
+    explicit inline palette_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture, const color_t &color);
 
 // virtual
 protected:
@@ -88,7 +88,7 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline palette_button_t::palette_button_t(widget_controller_t &controller_, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+inline palette_button_t::palette_button_t(widget_controller_t &controller_, const BUTTON_TEXTURE_NAME_TYPE &texture_, const color_t &color_):
 texture_button_t(controller_),
 color           (color_)
 {
@@ -99,7 +99,7 @@ color           (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline palette_button_t::palette_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+inline palette_button_t::palette_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const BUTTON_TEXTURE_NAME_TYPE &texture_, const color_t &color_):
 texture_button_t(controller_, enclosing_),
 color           (color_)
 {

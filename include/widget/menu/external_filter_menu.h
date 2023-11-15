@@ -17,8 +17,8 @@ public:
 
 // member functions
 public:
-    explicit external_filter_menu_t(widget_controller_t &controller, filter_manager_t &filter_manager,                               const color_t &color = color_t());
-    explicit external_filter_menu_t(widget_controller_t &controller, filter_manager_t &filter_manager, const rectangle_t &enclosing, const color_t &color = color_t());
+    explicit external_filter_menu_t(widget_controller_t &controller,                               filter_manager_t &filter_manager);
+    explicit external_filter_menu_t(widget_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager);
 
     void inline set_filters(filter_t *brightness);
     void inline create     (const rectangle_t &enclosing);

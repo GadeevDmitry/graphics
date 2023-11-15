@@ -17,8 +17,8 @@ public:
 
 // member functions
 public:
-    explicit palette_window_t(window_controller_t &controller, tool_manager_t &tool_manager,                               const char *header_name, const color_t &color = Red_theme);
-    explicit palette_window_t(window_controller_t &controller, tool_manager_t &tool_manager, const rectangle_t &enclosing, const char *header_name, const color_t &color = Red_theme);
+    explicit palette_window_t(window_controller_t &controller,                               tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
+    explicit palette_window_t(window_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
 
     void inline create        (const rectangle_t &enclosing);
 private:

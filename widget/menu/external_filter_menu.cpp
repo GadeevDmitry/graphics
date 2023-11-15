@@ -15,8 +15,8 @@ btn_brightness    (buttons_controller, "Brightness")
 
 //==================================================================================================
 
-external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager, const color_t &color_):
-menu_t               (controller_, color_),
+external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager):
+menu_t               (controller_, color_t::White),
 filter_menu_data_init(filter_manager)
 {
     register_buttons();
@@ -24,8 +24,8 @@ filter_menu_data_init(filter_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager, const rectangle_t &enclosing_, const color_t &color_):
-menu_t               (controller_, color_),
+external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager):
+menu_t               (controller_, color_t::White),
 filter_menu_data_init(filter_manager)
 {
     register_buttons();
@@ -63,6 +63,8 @@ void external_filter_menu_t::create_buttons()
             enclosing.ld_corner + filter_btn_off,
             enclosing.ld_corner + filter_btn_off + filter_btn_size
         );
+
+        (**cnt_btn).create_texture();
 
         filter_btn_off.y += filter_btn_size.y;
         cnt_btn = (filter_button_t **) list_next(cnt_btn);

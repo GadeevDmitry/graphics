@@ -16,8 +16,8 @@ private:
 
 // member functions
 public:
-    explicit main_window_menu_t(window_controller_t &controller, filter_manager_t &filter_manager);
-    explicit main_window_menu_t(window_controller_t &controller, filter_manager_t &filter_manager, const rectangle_t &enclosing);
+    explicit main_window_menu_t(window_controller_t &controller,                               filter_manager_t &filter_manager);
+    explicit main_window_menu_t(window_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager);
 
     void inline create        (const rectangle_t &enclosing);
     void inline set_filters   (filter_t *brightness);

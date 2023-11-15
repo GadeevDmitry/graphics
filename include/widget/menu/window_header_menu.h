@@ -36,8 +36,8 @@ class window_header_menu_t: public menu_t
 {
 // member functions
 public:
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close,                               const char *menu_name);
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const char *menu_name);
+    explicit window_header_menu_t(window_header_menu_controller_t &controller,                               window_t &wnd, const char *wnd_name);
+    explicit window_header_menu_t(window_header_menu_controller_t &controller, const rectangle_t &enclosing, window_t &wnd, const char *wnd_name);
 
     void inline create            (const rectangle_t &enclosing);
 private:

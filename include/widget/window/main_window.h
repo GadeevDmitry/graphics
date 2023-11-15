@@ -14,11 +14,11 @@ public:
 
 // member functions
 public:
-    explicit main_window_t(window_controller_t &controller, filter_manager_t &filter_manager,                               const char *header_name, const color_t &color = Red_theme);
-    explicit main_window_t(window_controller_t &controller, filter_manager_t &filter_manager, const rectangle_t &enclosing, const char *header_name, const color_t &color = Red_theme);
+    explicit main_window_t(window_controller_t &controller,                               filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
+    explicit main_window_t(window_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
 
-    void        create     (const rectangle_t &enclosing);
     void inline set_filters(filter_t *brightness);
+    void        create     (const rectangle_t &enclosing);
 
 // virtual
 protected:

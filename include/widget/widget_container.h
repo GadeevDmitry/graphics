@@ -11,7 +11,8 @@ class widget_container_t: public widget_t
 {
 // member functions
 public:
-    explicit inline  widget_container_t(const rectangle_t &enclosing = rectangle_t());
+             inline  widget_container_t();
+    explicit inline  widget_container_t(const rectangle_t &enclosing, const bool to_delete = false);
              inline ~widget_container_t();
 
     bool register_subwidget       (widget_t *subwidget);
@@ -46,13 +47,23 @@ protected:
 // member data
 protected:
     list subwidgets;
-
 };
 
-inline widget_container_t::widget_container_t(const rectangle_t &enclosing_):
-widget_t(enclosing_)
+//--------------------------------------------------------------------------------------------------
+
+inline widget_container_t::widget_container_t():
+widget_t(rectangle_t())
 {
     list_ctor(&subwidgets, sizeof(widget_t *));
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline widget_container_t::widget_container_t(const rectangle_t &enclosing_, const bool to_delete):
+widget_t(enclosing_)
+{
+    if (to_delete) list_ctor(&subwidgets, sizeof(widget_t *), widget_t::widget_delete);
+    else           list_ctor(&subwidgets, sizeof(widget_t *));
 }
 
 //--------------------------------------------------------------------------------------------------

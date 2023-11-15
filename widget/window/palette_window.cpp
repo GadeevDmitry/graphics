@@ -11,17 +11,17 @@ const size_t palette_window_t::palette_btns_num = 6;
 
 #define palette_window_data_init(tool_manager)                                          \
 buttons_controller(tool_manager),                                                       \
-btn_white         (buttons_controller, color_t::White , palette_button_t::WHITE_OFF ),  \
-btn_blue          (buttons_controller, color_t::Blue  , palette_button_t::BLUE_OFF  ),  \
-btn_red           (buttons_controller, color_t::Red   , palette_button_t::RED_OFF   ),  \
-btn_orange        (buttons_controller, color_t::Orange, palette_button_t::ORANGE_OFF),  \
-btn_green         (buttons_controller, color_t::Green , palette_button_t::GREEN_OFF ),  \
-btn_black         (buttons_controller, color_t::Black , palette_button_t::BLACK_OFF )
+btn_white         (buttons_controller, palette_button_t::WHITE_OFF , color_t::White ),  \
+btn_blue          (buttons_controller, palette_button_t::BLUE_OFF  , color_t::Blue  ),  \
+btn_red           (buttons_controller, palette_button_t::RED_OFF   , color_t::Red   ),  \
+btn_orange        (buttons_controller, palette_button_t::ORANGE_OFF, color_t::Orange),  \
+btn_green         (buttons_controller, palette_button_t::GREEN_OFF , color_t::Green ),  \
+btn_black         (buttons_controller, palette_button_t::BLACK_OFF , color_t::Black )
 
 //==================================================================================================
 
-palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const char *header_name, const color_t &color_):
-window_t                (controller_, header_name, color_),
+palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (controller_, color_, wnd_name),
 palette_window_data_init(tool_manager)
 {
     register_buttons();
@@ -29,8 +29,8 @@ palette_window_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const rectangle_t &enclosing_, const char *header_name, const color_t &color_):
-window_t                (controller_, header_name, color_),
+palette_window_t::palette_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (controller_, color_, wnd_name),
 palette_window_data_init(tool_manager)
 {
     register_buttons();

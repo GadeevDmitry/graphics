@@ -18,7 +18,7 @@ filter_btn                     (external_menu_button_controller, filter_menu, "F
 
 //--------------------------------------------------------------------------------------------------
 
-main_window_menu_t::main_window_menu_t(window_controller_t &controller_, filter_manager_t &filter_manager, const rectangle_t &enclosing_):
+main_window_menu_t::main_window_menu_t(window_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager):
 menu_t                         (controller_, color_t::White),
 external_menu_button_controller(),
 filter_menu                    (controller_, filter_manager),
@@ -39,6 +39,7 @@ void main_window_menu_t::create_buttons()
         menu_enclosing.ld_corner,
         main_menu_btn_width, menu_size.y
     );
+    filter_btn.create_texture();
 
     filter_menu.create(rectangle_t(
         filter_btn.enclosing.lu_corner(),

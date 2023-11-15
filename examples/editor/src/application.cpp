@@ -39,10 +39,10 @@ brightness_filter(),
 filter_manager   (),
 
 window_controller(),
-canvas_window    (window_controller, tool_manager  , filter_manager, "Canvas" , window_t::Dark_theme ),
-palette_window   (window_controller, tool_manager                  , "Palette", window_t::Light_theme),
-toolbar_window   (window_controller, tool_manager                  , "Toolbar", window_t::Blue_theme ),
-main_window      (window_controller,                 filter_manager, "Main"   , window_t::Red_theme  ),
+canvas_window    (window_controller, tool_manager  , filter_manager, window_t::Dark_theme , "Canvas" ),
+palette_window   (window_controller, tool_manager                  , window_t::Light_theme, "Palette"),
+toolbar_window   (window_controller, tool_manager                  , window_t::Blue_theme , "Toolbar"),
+main_window      (window_controller,                 filter_manager, window_t::Red_theme  , "Main"   ),
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
     event_manager.register_child(&desktop);

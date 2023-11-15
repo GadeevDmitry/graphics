@@ -10,9 +10,12 @@ class label_t: public widget_t
 {
 // member functions
 public:
-             inline label_t();
-    explicit inline label_t(                              const text_t &text, const color_t &background, const vec2d &text_rel_off = vec2d(0, 0));
-    explicit inline label_t(const rectangle_t &enclosing, const text_t &text, const color_t &background, const vec2d &text_rel_off = vec2d(0, 0));
+             label_t();
+    explicit label_t(const rectangle_t &enclosing);
+    explicit label_t(                              const char *name, const size_t char_size);
+    explicit label_t(const rectangle_t &enclosing, const char *name, const size_t char_size);
+
+    void create_texture();
 
 // virtual
 public:
@@ -31,41 +34,15 @@ public:
     text_t  text;
     vec2d   text_rel_off;
     color_t background;
+private:
+    texture_t texture;
 };
-
-//--------------------------------------------------------------------------------------------------
-
-inline label_t::label_t():
-widget_t    (),
-text        (),
-text_rel_off(0, 0),
-background  ()
-{}
-
-//--------------------------------------------------------------------------------------------------
-
-inline label_t::label_t(const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
-widget_t    (),
-text        (text_),
-text_rel_off(text_rel_off_),
-background  (background_)
-{}
-
-//--------------------------------------------------------------------------------------------------
-
-inline label_t::label_t(const rectangle_t &enclosing_, const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
-widget_t    (enclosing_),
-text        (text_),
-text_rel_off(text_rel_off_),
-background  (background_)
-{}
 
 //--------------------------------------------------------------------------------------------------
 
 inline void label_t::render(render_texture_t &wnd)
 {
-    wnd.draw_rectangle(background,                          own_visible);
-    wnd.draw_text     (text      , text_rel_off, enclosing, own_visible);
+    wnd.draw_texture(texture, enclosing, own_visible);
 }
 
 //--------------------------------------------------------------------------------------------------

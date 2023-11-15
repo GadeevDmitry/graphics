@@ -10,8 +10,8 @@ class menu_t: public widget_container_t
 {
 // member functions
 public:
-    explicit inline  menu_t(widget_controller_t &controller,                               const color_t &color = color_t());
-    explicit inline  menu_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color = color_t());
+    explicit inline  menu_t(widget_controller_t &controller,                               const color_t &color);
+    explicit inline  menu_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color);
              inline ~menu_t() {}
 
 // virtual

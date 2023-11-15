@@ -78,8 +78,8 @@ private:
 
 // member functions
 public:
-    explicit inline tool_button_t(widget_controller_t &controller,                               tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
-    explicit inline tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, tool_t *tool = nullptr, const BUTTON_TEXTURE_NAME_TYPE &texture = FILL_OFF);
+    explicit inline tool_button_t(widget_controller_t &controller,                               const BUTTON_TEXTURE_NAME_TYPE &texture, tool_t *tool = nullptr);
+    explicit inline tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture, tool_t *tool = nullptr);
 
 // virtual
 protected:
@@ -92,7 +92,7 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline tool_button_t::tool_button_t(widget_controller_t &controller_, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+inline tool_button_t::tool_button_t(widget_controller_t &controller_, const BUTTON_TEXTURE_NAME_TYPE &texture_, tool_t *tool_):
 texture_button_t(controller_),
 tool            (tool_)
 {
@@ -103,7 +103,7 @@ tool            (tool_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline tool_button_t::tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+inline tool_button_t::tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const BUTTON_TEXTURE_NAME_TYPE &texture_, tool_t *tool_):
 texture_button_t(controller_, enclosing_),
 tool            (tool_)
 {

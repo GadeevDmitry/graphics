@@ -7,8 +7,8 @@ const double main_window_t::main_menu_height = 30;
 
 //==================================================================================================
 
-main_window_t::main_window_t(window_controller_t &controller_, filter_manager_t &filter_manager, const char *header_name, const color_t &color_):
-window_t (controller_, header_name, color_),
+main_window_t::main_window_t(window_controller_t &controller_, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
+window_t (controller_, color_, wnd_name),
 main_menu(controller_, filter_manager)
 {
     register_subwidget(&main_menu);
@@ -16,8 +16,8 @@ main_menu(controller_, filter_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-main_window_t::main_window_t(window_controller_t &controller_, filter_manager_t &filter_manager, const rectangle_t &enclosing_, const char *header_name, const color_t &color_):
-window_t (controller_, header_name, color_),
+main_window_t::main_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
+window_t (controller_, color_, wnd_name),
 main_menu(controller_, filter_manager)
 {
     register_subwidget(&main_menu);
