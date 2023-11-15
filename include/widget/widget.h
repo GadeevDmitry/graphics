@@ -104,9 +104,9 @@ ancestor  (nullptr)
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_t::widget_t(const rectangle_t &enclosing):
+inline widget_t::widget_t(const rectangle_t &enclosing_):
 eventable (),
-renderable(enclosing),
+renderable(enclosing_),
 status    (WIDGET_OPENED),
 ancestor  (nullptr)
 {}

@@ -29,12 +29,12 @@ palette_window_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const rectangle_t &enclosing, const char *header_name, const color_t &color_):
+palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const rectangle_t &enclosing_, const char *header_name, const color_t &color_):
 window_t                (controller_, header_name, color_),
 palette_window_data_init(tool_manager)
 {
     register_buttons();
-    create(enclosing);
+    create(enclosing_);
 }
 
 //--------------------------------------------------------------------------------------------------

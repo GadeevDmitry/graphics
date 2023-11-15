@@ -24,12 +24,12 @@ filter_menu_data_init(filter_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager, const rectangle_t &enclosing, const color_t &color_):
+external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager, const rectangle_t &enclosing_, const color_t &color_):
 menu_t               (controller_, color_),
 filter_menu_data_init(filter_manager)
 {
     register_buttons();
-    create(enclosing);
+    create(enclosing_);
 }
 
 //--------------------------------------------------------------------------------------------------

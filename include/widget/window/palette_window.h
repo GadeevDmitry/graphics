@@ -42,9 +42,9 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 
-inline void palette_window_t::create(const rectangle_t &enclosing)
+inline void palette_window_t::create(const rectangle_t &enclosing_)
 {
-    window_t::create(enclosing);
+    window_t::create(enclosing_);
     create_buttons();
 }
 

@@ -32,8 +32,8 @@ texture (texture_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline texture_button_t::texture_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, const texture_t *texture_):
-button_t(controller_, enclosing),
+inline texture_button_t::texture_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const texture_t *texture_):
+button_t(controller_, enclosing_),
 texture (texture_)
 {}
 

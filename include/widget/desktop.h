@@ -44,8 +44,8 @@ background        (background_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline desktop_t::desktop_t(const rectangle_t &enclosing, const color_t &background_):
-widget_container_t(enclosing),
+inline desktop_t::desktop_t(const rectangle_t &enclosing_, const color_t &background_):
+widget_container_t(enclosing_),
 background        (background_)
 {}
 

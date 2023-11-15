@@ -43,8 +43,8 @@ controller        (controller_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline menu_t::menu_t(widget_controller_t &controller_, const rectangle_t &enclosing, const color_t &color_):
-widget_container_t(enclosing),
+inline menu_t::menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_):
+widget_container_t(enclosing_),
 color             (color_),
 controller        (controller_)
 {}

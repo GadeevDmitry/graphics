@@ -49,8 +49,8 @@ protected:
 
 };
 
-inline widget_container_t::widget_container_t(const rectangle_t &enclosing):
-widget_t(enclosing)
+inline widget_container_t::widget_container_t(const rectangle_t &enclosing_):
+widget_t(enclosing_)
 {
     list_ctor(&subwidgets, sizeof(widget_t *));
 }

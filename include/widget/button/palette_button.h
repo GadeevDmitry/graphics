@@ -99,8 +99,8 @@ color           (color_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline palette_button_t::palette_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_, enclosing),
+inline palette_button_t::palette_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing_),
 color           (color_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);

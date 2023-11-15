@@ -36,9 +36,10 @@ public:
 //--------------------------------------------------------------------------------------------------
 
 inline label_t::label_t():
-widget_t  (),
-text      (),
-background()
+widget_t    (),
+text        (),
+text_rel_off(0, 0),
+background  ()
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -52,8 +53,8 @@ background  (background_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline label_t::label_t(const rectangle_t &enclosing, const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
-widget_t    (enclosing),
+inline label_t::label_t(const rectangle_t &enclosing_, const text_t &text_, const color_t &background_, const vec2d &text_rel_off_):
+widget_t    (enclosing_),
 text        (text_),
 text_rel_off(text_rel_off_),
 background  (background_)

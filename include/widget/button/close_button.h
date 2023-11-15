@@ -74,8 +74,8 @@ to_close        (to_close_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_, enclosing),
+inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const rectangle_t &enclosing_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing_),
 to_close        (to_close_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);

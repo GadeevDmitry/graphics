@@ -103,8 +103,8 @@ tool            (tool_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline tool_button_t::tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_, enclosing),
+inline tool_button_t::tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, tool_t *tool_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(controller_, enclosing_),
 tool            (tool_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);

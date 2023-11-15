@@ -25,15 +25,15 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline label_button_t::label_button_t(widget_controller_t &controller, const char *btn_name, const size_t &char_size):
-button_t    (controller),
+inline label_button_t::label_button_t(widget_controller_t &controller_, const char *btn_name, const size_t &char_size):
+button_t    (controller_),
 text        (&font_t::get_font_by_name(font_t::EDU_QLD), btn_name, color_t::Black, char_size)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline label_button_t::label_button_t(widget_controller_t &controller, const rectangle_t &enclosing_, const char *btn_name, const size_t &char_size):
-button_t    (controller, enclosing_),
+inline label_button_t::label_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *btn_name, const size_t &char_size):
+button_t    (controller_, enclosing_),
 text        (&font_t::get_font_by_name(font_t::EDU_QLD), btn_name, color_t::Black, char_size)
 {}
 

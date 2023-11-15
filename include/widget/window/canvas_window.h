@@ -29,9 +29,9 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 
-inline void canvas_window_t::create(const rectangle_t &enclosing)
+inline void canvas_window_t::create(const rectangle_t &enclosing_)
 {
-    window_t::create(enclosing);
+    window_t::create(enclosing_);
     create_canvas();
 }
 

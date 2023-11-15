@@ -37,8 +37,8 @@ controller(controller_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline button_t::button_t(widget_controller_t &controller_, const rectangle_t &enclosing):
-widget_t  (enclosing),
+inline button_t::button_t(widget_controller_t &controller_, const rectangle_t &enclosing_):
+widget_t  (enclosing_),
 controller(controller_)
 {}
 

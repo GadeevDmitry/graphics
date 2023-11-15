@@ -30,7 +30,7 @@ window_name         (text_t(&font_t::get_font_by_name(font_t::EDU_QLD), menu_nam
 
 //--------------------------------------------------------------------------------------------------
 
-window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing, const char *menu_name):
+window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &menu_controller, widget_t &to_close, const rectangle_t &enclosing_, const char *menu_name):
 menu_t              (menu_controller, color_t::White),
 close_btn_controller(),
 close_btn           (close_btn_controller, to_close, close_button_t::GREEN),
@@ -38,7 +38,7 @@ window_name         (text_t(&font_t::get_font_by_name(font_t::EDU_QLD), menu_nam
 {
     register_subwidget(&window_name);
     register_subwidget(&close_btn);
-    create(enclosing);
+    create(enclosing_);
 }
 
 //--------------------------------------------------------------------------------------------------

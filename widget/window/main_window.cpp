@@ -26,11 +26,11 @@ main_menu(controller_, filter_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-void main_window_t::create(const rectangle_t &enclosing)
+void main_window_t::create(const rectangle_t &enclosing_)
 {
-    window_t::create(enclosing);
+    window_t::create(enclosing_);
     main_menu.create(rectangle_t(
-        enclosing.ld_corner + vec2d(0, header_menu_height),
-        enclosing.get_size().x, main_menu_height
+        enclosing_.ld_corner + vec2d(0, header_menu_height),
+        enclosing_.get_size().x, main_menu_height
     ));
 }

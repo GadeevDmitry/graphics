@@ -23,10 +23,10 @@ bool external_menu_button_controller_t::on_mouse_press(widget_t *handle, const e
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu, const char *btn_name):
+external_menu_button_t::external_menu_button_t(widget_controller_t &controller_, menu_t &external_menu_, const char *btn_name):
 label_button_t(controller_, btn_name, 20),
 is_menu_hidden(true),
-external_menu (external_menu)
+external_menu (external_menu_)
 {
     external_menu.ancestor = this;
 }
