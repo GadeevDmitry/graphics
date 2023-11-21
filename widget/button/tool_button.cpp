@@ -5,23 +5,23 @@
 
 const char *tool_button_t::BUTTON_TEXTURES_FILES[] =
 {
-    "../../widget/textures/button/fill_on.png",
-    "../../widget/textures/button/rectangle_on.png",
-    "../../widget/textures/button/ellipse_on.png",
-    "../../widget/textures/button/polyline_on.png",
-    "../../widget/textures/button/pencil_on.png",
-    "../../widget/textures/button/line_on.png",
-    "../../widget/textures/button/rubber_on.png",
-    "../../widget/textures/button/spline_on.png",
+    "assets/textures/button/fill_on.png",
+    "assets/textures/button/rectangle_on.png",
+    "assets/textures/button/ellipse_on.png",
+    "assets/textures/button/polyline_on.png",
+    "assets/textures/button/pencil_on.png",
+    "assets/textures/button/line_on.png",
+    "assets/textures/button/rubber_on.png",
+    "assets/textures/button/spline_on.png",
 
-    "../../widget/textures/button/fill_off.png",
-    "../../widget/textures/button/rectangle_off.png",
-    "../../widget/textures/button/ellipse_off.png",
-    "../../widget/textures/button/polyline_off.png",
-    "../../widget/textures/button/pencil_off.png",
-    "../../widget/textures/button/line_off.png",
-    "../../widget/textures/button/rubber_off.png",
-    "../../widget/textures/button/spline_off.png"
+    "assets/textures/button/fill_off.png",
+    "assets/textures/button/rectangle_off.png",
+    "assets/textures/button/ellipse_off.png",
+    "assets/textures/button/polyline_off.png",
+    "assets/textures/button/pencil_off.png",
+    "assets/textures/button/line_off.png",
+    "assets/textures/button/rubber_off.png",
+    "assets/textures/button/spline_off.png"
 };
 
 texture_t tool_button_t::BUTTON_TEXTURES[sizeof(BUTTON_TEXTURES_FILES) / sizeof(char *)] = {};

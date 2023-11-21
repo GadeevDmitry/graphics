@@ -5,9 +5,9 @@
 
 const char *font_t::FONTS_FILES[] =
 {
-    "../../widget/fonts/edu_qld.ttf",
-    "../../widget/fonts/red_seven.otf",
-    "../../widget/fonts/tupo_vyaz.ttf"
+    "assets/fonts/edu_qld.ttf",
+    "assets/fonts/red_seven.otf",
+    "assets/fonts/tupo_vyaz.ttf"
 };
 
 font_t font_t::FONTS[sizeof(font_t::FONTS_FILES) / sizeof(char *)] = {};

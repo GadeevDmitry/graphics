@@ -5,9 +5,9 @@
 
 const char *close_button_t::BUTTON_TEXTURES_FILES[] =
 {
-    "../../widget/textures/button/red_close.png",
-    "../../widget/textures/button/blue_close.png",
-    "../../widget/textures/button/green_close.png",
+    "assets/textures/button/red_close.png",
+    "assets/textures/button/blue_close.png",
+    "assets/textures/button/green_close.png",
 };
 
 texture_t close_button_t::BUTTON_TEXTURES[sizeof(BUTTON_TEXTURES_FILES) / sizeof(char *)] = {};

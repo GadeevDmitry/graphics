@@ -5,19 +5,19 @@
 
 const char *palette_button_t::BUTTON_TEXTURES_FILES[] =
 {
-    "../../widget/textures/button/white_on.png",
-    "../../widget/textures/button/blue_on.png",
-    "../../widget/textures/button/red_on.png",
-    "../../widget/textures/button/orange_on.png",
-    "../../widget/textures/button/green_on.png",
-    "../../widget/textures/button/black_on.png",
+    "assets/textures/button/white_on.png",
+    "assets/textures/button/blue_on.png",
+    "assets/textures/button/red_on.png",
+    "assets/textures/button/orange_on.png",
+    "assets/textures/button/green_on.png",
+    "assets/textures/button/black_on.png",
 
-    "../../widget/textures/button/white_off.png",
-    "../../widget/textures/button/blue_off.png",
-    "../../widget/textures/button/red_off.png",
-    "../../widget/textures/button/orange_off.png",
-    "../../widget/textures/button/green_off.png",
-    "../../widget/textures/button/black_off.png",
+    "assets/textures/button/white_off.png",
+    "assets/textures/button/blue_off.png",
+    "assets/textures/button/red_off.png",
+    "assets/textures/button/orange_off.png",
+    "assets/textures/button/green_off.png",
+    "assets/textures/button/black_off.png",
 };
 
 texture_t palette_button_t::BUTTON_TEXTURES[sizeof(BUTTON_TEXTURES_FILES) / sizeof(char *)] = {};

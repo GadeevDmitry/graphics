@@ -9,7 +9,7 @@ CFLAGS := $(CFLAGS_RELEASE)
 endif
 
 BUILD_DIR   := build/
-ROOT_PREFIX := ../../
+ROOT_PREFIX := ./
 export CFLAGS BUILD_DIR ROOT_PREFIX
 
 #================================================================================================================================
@@ -20,7 +20,7 @@ SFML_LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 
 .PHONY: all
 all:
-	$(CC) $(CFLAGS) $(INCLUDES) src/application.cpp src/main.cpp $(OBJS) $(SFML_LIBS) -o $(BUILD_DIR)editor
+	$(CC) $(CFLAGS) $(INCLUDES) main/application.cpp main/main.cpp $(OBJS) $(SFML_LIBS) -o $(BUILD_DIR)editor
 
 .PHONY: components
 components:
@@ -39,8 +39,8 @@ endif
 .PHONY: compilation_database_rule
 compilation_database_rule:
 	$(MAKE) components
-	$(CC) src/application.cpp $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)application.o
-	$(CC) src/main.cpp        $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)main.o
+	$(CC) main/application.cpp $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)application.o
+	$(CC) main/main.cpp        $(CFLAGS) $(INCLUDES) -c -o $(BUILD_DIR)main.o
 
 .PHONY: compilation_database
 compilation_database:
