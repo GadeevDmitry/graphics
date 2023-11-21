@@ -53,10 +53,11 @@ private:
     filter_manager_t    filter_manager;
 
     window_controller_t window_controller;
-    canvas_window_t     canvas_window;
-    palette_window_t    palette_window;
-    toolbar_window_t    toolbar_window;
-    main_window_t       main_window;
+    canvas_window_t     *canvas_window;
+    palette_window_t    *palette_window;
+    toolbar_window_t    *toolbar_window;
+    main_window_t       *main_window;
+
     desktop_t           desktop;
 };
 

@@ -32,12 +32,12 @@ protected:
 // member data
 private:
     palette_button_controller_t buttons_controller;
-    palette_button_t            btn_white;
-    palette_button_t            btn_blue;
-    palette_button_t            btn_red;
-    palette_button_t            btn_orange;
-    palette_button_t            btn_green;
-    palette_button_t            btn_black;
+    palette_button_t           *btn_white;
+    palette_button_t           *btn_blue;
+    palette_button_t           *btn_red;
+    palette_button_t           *btn_orange;
+    palette_button_t           *btn_green;
+    palette_button_t           *btn_black;
 };
 
 //--------------------------------------------------------------------------------------------------

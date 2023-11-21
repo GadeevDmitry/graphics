@@ -38,14 +38,14 @@ public:
 //--------------------------------------------------------------------------------------------------
 
 inline desktop_t::desktop_t(const color_t &background_):
-widget_container_t(),
+widget_container_t(true),
 background        (background_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
 inline desktop_t::desktop_t(const rectangle_t &enclosing_, const color_t &background_):
-widget_container_t(enclosing_),
+widget_container_t(enclosing_, true),
 background        (background_)
 {}
 
@@ -75,7 +75,6 @@ inline void desktop_t::recalc_regions()
 
 inline void desktop_t::render(render_texture_t &wnd)
 {
-//  wnd.draw_region(visible);
     wnd.draw_rectangle(background, own_visible);
     subwidgets_render(wnd);
 }

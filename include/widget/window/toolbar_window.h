@@ -34,14 +34,14 @@ protected:
 // member data
 private:
     tool_button_controller_t buttons_controller;
-    tool_button_t            btn_fill;
-    tool_button_t            btn_rectangle;
-    tool_button_t            btn_ellipse;
-    tool_button_t            btn_polyline;
-    tool_button_t            btn_pencil;
-    tool_button_t            btn_line;
-    tool_button_t            btn_rubber;
-    tool_button_t            btn_spline;
+    tool_button_t           *btn_fill;
+    tool_button_t           *btn_rectangle;
+    tool_button_t           *btn_ellipse;
+    tool_button_t           *btn_polyline;
+    tool_button_t           *btn_pencil;
+    tool_button_t           *btn_line;
+    tool_button_t           *btn_rubber;
+    tool_button_t           *btn_spline;
 };
 
 //--------------------------------------------------------------------------------------------------

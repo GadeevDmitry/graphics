@@ -10,8 +10,8 @@ class menu_t: public widget_container_t
 {
 // member functions
 public:
-    explicit inline  menu_t(widget_controller_t &controller,                               const color_t &color);
-    explicit inline  menu_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color);
+    explicit inline  menu_t(widget_controller_t &controller,                               const color_t &color, const bool sub_delete = false);
+    explicit inline  menu_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color, const bool sub_delete = false);
              inline ~menu_t() {}
 
 // virtual
@@ -35,16 +35,16 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 
-inline menu_t::menu_t(widget_controller_t &controller_, const color_t &color_):
-widget_container_t(),
+inline menu_t::menu_t(widget_controller_t &controller_, const color_t &color_, const bool sub_delete):
+widget_container_t(sub_delete),
 color             (color_),
 controller        (controller_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline menu_t::menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_):
-widget_container_t(enclosing_),
+inline menu_t::menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_, const bool sub_delete):
+widget_container_t(enclosing_, sub_delete),
 color             (color_),
 controller        (controller_)
 {}

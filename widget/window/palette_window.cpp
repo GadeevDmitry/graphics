@@ -9,14 +9,14 @@ const size_t palette_window_t::palette_btns_num = 6;
 
 //==================================================================================================
 
-#define palette_window_data_init(tool_manager)                                          \
-buttons_controller(tool_manager),                                                       \
-btn_white         (buttons_controller, palette_button_t::WHITE_OFF , color_t::White ),  \
-btn_blue          (buttons_controller, palette_button_t::BLUE_OFF  , color_t::Blue  ),  \
-btn_red           (buttons_controller, palette_button_t::RED_OFF   , color_t::Red   ),  \
-btn_orange        (buttons_controller, palette_button_t::ORANGE_OFF, color_t::Orange),  \
-btn_green         (buttons_controller, palette_button_t::GREEN_OFF , color_t::Green ),  \
-btn_black         (buttons_controller, palette_button_t::BLACK_OFF , color_t::Black )
+#define palette_window_data_init(tool_manager)                                                                  \
+buttons_controller(tool_manager),                                                                               \
+btn_white         (new palette_button_t(buttons_controller, palette_button_t::WHITE_OFF , color_t::White )),    \
+btn_blue          (new palette_button_t(buttons_controller, palette_button_t::BLUE_OFF  , color_t::Blue  )),    \
+btn_red           (new palette_button_t(buttons_controller, palette_button_t::RED_OFF   , color_t::Red   )),    \
+btn_orange        (new palette_button_t(buttons_controller, palette_button_t::ORANGE_OFF, color_t::Orange)),    \
+btn_green         (new palette_button_t(buttons_controller, palette_button_t::GREEN_OFF , color_t::Green )),    \
+btn_black         (new palette_button_t(buttons_controller, palette_button_t::BLACK_OFF , color_t::Black ))
 
 //==================================================================================================
 
@@ -42,12 +42,12 @@ palette_window_data_init(tool_manager)
 void palette_window_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(&btn_black );
-    register_subwidget(&btn_green );
-    register_subwidget(&btn_orange);
-    register_subwidget(&btn_red   );
-    register_subwidget(&btn_blue  );
-    register_subwidget(&btn_white );
+    register_subwidget(btn_black );
+    register_subwidget(btn_green );
+    register_subwidget(btn_orange);
+    register_subwidget(btn_red   );
+    register_subwidget(btn_blue  );
+    register_subwidget(btn_white );
 }
 
 //--------------------------------------------------------------------------------------------------

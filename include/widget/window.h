@@ -54,7 +54,7 @@ protected:
 // member data
 private:
     window_header_menu_controller_t header_menu_controller;
-    window_header_menu_t            header_menu;
+    window_header_menu_t           *header_menu;
 };
 
 //--------------------------------------------------------------------------------------------------

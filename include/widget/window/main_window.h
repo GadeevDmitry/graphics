@@ -26,14 +26,14 @@ protected:
 
 // member data
 public:
-    main_window_menu_t main_menu;
+    main_window_menu_t *main_menu;
 };
 
 //--------------------------------------------------------------------------------------------------
 
 inline void main_window_t::set_filters(filter_t *brightness)
 {
-    main_menu.set_filters(brightness);
+    main_menu->set_filters(brightness);
 }
 
 //--------------------------------------------------------------------------------------------------

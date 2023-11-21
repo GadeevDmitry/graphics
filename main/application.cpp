@@ -39,25 +39,27 @@ brightness_filter(),
 filter_manager   (),
 
 window_controller(),
-canvas_window    (window_controller, tool_manager  , filter_manager, window_t::Dark_theme , "Canvas" ),
-palette_window   (window_controller, tool_manager                  , window_t::Light_theme, "Palette"),
-toolbar_window   (window_controller, tool_manager                  , window_t::Blue_theme , "Toolbar"),
-main_window      (window_controller,                 filter_manager, window_t::Red_theme  , "Main"   ),
+canvas_window    (new  canvas_window_t(window_controller, tool_manager  , filter_manager, window_t::Dark_theme , "Canvas" )),
+palette_window   (new palette_window_t(window_controller, tool_manager                  , window_t::Light_theme, "Palette")),
+toolbar_window   (new toolbar_window_t(window_controller, tool_manager                  , window_t::Blue_theme , "Toolbar")),
+main_window      (new    main_window_t(window_controller,                 filter_manager, window_t::Red_theme  , "Main"   )),
+
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
     event_manager.register_child(&desktop);
 
-    main_window.set_filters(
+    main_window->set_filters(
         &brightness_filter);
 
-    toolbar_window.set_tools(
+    toolbar_window->set_tools(
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
         nullptr, &line_tool     , nullptr      , nullptr);
 
-    main_window.register_subwindow(&canvas_window);
-    main_window.register_subwindow(&palette_window);
-    main_window.register_subwindow(&toolbar_window);
-    desktop    .register_window   (&main_window);
+    main_window->register_subwindow(canvas_window);
+    main_window->register_subwindow(palette_window);
+    main_window->register_subwindow(toolbar_window);
+
+    desktop.register_window(main_window);
 
     create();
 }
@@ -66,19 +68,19 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 
 void application_t::create()
 {
-    main_window.create(desktop.enclosing);
+    main_window->create(desktop.enclosing);
 
-    toolbar_window.create(rectangle_t(
-        main_window.enclosing.ld_corner + vec2d(0, window_t::header_menu_height + main_window_t::main_menu_height + 10),
+    toolbar_window->create(rectangle_t(
+        main_window->enclosing.ld_corner + vec2d(0, window_t::header_menu_height + main_window_t::main_menu_height + 10),
         toolbar_window_t::toolbar_size.x, window_t::header_menu_height + toolbar_window_t::toolbar_size.y));
 
-    palette_window.create(rectangle_t(
-        toolbar_window.enclosing.lu_corner() + vec2d(0, 10),
+    palette_window->create(rectangle_t(
+        toolbar_window->enclosing.lu_corner() + vec2d(0, 10),
         palette_window_t::palette_size.x, window_t::header_menu_height + palette_window_t::palette_size.y));
 
-    canvas_window.create(rectangle_t(
-        toolbar_window.enclosing.rd_corner() + vec2d(30, 30),
-        main_window   .enclosing.ru_corner   - vec2d(30, 30)
+    canvas_window->create(rectangle_t(
+        toolbar_window->enclosing.rd_corner() + vec2d(30, 30),
+        main_window   ->enclosing.ru_corner   - vec2d(30, 30)
     ));
 
     desktop.init_regions();

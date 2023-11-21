@@ -11,7 +11,7 @@ class widget_container_t: public widget_t
 {
 // member functions
 public:
-             inline  widget_container_t();
+             inline  widget_container_t(                              const bool to_delete = false);
     explicit inline  widget_container_t(const rectangle_t &enclosing, const bool to_delete = false);
              inline ~widget_container_t();
 
@@ -51,10 +51,11 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 
-inline widget_container_t::widget_container_t():
+inline widget_container_t::widget_container_t(const bool to_delete):
 widget_t(rectangle_t())
 {
-    list_ctor(&subwidgets, sizeof(widget_t *));
+    if (to_delete) list_ctor(&subwidgets, sizeof(widget_t *), widget_t::widget_delete);
+    else           list_ctor(&subwidgets, sizeof(widget_t *));
 }
 
 //--------------------------------------------------------------------------------------------------

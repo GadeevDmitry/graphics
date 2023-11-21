@@ -9,16 +9,16 @@ const size_t toolbar_window_t::toolbar_btns_num = 8;
 
 //==================================================================================================
 
-#define toolbar_window_data_init(tool_manager)                                  \
-buttons_controller(tool_manager),                                               \
-btn_fill          (buttons_controller, tool_button_t::FILL_OFF     ),  \
-btn_rectangle     (buttons_controller, tool_button_t::RECTANGLE_OFF),  \
-btn_ellipse       (buttons_controller, tool_button_t::ELLIPSE_OFF  ),  \
-btn_polyline      (buttons_controller, tool_button_t::POLYLINE_OFF ),  \
-btn_pencil        (buttons_controller, tool_button_t::PENCIL_OFF   ),  \
-btn_line          (buttons_controller, tool_button_t::LINE_OFF     ),  \
-btn_rubber        (buttons_controller, tool_button_t::RUBBER_OFF   ),  \
-btn_spline        (buttons_controller, tool_button_t::SPLINE_OFF   )
+#define toolbar_window_data_init(tool_manager)                                              \
+buttons_controller(tool_manager),                                                           \
+btn_fill          (new tool_button_t(buttons_controller, tool_button_t::FILL_OFF     )),    \
+btn_rectangle     (new tool_button_t(buttons_controller, tool_button_t::RECTANGLE_OFF)),    \
+btn_ellipse       (new tool_button_t(buttons_controller, tool_button_t::ELLIPSE_OFF  )),    \
+btn_polyline      (new tool_button_t(buttons_controller, tool_button_t::POLYLINE_OFF )),    \
+btn_pencil        (new tool_button_t(buttons_controller, tool_button_t::PENCIL_OFF   )),    \
+btn_line          (new tool_button_t(buttons_controller, tool_button_t::LINE_OFF     )),    \
+btn_rubber        (new tool_button_t(buttons_controller, tool_button_t::RUBBER_OFF   )),    \
+btn_spline        (new tool_button_t(buttons_controller, tool_button_t::SPLINE_OFF   ))
 
 //==================================================================================================
 
@@ -44,14 +44,14 @@ toolbar_window_data_init(tool_manager)
 void toolbar_window_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(&btn_spline   );
-    register_subwidget(&btn_rubber   );
-    register_subwidget(&btn_line     );
-    register_subwidget(&btn_pencil   );
-    register_subwidget(&btn_polyline );
-    register_subwidget(&btn_ellipse  );
-    register_subwidget(&btn_rectangle);
-    register_subwidget(&btn_fill     );
+    register_subwidget(btn_spline   );
+    register_subwidget(btn_rubber   );
+    register_subwidget(btn_line     );
+    register_subwidget(btn_pencil   );
+    register_subwidget(btn_polyline );
+    register_subwidget(btn_ellipse  );
+    register_subwidget(btn_rectangle);
+    register_subwidget(btn_fill     );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,14 +59,14 @@ void toolbar_window_t::register_buttons()
 void toolbar_window_t::set_tools(tool_t *fill  , tool_t *rectnagle, tool_t *ellipse, tool_t *polyline,
                                  tool_t *pencil, tool_t *line     , tool_t *rubber , tool_t *spline)
 {
-    btn_fill     .tool = fill;
-    btn_rectangle.tool = rectnagle;
-    btn_ellipse  .tool = ellipse;
-    btn_polyline .tool = polyline;
-    btn_pencil   .tool = pencil;
-    btn_line     .tool = line;
-    btn_rubber   .tool = rubber;
-    btn_spline   .tool = spline;
+    btn_fill     ->tool = fill;
+    btn_rectangle->tool = rectnagle;
+    btn_ellipse  ->tool = ellipse;
+    btn_polyline ->tool = polyline;
+    btn_pencil   ->tool = pencil;
+    btn_line     ->tool = line;
+    btn_rubber   ->tool = rubber;
+    btn_spline   ->tool = spline;
 }
 
 //--------------------------------------------------------------------------------------------------

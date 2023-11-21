@@ -24,7 +24,7 @@ protected:
 // member data
 private:
     canvas_controller_t canvas_controller;
-    canvas_t            canvas;
+    canvas_t           *canvas;
 };
 
 //--------------------------------------------------------------------------------------------------
