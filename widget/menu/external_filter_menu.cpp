@@ -11,12 +11,12 @@ const size_t external_filter_menu_t::filter_btns_num = 1;
 
 #define filter_menu_data_init(filter_manager)        \
 buttons_controller(filter_manager),                  \
-btn_brightness    (buttons_controller, "Brightness")
+btn_brightness    (new filter_button_t(buttons_controller, "Brightness"))
 
 //==================================================================================================
 
 external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager):
-menu_t               (controller_, color_t::White),
+menu_t               (controller_, color_t::White, true),
 filter_menu_data_init(filter_manager)
 {
     register_buttons();
@@ -25,7 +25,7 @@ filter_menu_data_init(filter_manager)
 //--------------------------------------------------------------------------------------------------
 
 external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager):
-menu_t               (controller_, color_t::White),
+menu_t               (controller_, color_t::White, true),
 filter_menu_data_init(filter_manager)
 {
     register_buttons();
@@ -37,7 +37,7 @@ filter_menu_data_init(filter_manager)
 void external_filter_menu_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(&btn_brightness);
+    register_subwidget(btn_brightness);
 }
 
 //--------------------------------------------------------------------------------------------------

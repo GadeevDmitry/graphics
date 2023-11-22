@@ -33,14 +33,14 @@ protected:
 // member data
 private:
     filter_button_controller_t buttons_controller;
-    filter_button_t            btn_brightness;
+    filter_button_t           *btn_brightness;
 };
 
 //--------------------------------------------------------------------------------------------------
 
 inline void external_filter_menu_t::set_filters(filter_t *brightness)
 {
-    btn_brightness.filter = brightness;
+    btn_brightness->filter = brightness;
 }
 
 //--------------------------------------------------------------------------------------------------
