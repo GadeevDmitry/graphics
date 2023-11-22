@@ -1,8 +1,9 @@
 #ifndef MAIN_WINDOW_MENU_H
 #define MAIN_WINDOW_MENU_H
 
-#include "external_filter_menu.h"
 #include "external_tool_menu.h"
+#include "external_filter_menu.h"
+#include "external_palette_menu.h"
 #include "widget/window.h"
 #include "widget/button/external_menu_button.h"
 
@@ -37,11 +38,13 @@ protected:
 private:
     external_menu_button_controller_t external_menu_button_controller;
 
-    external_filter_menu_t filter_menu;
-    external_menu_button_t filter_btn;
+    external_filter_menu_t  filter_menu;
+    external_tool_menu_t    tool_menu;
+    external_palette_menu_t palette_menu;
 
-    external_tool_menu_t   tool_menu;
-    external_menu_button_t tool_btn;
+    external_menu_button_t  filter_btn;
+    external_menu_button_t  tool_btn;
+    external_menu_button_t  palette_btn;
 };
 
 //--------------------------------------------------------------------------------------------------
