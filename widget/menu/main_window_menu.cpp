@@ -3,40 +3,51 @@
 
 //==================================================================================================
 
-const double main_window_menu_t::main_menu_btn_width = 50;
+const double main_window_menu_t::main_menu_btn_width = 60;
 
 //==================================================================================================
 
-main_window_menu_t::main_window_menu_t(window_controller_t &controller_, filter_manager_t &filter_manager):
+main_window_menu_t::main_window_menu_t(window_controller_t &controller_, filter_manager_t &filter_manager, tool_manager_t &tool_manager):
 menu_t                         (controller_, color_t::White),
 external_menu_button_controller(),
 filter_menu                    (controller_, filter_manager),
-filter_btn                     (external_menu_button_controller, filter_menu, "Filters")
+filter_btn                     (external_menu_button_controller, filter_menu, "Filters"),
+tool_menu                      (controller_, tool_manager),
+tool_btn                       (external_menu_button_controller, tool_menu, "Tools")
 {
-    register_subwidget(&filter_btn);
+    register_buttons();
 }
 
 //--------------------------------------------------------------------------------------------------
 
-main_window_menu_t::main_window_menu_t(window_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager):
+main_window_menu_t::main_window_menu_t(window_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager, tool_manager_t &tool_manager):
 menu_t                         (controller_, color_t::White),
 external_menu_button_controller(),
 filter_menu                    (controller_, filter_manager),
-filter_btn                     (external_menu_button_controller, filter_menu, "Filters")
+filter_btn                     (external_menu_button_controller, filter_menu, "Filters"),
+tool_menu                      (controller_, tool_manager),
+tool_btn                       (external_menu_button_controller, tool_menu, "Tools")
+{
+    register_buttons();
+    create(enclosing_);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void main_window_menu_t::register_buttons()
 {
     register_subwidget(&filter_btn);
-    create(enclosing_);
+    register_subwidget(&tool_btn);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void main_window_menu_t::create_buttons()
 {
-    rectangle_t menu_enclosing = enclosing;
-    vec2d       menu_size      = menu_enclosing.get_size();
+    const vec2d menu_size = enclosing.get_size();
 
     filter_btn.enclosing = rectangle_t(
-        menu_enclosing.ld_corner,
+        enclosing.ld_corner,
         main_menu_btn_width, menu_size.y
     );
     filter_btn.create_texture();
@@ -44,6 +55,17 @@ void main_window_menu_t::create_buttons()
     filter_menu.create(rectangle_t(
         filter_btn.enclosing.lu_corner(),
         external_filter_menu_t::filter_menu_size.x, external_filter_menu_t::filter_menu_size.y
+    ));
+
+    tool_btn.enclosing = rectangle_t(
+        filter_btn.enclosing.rd_corner(),
+        main_menu_btn_width, menu_size.y
+    );
+    tool_btn.create_texture();
+
+    tool_menu.create(rectangle_t(
+        tool_btn.enclosing.lu_corner(),
+        external_tool_menu_t::tool_menu_size.x, external_tool_menu_t::tool_menu_size.y
     ));
 }
 

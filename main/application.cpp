@@ -42,7 +42,7 @@ window_controller(),
 canvas_window    (new  canvas_window_t(window_controller, tool_manager  , filter_manager, window_t::Dark_theme , "Canvas" )),
 palette_window   (new palette_window_t(window_controller, tool_manager                  , window_t::Light_theme, "Palette")),
 toolbar_window   (new toolbar_window_t(window_controller, tool_manager                  , window_t::Blue_theme , "Toolbar")),
-main_window      (new    main_window_t(window_controller,                 filter_manager, window_t::Red_theme  , "Main"   )),
+main_window      (new    main_window_t(window_controller, tool_manager  , filter_manager, window_t::Red_theme  , "Main"   )),
 
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
@@ -50,6 +50,10 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 
     main_window->set_filters(
         &brightness_filter);
+
+    main_window->set_tools(
+        nullptr, &rectangle_tool, &ellipse_tool, nullptr,
+        nullptr, &line_tool     , nullptr      , nullptr);
 
     toolbar_window->set_tools(
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,

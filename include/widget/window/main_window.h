@@ -14,10 +14,12 @@ public:
 
 // member functions
 public:
-    explicit main_window_t(window_controller_t &controller,                               filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
-    explicit main_window_t(window_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
+    explicit main_window_t(window_controller_t &controller,                               tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
+    explicit main_window_t(window_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
 
     void inline set_filters(filter_t *brightness);
+    void inline set_tools  (tool_t *fill  , tool_t *rectangle, tool_t *ellipse, tool_t *polyline,
+                            tool_t *pencil, tool_t *line     , tool_t *rubber , tool_t *spline);
     void        create     (const rectangle_t &enclosing);
 
 // virtual
@@ -34,6 +36,14 @@ public:
 inline void main_window_t::set_filters(filter_t *brightness)
 {
     main_menu->set_filters(brightness);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::set_tools(tool_t *fill  , tool_t *rectangle, tool_t *ellipse, tool_t *polyline,
+                                     tool_t *pencil, tool_t *line     , tool_t *rubber , tool_t *spline)
+{
+    main_menu->set_tools(fill, rectangle, ellipse, polyline, pencil, line, rubber, spline);
 }
 
 //--------------------------------------------------------------------------------------------------

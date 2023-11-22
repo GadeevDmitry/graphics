@@ -2,7 +2,6 @@
 #define EXTERNAL_FILTER_MENU_H
 
 #include "widget/menu.h"
-#include "widget/window.h"
 #include "widget/button/filter_button.h"
 
 //==================================================================================================
