@@ -11,7 +11,7 @@ eventable::mouse_context_t event_manager_t::global_mouse_context;
 
 event_manager_t::event_manager_t()
 {
-    list_ctor(&childs, sizeof(eventable *), nullptr);
+    list_ctor(&childs, sizeof(eventable_proxy), eventable_proxy::eventable_proxy_delete);
 
     unsigned char init_value = 0;
     array_ctor(&pass_priorities, eventable::EVENT_TYPE_COUNT, sizeof(unsigned char));
@@ -158,15 +158,15 @@ bool event_manager_t::process_key_press_event(const KEY_TYPE &key)
     eventable::key_context_t local_context = global_key_context;
     bool res = false;
 
-    eventable **child = (eventable **) list_front(&childs);
-    eventable **fict  = (eventable **) list_fict (&childs);
+    eventable_proxy *child = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict  = (eventable_proxy *) list_fict (&childs);
 
-    for (; child != fict; child = (eventable **) list_next(child))
+    for (; child != fict; child = (eventable_proxy *) list_next(child))
     {
         unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_KEY_PRESS);
 
-        if ((**child).event_priority < pass_priority) continue;
-        if ((**child).on_key_press(local_context, key)) res = true;
+        if (child->get_priority() < pass_priority) continue;
+        if (child->on_key_press(local_context, key)) res = true;
     }
 
     return res;
@@ -181,15 +181,15 @@ bool event_manager_t::process_key_release_event(const KEY_TYPE &key)
     eventable::key_context_t local_context = global_key_context;
     bool res = false;
 
-    eventable **child = (eventable **) list_front(&childs);
-    eventable **fict  = (eventable **) list_fict (&childs);
+    eventable_proxy *child = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict  = (eventable_proxy *) list_fict (&childs);
 
-    for (; child != fict; child = (eventable **) list_next(child))
+    for (; child != fict; child = (eventable_proxy *) list_next(child))
     {
         unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_KEY_RELEASE);
 
-        if ((**child).event_priority < pass_priority) continue;
-        if ((**child).on_key_release(local_context, key)) res = true;
+        if (child->get_priority() < pass_priority) continue;
+        if (child->on_key_release(local_context, key)) res = true;
     }
 
     return res;
@@ -204,15 +204,15 @@ bool event_manager_t::process_mouse_press_event(const MOUSE_BUTTON_TYPE &btn)
     eventable::mouse_context_t local_context = global_mouse_context;
     bool res = false;
 
-    eventable **child = (eventable **) list_front(&childs);
-    eventable **fict  = (eventable **) list_fict (&childs);
+    eventable_proxy *child = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict  = (eventable_proxy *) list_fict (&childs);
 
-    for (; child != fict; child = (eventable **) list_next(child))
+    for (; child != fict; child = (eventable_proxy *) list_next(child))
     {
         unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_PRESS);
 
-        if ((**child).event_priority < pass_priority) continue;
-        if ((**child).on_mouse_press(local_context, btn)) res = true;
+        if (child->get_priority() < pass_priority) continue;
+        if (child->on_mouse_press(local_context, btn)) res = true;
     }
 
     return res;
@@ -227,15 +227,15 @@ bool event_manager_t::process_mouse_release_event(const MOUSE_BUTTON_TYPE &btn)
     eventable::mouse_context_t local_context = global_mouse_context;
     bool res = false;
 
-    eventable **child = (eventable **) list_front(&childs);
-    eventable **fict  = (eventable **) list_fict (&childs);
+    eventable_proxy *child = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict  = (eventable_proxy *) list_fict (&childs);
 
-    for (; child != fict; child = (eventable **) list_next(child))
+    for (; child != fict; child = (eventable_proxy *) list_next(child))
     {
         unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_RELEASE);
 
-        if ((**child).event_priority < pass_priority) continue;
-        if ((**child).on_mouse_release(local_context, btn)) res = true;
+        if (child->get_priority() < pass_priority) continue;
+        if (child->on_mouse_release(local_context, btn)) res = true;
     }
 
     return res;
@@ -250,15 +250,15 @@ bool event_manager_t::process_mouse_move_event(const vec2d &pos)
     eventable::mouse_context_t local_context = global_mouse_context;
     bool res = false;
 
-    eventable **child = (eventable **) list_front(&childs);
-    eventable **fict  = (eventable **) list_fict (&childs);
+    eventable_proxy *child = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict  = (eventable_proxy *) list_fict (&childs);
 
-    for (; child != fict; child = (eventable **) list_next(child))
+    for (; child != fict; child = (eventable_proxy *) list_next(child))
     {
         unsigned char pass_priority = *(unsigned char *) array_get(&pass_priorities, eventable::EVENT_MOUSE_MOVE);
 
-        if ((**child).event_priority < pass_priority) continue;
-        if ((**child).on_mouse_move(local_context, off)) res = true;
+        if (child->get_priority() < pass_priority) continue;
+        if (child->on_mouse_move(local_context, off)) res = true;
     }
 
     return res;

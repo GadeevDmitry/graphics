@@ -28,6 +28,7 @@ MOUSE_BUTTON_TYPE eventable::mouse_context_t::convert_sfml_btn(const sf::Mouse::
 }
 
 //--------------------------------------------------------------------------------------------------
+
 vec2d eventable::mouse_context_t::convert_sfml_pos(const sf::Vector2i &sfml_mouse_pos)
 {
     return vec2d((double) sfml_mouse_pos.x, (double) sfml_mouse_pos.y);
