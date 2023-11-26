@@ -28,6 +28,7 @@ components:
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/filter/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/geometry/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/graphic/Makefile
+	$(MAKE) -f $(ROOT_PREFIX)makefiles/plugin/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/tool/Makefile
 	$(MAKE) -f $(ROOT_PREFIX)makefiles/widget/Makefile
 ifeq ($(mode), debug)

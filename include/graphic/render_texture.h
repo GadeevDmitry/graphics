@@ -15,6 +15,11 @@
 
 //==================================================================================================
 
+namespace host
+{
+    class HostRenderTargetI;
+}
+
 class render_texture_t
 {
 // member functions
@@ -59,12 +64,15 @@ public:
     void        draw_rectangle(const rectangle_t  &abs, const color_t &fill_col, const color_t &out_col, const double out_thickness);
     void        draw_rectangle(                         const color_t &fill_col, const clipping_region_t &reg);
 
-    void        draw_circle   (const circle_t     &abs, const color_t &fiil_col, const color_t &out_col, const double out_thickness, const vec2d &scale);
+    void        draw_circle   (const circle_t     &abs, const color_t &fill_col, const color_t &out_col, const double out_thickness, const vec2d &scale);
     void        draw_circle   (const circle_t     &abs, const color_t &fill_col, const rectangle_t &enclosing, const clipping_region_t &reg, const vec2d &scale);
 
 // member data
 private:
     sf::RenderTexture data;
+
+// friends
+    friend host::HostRenderTargetI;
 };
 
 //==================================================================================================

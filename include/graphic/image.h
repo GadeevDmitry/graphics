@@ -14,9 +14,11 @@ public:
              inline image_t();
     explicit inline image_t(const sf::Image &data);
     explicit inline image_t(const unsigned width, const unsigned height);
+    explicit inline image_t(const unsigned width, const unsigned height, const char *pixels);
     explicit inline image_t(const char *filename);
 
     void    inline  create         (const unsigned width, const unsigned height);
+    void    inline  create         (const unsigned width, const unsigned height, const char *pixels);
     bool    inline  load_from_file (const char *filename);
 
     vec2d   inline  get_size       () const;
@@ -53,6 +55,14 @@ data()
 
 //--------------------------------------------------------------------------------------------------
 
+inline image_t::image_t(const unsigned width, const unsigned height, const char *pixels):
+data()
+{
+    data.create(width, height, (const sf::Uint8 *) pixels);
+}
+
+//--------------------------------------------------------------------------------------------------
+
 inline image_t::image_t(const char *filename):
 data()
 {
@@ -64,6 +74,13 @@ data()
 inline void image_t::create(const unsigned width, const unsigned height)
 {
     return data.create(width, height);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void image_t::create(const unsigned width, const unsigned height, const char *pixels)
+{
+    return data.create(width, height, (const sf::Uint8 *) pixels);
 }
 
 //--------------------------------------------------------------------------------------------------
