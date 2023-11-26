@@ -11,7 +11,7 @@ main_window_t::main_window_t(window_controller_t &controller_, tool_manager_t &t
 window_t (controller_, color_, wnd_name),
 main_menu(new main_window_menu_t(controller_, filter_manager, tool_manager))
 {
-    register_subwidget(main_menu);
+    register_subwidget(widget_proxy_t(main_menu));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ main_window_t::main_window_t(window_controller_t &controller_, const rectangle_t
 window_t (controller_, color_, wnd_name),
 main_menu(new main_window_menu_t(controller_, filter_manager, tool_manager))
 {
-    register_subwidget(main_menu);
+    register_subwidget(widget_proxy_t(main_menu));
     create(enclosing_);
 }
 

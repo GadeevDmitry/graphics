@@ -11,7 +11,7 @@ eventable::mouse_context_t event_manager_t::global_mouse_context;
 
 event_manager_t::event_manager_t()
 {
-    list_ctor(&childs, sizeof(eventable_proxy), eventable_proxy::eventable_proxy_delete);
+    list_ctor(&childs, sizeof(eventable_proxy), eventable_proxy::eventable_proxy_dtor);
 
     unsigned char init_value = 0;
     array_ctor(&pass_priorities, eventable::EVENT_TYPE_COUNT, sizeof(unsigned char));

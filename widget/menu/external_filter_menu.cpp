@@ -37,7 +37,7 @@ filter_menu_data_init(filter_manager)
 void external_filter_menu_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(btn_brightness);
+    register_subwidget(widget_proxy_t(btn_brightness));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,19 +54,23 @@ void external_filter_menu_t::create_buttons()
 
     vec2d filter_btn_off(0, 0);
 
-    size_t            cnt     = 0;
-    filter_button_t **cnt_btn = (filter_button_t **) list_front(&subwidgets);
+    size_t          cnt     = 0;
+    widget_proxy_t *cnt_btn = (widget_proxy_t *) list_front(&subwidgets);
 
     for (; cnt < filter_btns_num; ++cnt)
     {
-        (**cnt_btn).enclosing = rectangle_t(
+        LOG_ASSERT(cnt_btn->is_internal);
+
+        filter_button_t *cnt_filter_btn = (filter_button_t *) cnt_btn->internal;
+
+        cnt_filter_btn->enclosing = rectangle_t(
             enclosing.ld_corner + filter_btn_off,
             enclosing.ld_corner + filter_btn_off + filter_btn_size
         );
 
-        (**cnt_btn).create_texture();
+        cnt_filter_btn->create_texture();
 
         filter_btn_off.y += filter_btn_size.y;
-        cnt_btn = (filter_button_t **) list_next(cnt_btn);
+        cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }

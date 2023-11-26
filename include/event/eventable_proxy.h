@@ -12,7 +12,7 @@ class eventable_proxy
 {
 // static
 public:
-    static void inline eventable_proxy_delete(void *eventable_proxy_object);
+    static void inline eventable_proxy_dtor(void *eventable_proxy_object);
 
 // member functions
 public:
@@ -41,9 +41,9 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline void eventable_proxy::eventable_proxy_delete(void *eventable_proxy_object)
+inline void eventable_proxy::eventable_proxy_dtor(void *eventable_proxy_object)
 {
-    delete (eventable_proxy *) eventable_proxy_object;
+    ((eventable_proxy *) eventable_proxy_object)->~eventable_proxy();
 }
 
 //--------------------------------------------------------------------------------------------------

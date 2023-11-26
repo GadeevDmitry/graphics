@@ -24,8 +24,8 @@ close_btn_controller(),
 close_btn           (close_btn_controller, wnd, close_button_t::GREEN),
 window_name         (wnd_name, 30)
 {
-    register_subwidget(&window_name);
-    register_subwidget(&close_btn);
+    register_subwidget(widget_proxy_t(&window_name));
+    register_subwidget(widget_proxy_t(&close_btn  ));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ close_btn_controller(),
 close_btn           (close_btn_controller, wnd, close_button_t::GREEN),
 window_name         (wnd_name, 30)
 {
-    register_subwidget(&window_name);
-    register_subwidget(&close_btn);
+    register_subwidget(widget_proxy_t(&window_name));
+    register_subwidget(widget_proxy_t(&close_btn  ));
     create(enclosing_);
 }
 

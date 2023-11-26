@@ -46,7 +46,7 @@ main_window      (new    main_window_t(window_controller, tool_manager  , filter
 
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
-    event_manager.register_child(&desktop);
+    event_manager.register_child(eventable_proxy(&desktop));
 
     main_window->set_filters(
         &brightness_filter);

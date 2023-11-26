@@ -2,7 +2,7 @@
 #define WIDGET_MANAGER_H
 
 #include <assert.h>
-#include "widget.h"
+#include "widget_proxy.h"
 #include "data_structs/include/list.h"
 
 //==================================================================================================
@@ -15,7 +15,7 @@ public:
     explicit inline  widget_container_t(const rectangle_t &enclosing, const bool to_delete = false);
              inline ~widget_container_t();
 
-    bool register_subwidget       (widget_t *subwidget);
+    bool register_subwidget       (const widget_proxy_t &subwidget);
 protected:
     void subwidgets_move          (const vec2d &offset);
     void subwidgets_dump          () const;
@@ -54,8 +54,8 @@ protected:
 inline widget_container_t::widget_container_t(const bool to_delete):
 widget_t(rectangle_t())
 {
-    if (to_delete) list_ctor(&subwidgets, sizeof(widget_t *), widget_t::widget_delete);
-    else           list_ctor(&subwidgets, sizeof(widget_t *));
+    if (to_delete) list_ctor(&subwidgets, sizeof(widget_proxy_t), widget_proxy_t::widget_proxy_dtor_internal);
+    else           list_ctor(&subwidgets, sizeof(widget_proxy_t), widget_proxy_t::widget_proxy_dtor);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,8 +63,8 @@ widget_t(rectangle_t())
 inline widget_container_t::widget_container_t(const rectangle_t &enclosing_, const bool to_delete):
 widget_t(enclosing_)
 {
-    if (to_delete) list_ctor(&subwidgets, sizeof(widget_t *), widget_t::widget_delete);
-    else           list_ctor(&subwidgets, sizeof(widget_t *));
+    if (to_delete) list_ctor(&subwidgets, sizeof(widget_proxy_t), widget_proxy_t::widget_proxy_dtor_internal);
+    else           list_ctor(&subwidgets, sizeof(widget_proxy_t), widget_proxy_t::widget_proxy_dtor);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -44,14 +44,14 @@ tool_menu_data_init(tool_manager)
 void external_tool_menu_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(btn_spline   );
-    register_subwidget(btn_rubber   );
-    register_subwidget(btn_line     );
-    register_subwidget(btn_pencil   );
-    register_subwidget(btn_polyline );
-    register_subwidget(btn_ellipse  );
-    register_subwidget(btn_rectangle);
-    register_subwidget(btn_fill     );
+    register_subwidget(widget_proxy_t(btn_spline   ));
+    register_subwidget(widget_proxy_t(btn_rubber   ));
+    register_subwidget(widget_proxy_t(btn_line     ));
+    register_subwidget(widget_proxy_t(btn_pencil   ));
+    register_subwidget(widget_proxy_t(btn_polyline ));
+    register_subwidget(widget_proxy_t(btn_ellipse  ));
+    register_subwidget(widget_proxy_t(btn_rectangle));
+    register_subwidget(widget_proxy_t(btn_fill     ));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,19 +83,23 @@ void external_tool_menu_t::create_buttons()
 
     vec2d tool_btn_off(0, 0);
 
-    size_t                   cnt     = 0;
-    external_tool_button_t **cnt_btn = (external_tool_button_t **) list_front(&subwidgets); 
+    size_t          cnt     = 0;
+    widget_proxy_t *cnt_btn = (widget_proxy_t *) list_front(&subwidgets); 
 
     for (; cnt < tool_btns_num; ++cnt)
     {
-        (**cnt_btn).enclosing = rectangle_t(
+        LOG_ASSERT(cnt_btn->is_internal);
+
+        external_tool_button_t *cnt_tool_btn = (external_tool_button_t *) cnt_btn->internal;
+
+        cnt_tool_btn->enclosing = rectangle_t(
             enclosing.ld_corner + tool_btn_off,
             enclosing.ld_corner + tool_btn_off + tool_btn_size
         );
 
-        (**cnt_btn).create_texture();
+        cnt_tool_btn->create_texture();
 
         tool_btn_off.y += tool_btn_size.y;
-        cnt_btn = (external_tool_button_t **) list_next(cnt_btn);
+        cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }

@@ -35,8 +35,8 @@ public:
      event_manager_t();
     ~event_manager_t();
 
-    bool inline   register_child           (eventable_proxy *child);
-    bool inline unregister_child           (eventable_proxy *child);
+    bool inline   register_child           (const eventable_proxy &child);
+    bool inline unregister_child           (const eventable_proxy &child);
 
     void inline set_all_priorities         (const unsigned char pass_priority);
     void inline set_event_priority         (const unsigned char pass_priority, const eventable::EVENT_TYPE event);
@@ -72,16 +72,16 @@ inline const eventable::mouse_context_t &event_manager_t::get_global_mouse_conte
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool event_manager_t::register_child(eventable_proxy *child)
+inline bool event_manager_t::register_child(const eventable_proxy &child)
 {
-    return list_push_back(&childs, child);
+    return list_push_back(&childs, &child);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool event_manager_t::unregister_child(eventable_proxy *child)
+inline bool event_manager_t::unregister_child(const eventable_proxy &child)
 {
-    return list_erase(&childs, child);
+    return list_erase(&childs, &child);
 }
 
 //--------------------------------------------------------------------------------------------------

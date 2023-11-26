@@ -9,7 +9,7 @@ namespace host
 {
     void HostEventManagerI::register_object(EventProcessableI *object)
     {
-        eventable_proxy *object_proxy = new eventable_proxy(object);
+        eventable_proxy object_proxy = eventable_proxy(object);
         event_manager.register_child(object_proxy);
     }
 

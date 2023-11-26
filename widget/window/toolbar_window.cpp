@@ -44,14 +44,14 @@ toolbar_window_data_init(tool_manager)
 void toolbar_window_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(btn_spline   );
-    register_subwidget(btn_rubber   );
-    register_subwidget(btn_line     );
-    register_subwidget(btn_pencil   );
-    register_subwidget(btn_polyline );
-    register_subwidget(btn_ellipse  );
-    register_subwidget(btn_rectangle);
-    register_subwidget(btn_fill     );
+    register_subwidget(widget_proxy_t(btn_spline   ));
+    register_subwidget(widget_proxy_t(btn_rubber   ));
+    register_subwidget(widget_proxy_t(btn_line     ));
+    register_subwidget(widget_proxy_t(btn_pencil   ));
+    register_subwidget(widget_proxy_t(btn_polyline ));
+    register_subwidget(widget_proxy_t(btn_ellipse  ));
+    register_subwidget(widget_proxy_t(btn_rectangle));
+    register_subwidget(widget_proxy_t(btn_fill     ));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,27 +85,35 @@ void toolbar_window_t::create_buttons()
     vec2d r_column_off(toolbar_size.x - toolbar_btn_size.x - 20, header_menu_height + 10);
 
     size_t          cnt     = 0;
-    tool_button_t **cnt_btn = (tool_button_t **) list_front(&subwidgets);
+    widget_proxy_t *cnt_btn = (widget_proxy_t *) list_front(&subwidgets);
 
     for (; cnt < toolbar_btns_num / 2; ++cnt)
     {
-        (**cnt_btn).enclosing = rectangle_t(
+        LOG_ASSERT(cnt_btn->is_internal);
+
+        tool_button_t *cnt_tool_btn = (tool_button_t *) cnt_btn->internal;
+
+        cnt_tool_btn->enclosing = rectangle_t(
             enclosing.ld_corner + l_column_off,
             enclosing.ld_corner + l_column_off + toolbar_btn_size
         );
 
         l_column_off.y += toolbar_btn_size.y + 10;
-        cnt_btn = (tool_button_t **) list_next(cnt_btn);
+        cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 
     for (; cnt < toolbar_btns_num; ++cnt)
     {
-        (**cnt_btn).enclosing = rectangle_t(
+        LOG_ASSERT(cnt_btn->is_internal);
+
+        tool_button_t *cnt_tool_btn = (tool_button_t *) cnt_btn->internal;
+
+        cnt_tool_btn->enclosing = rectangle_t(
             enclosing.ld_corner + r_column_off,
             enclosing.ld_corner + r_column_off + toolbar_btn_size
         );
 
         r_column_off.y += toolbar_btn_size.y + 10;
-        cnt_btn = (tool_button_t **) list_next(cnt_btn);
+        cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }

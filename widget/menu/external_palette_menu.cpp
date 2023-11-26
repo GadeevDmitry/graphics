@@ -42,12 +42,12 @@ palette_menu_data_init(tool_manager)
 void external_palette_menu_t::register_buttons()
 {
     // reverse order for right create_buttons() work
-    register_subwidget(btn_black);
-    register_subwidget(btn_green);
-    register_subwidget(btn_orange);
-    register_subwidget(btn_red);
-    register_subwidget(btn_blue);
-    register_subwidget(btn_white);
+    register_subwidget(widget_proxy_t(btn_black ));
+    register_subwidget(widget_proxy_t(btn_green ));
+    register_subwidget(widget_proxy_t(btn_orange));
+    register_subwidget(widget_proxy_t(btn_red   ));
+    register_subwidget(widget_proxy_t(btn_blue  ));
+    register_subwidget(widget_proxy_t(btn_white ));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,19 +64,23 @@ void external_palette_menu_t::create_buttons()
 
     vec2d tool_btn_off(0, 0);
 
-    size_t                      cnt     = 0;
-    external_palette_button_t **cnt_btn = (external_palette_button_t **) list_front(&subwidgets); 
+    size_t          cnt     = 0;
+    widget_proxy_t *cnt_btn = (widget_proxy_t *) list_front(&subwidgets); 
 
     for (; cnt < palette_btns_num; ++cnt)
     {
-        (**cnt_btn).enclosing = rectangle_t(
+        LOG_ASSERT(cnt_btn->is_internal);
+
+        external_palette_button_t *cnt_palette_btn = (external_palette_button_t *) cnt_btn->internal;
+
+        cnt_palette_btn->enclosing = rectangle_t(
             enclosing.ld_corner + tool_btn_off,
             enclosing.ld_corner + tool_btn_off + palette_btn_size
         );
 
-        (**cnt_btn).create_texture();
+        cnt_palette_btn->create_texture();
 
         tool_btn_off.y += palette_btn_size.y;
-        cnt_btn = (external_palette_button_t **) list_next(cnt_btn);
+        cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }

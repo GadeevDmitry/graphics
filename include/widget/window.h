@@ -61,7 +61,7 @@ private:
 
 inline bool window_t::register_subwindow(window_t *window)
 {
-    return register_subwidget(window);
+    return register_subwidget(widget_proxy_t(window));
 }
 
 //--------------------------------------------------------------------------------------------------

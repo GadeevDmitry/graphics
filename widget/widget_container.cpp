@@ -4,11 +4,13 @@
 
 //==================================================================================================
 
-bool widget_container_t::register_subwidget(widget_t *subwidget)
+bool widget_container_t::register_subwidget(const widget_proxy_t &subwidget)
 {
     if (list_push_front(&subwidgets, &subwidget))
     {
-        subwidget->ancestor = this;
+        LOG_ASSERT(subwidget.is_internal);
+        subwidget.internal->ancestor = this;
+
         return true;
     }
 
@@ -21,14 +23,13 @@ void widget_container_t::subwidgets_move(const vec2d &offset)
 {
     if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        widget_t &cur = **cnt;
-        cur.move(offset);
+        cnt->move(offset);
     }
 }
 
@@ -38,15 +39,15 @@ void widget_container_t::subwidgets_dump() const
 {
     if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
     LOG_TAB++;
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        widget_t &cur = **cnt;
-        cur.dump();
+        if (cnt->is_internal)
+            cnt->internal->dump();
     }
     LOG_TAB--;
 }
@@ -57,13 +58,14 @@ void widget_container_t::subwidgets_graphic_dump(render_texture_t &wnd) const
 {
     if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cur = front; cur != fict;
-         cur = (widget_t **) list_next(cur))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        (**cur).graphic_dump(wnd);
+        if (cnt->is_internal)
+            cnt->internal->graphic_dump(wnd);
     }
 };
 
@@ -74,25 +76,25 @@ bool widget_container_t::subwidgets_update_struct()
     if (status == WIDGET_CLOSED) return true;
     if (subwidgets.size == 0)    return false;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
-    size_t     ind   = 0;
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
+    size_t          ind   = 0;
 
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        widget_t &cur = **cnt;
-
-        switch (cur.status)
+        switch (cnt->get_status())
         {
             case WIDGET_OPENED   : break;
 
             case WIDGET_CLOSED   : list_erase(&subwidgets, ind);
                                    return true;
 
-            case WIDGET_ACTIVATED: list_replace(&subwidgets, cnt, ind, 0);
-                                   cur.status = WIDGET_OPENED;
-                                   cur.update_struct();
+            case WIDGET_ACTIVATED: LOG_ASSERT(cnt->is_internal);
+
+                                   list_replace(&subwidgets, cnt, ind, 0);
+                                   cnt->internal->status = WIDGET_OPENED;
+                                   cnt->internal->update_struct();
                                    return true;
             default: break;
         }
@@ -108,26 +110,32 @@ void widget_container_t::subwidgets_recalc_regions()
 {
     if (subwidgets.size == 0) return;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cnt_1 = front; cnt_1 != fict;
-         cnt_1 = (widget_t **) list_next(cnt_1))
+    for (widget_proxy_t *cnt_1 = front; cnt_1 != fict;
+         cnt_1 = (widget_proxy_t *) list_next(cnt_1))
     {
-        widget_t &cur_1 = **cnt_1;
-
-        cur_1.reset_regions();
-        cur_1.own_visible *= own_visible;
-
-        for (widget_t **cnt_2 = front; cnt_2 != cnt_1;
-             cnt_2 = (widget_t **) list_next(cnt_2))
+        if (!cnt_1->is_internal)
         {
-            widget_t &cur_2 = **cnt_2;
-            cur_1.own_visible -= cur_2.sub_enclosing;
+            cnt_1->external->recalcRegion();
+            continue;
         }
 
-        cur_1.recalc_regions();
-        own_visible -= cur_1.sub_enclosing;
+        cnt_1->internal->reset_regions();
+        cnt_1->internal->own_visible *= own_visible;
+
+        for (widget_proxy_t *cnt_2 = front; cnt_2 != cnt_1;
+             cnt_2 = (widget_proxy_t *) list_next(cnt_2))
+        {
+            if (!cnt_2->is_internal)
+                continue;
+
+            cnt_1->internal->own_visible -= cnt_2->internal->sub_enclosing;
+        }
+
+        cnt_1->internal->recalc_regions();
+        own_visible -= cnt_1->internal->sub_enclosing;
     }
 }
 
@@ -137,14 +145,13 @@ bool widget_container_t::on_subwidgets_key_press(const key_context_t &context, c
 {
     if (subwidgets.size == 0) return false;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        widget_t &cur = **cnt;
-        if (cur.on_key_press(context, key)) return true;
+        if (cnt->on_key_press(context, key)) return true;
     }
 
     return false;
@@ -156,14 +163,13 @@ bool widget_container_t::on_subwidgets_mouse_press(const mouse_context_t &contex
 {
     if (subwidgets.size == 0) return false;
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        widget_t &cur = **cnt;
-        if (cur.on_mouse_press(context, btn)) return true;
+        if (cnt->on_mouse_press(context, btn)) return true;
     }
 
     return false;
@@ -175,14 +181,13 @@ void widget_container_t::subwidgets_render(render_texture_t &render_texture) con
 {
     if (subwidgets.size == 0) return;
 
-    widget_t **back = (widget_t **) list_back(&subwidgets);
-    widget_t **fict = (widget_t **) list_fict(&subwidgets);
+    widget_proxy_t *back = (widget_proxy_t *) list_back(&subwidgets);
+    widget_proxy_t *fict = (widget_proxy_t *) list_fict(&subwidgets);
 
-    for (widget_t **cnt = back; cnt != fict;
-         cnt = (widget_t **) list_prev(cnt))
+    for (widget_proxy_t *cnt = back; cnt != fict;
+         cnt = (widget_proxy_t *) list_prev(cnt))
     {
-        widget_t &cur = **cnt;
-        cur.render(render_texture);
+        cnt->render(render_texture);
     }
 }
 

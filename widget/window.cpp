@@ -33,7 +33,7 @@ menu_t                (controller_, color_, true),
 header_menu_controller(*this),
 header_menu           (new window_header_menu_t(header_menu_controller, *this, wnd_name))
 {
-    register_subwidget(header_menu);
+    register_subwidget(widget_proxy_t(header_menu));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ menu_t                (controller_, color_, true),
 header_menu_controller(*this),
 header_menu           (new window_header_menu_t(header_menu_controller, *this, wnd_name))
 {
-    register_subwidget(header_menu);
+    register_subwidget(widget_proxy_t(header_menu));
     create(enclosing_);
 }
 

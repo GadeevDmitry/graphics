@@ -8,7 +8,7 @@ window_t         (controller_, color_, wnd_name),
 canvas_controller(tool_manager, filter_manager),
 canvas           (new canvas_t(canvas_controller))
 {
-    register_subwidget(canvas);
+    register_subwidget(widget_proxy_t(canvas));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ window_t         (controller_, color_, wnd_name),
 canvas_controller(tool_manager, filter_manager),
 canvas           (new canvas_t(canvas_controller))
 {
-    register_subwidget(canvas);
+    register_subwidget(widget_proxy_t(canvas));
     create(enclosing_);
 }
 

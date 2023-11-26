@@ -53,7 +53,7 @@ background        (background_)
 
 inline bool desktop_t::register_window(window_t *window)
 {
-    return register_subwidget(window);
+    return register_subwidget(widget_proxy_t(window));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -40,9 +40,9 @@ palette_btn                    (external_menu_button_controller, palette_menu, "
 
 void main_window_menu_t::register_buttons()
 {
-    register_subwidget(&filter_btn);
-    register_subwidget(&tool_btn);
-    register_subwidget(&palette_btn);
+    register_subwidget(widget_proxy_t(&filter_btn ));
+    register_subwidget(widget_proxy_t(&tool_btn   ));
+    register_subwidget(widget_proxy_t(&palette_btn));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -70,12 +70,13 @@ void main_window_menu_t::recalc_regions()
 {
     subwidgets_recalc_regions();
 
-    widget_t **front = (widget_t **) list_front(&subwidgets);
-    widget_t **fict  = (widget_t **) list_fict (&subwidgets);
+    widget_proxy_t *front = (widget_proxy_t *) list_front(&subwidgets);
+    widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
 
-    for (widget_t **cnt = front; cnt != fict;
-         cnt = (widget_t **) list_next(cnt))
+    for (widget_proxy_t *cnt = front; cnt != fict;
+         cnt = (widget_proxy_t *) list_next(cnt))
     {
-        sub_enclosing |= (**cnt).sub_enclosing;
+        LOG_ASSERT(cnt->is_internal);
+        sub_enclosing |= cnt->internal->sub_enclosing;
     }
 }
