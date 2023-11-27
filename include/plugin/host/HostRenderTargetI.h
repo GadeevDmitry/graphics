@@ -1,7 +1,7 @@
 #ifndef PLUGIN_HOST_RENDER_TARGET_I_H
 #define PLUGIN_HOST_RENDER_TARGET_I_H
 
-#include "plugin/standart/RenderTargetI.h"
+#include "plugin/standart/Render.h"
 #include "graphic/render_texture.h"
 
 //==================================================================================================

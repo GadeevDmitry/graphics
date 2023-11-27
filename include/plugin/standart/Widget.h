@@ -1,8 +1,8 @@
-#ifndef PLUGIN_WIDGET_I_H
-#define PLUGIN_WIDGET_I_H
+#ifndef PLUGIN_WIDGET_H
+#define PLUGIN_WIDGET_H
 
 #include "Event.h"
-#include "RenderTargetI.h"
+#include "Render.h"
 
 //==================================================================================================
 
@@ -36,4 +36,4 @@ namespace plugin
     };
 }
 
-#endif // PLUGIN_WIDGET_I_H
+#endif // PLUGIN_WIDGET_H

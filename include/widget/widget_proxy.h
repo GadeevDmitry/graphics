@@ -3,7 +3,7 @@
 
 #include "widget.h"
 #include "event/eventable_proxy.h"
-#include "plugin/standart/WidgetI.h"
+#include "plugin/standart/Widget.h"
 
 using plugin::EventProcessableI;
 using plugin::WidgetI;
