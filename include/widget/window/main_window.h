@@ -6,6 +6,11 @@
 
 //==================================================================================================
 
+namespace host
+{
+    class HostWidgetI;
+}
+
 class main_window_t: public window_t
 {
 // static
@@ -29,6 +34,9 @@ protected:
 // member data
 public:
     main_window_menu_t *main_menu;
+
+// friends
+    friend host::HostWidgetI;
 };
 
 //--------------------------------------------------------------------------------------------------
