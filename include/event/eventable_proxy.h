@@ -4,9 +4,9 @@
 #include "eventable.h"
 #include "plugin/standart/Event.h"
 
-using plugin::EventProcessableI;
-
 //==================================================================================================
+
+using plugin::EventProcessableI;
 
 class eventable_proxy
 {

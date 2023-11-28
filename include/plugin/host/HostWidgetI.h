@@ -51,7 +51,7 @@ namespace host
         virtual void    inline render        (RenderTargetI *) override;
         virtual void    inline recalcRegion  ()                override;
 
-        virtual         inline ~HostWidgetI  ()                override;
+        virtual         inline ~HostWidgetI  ()                override {}
 
     // member data
     private:
@@ -213,13 +213,6 @@ namespace host
     inline void HostWidgetI::recalcRegion()
     {
         LOG_ERROR("HostWidgetI::recalcRegion is not available for plugin\n");
-    }
-
-    //--------------------------------------------------------------------------------------------------
-
-    inline HostWidgetI::~HostWidgetI()
-    {
-        LOG_ERROR("HostWidgetI::~HostWidgetI is not available for plugin\n");
     }
 };
 

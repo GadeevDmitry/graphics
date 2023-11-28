@@ -3,6 +3,7 @@
 
 #include <cinttypes>
 #include "geometry/vec2d.h"
+#include "event/eventable.h"
 
 //==================================================================================================
 
@@ -118,10 +119,16 @@ namespace plugin
 
     struct KeyboardContext
     {
+    // static
+    public:
+        static inline Key      convert_host_key(const KEY_TYPE &host_key);
+        static inline KEY_TYPE     get_host_key(const Key      &plugin_key);
+
     // member functions
     public:
         explicit inline KeyboardContext();
         explicit inline KeyboardContext(const bool alt, const bool shift, const bool ctrl, const Key key);
+        explicit inline KeyboardContext(const eventable::key_context_t &context, const KEY_TYPE &key);
 
     // member data
     public:
@@ -131,6 +138,21 @@ namespace plugin
 
         Key  key;
     };
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline Key KeyboardContext::convert_host_key(const KEY_TYPE &host_key)
+    {
+        return (Key) host_key;
+    }
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline KEY_TYPE KeyboardContext::get_host_key(const Key &plugin_key)
+    {
+        if (plugin_key > Key::RSystem) return KEY_TYPE_UNKNOWN;
+        return (KEY_TYPE) plugin_key;
+    }
 
     //--------------------------------------------------------------------------------------------------
 
@@ -150,6 +172,15 @@ namespace plugin
     key  (key_)
     {}
 
+    //--------------------------------------------------------------------------------------------------
+
+    inline KeyboardContext::KeyboardContext(const eventable::key_context_t &context, const KEY_TYPE &key_):
+    alt  (context.alt),
+    shift(context.shift),
+    ctrl (context.control),
+    key  (convert_host_key(key_))
+    {}
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     enum class MouseButton
@@ -160,10 +191,17 @@ namespace plugin
 
     struct MouseContext
     {
+    // static
+    public:
+        static MouseButton       convert_host_btn(const MOUSE_BUTTON_TYPE &host_btn);
+        static MOUSE_BUTTON_TYPE     get_host_btn(const MouseButton       &plugin_btn);
+
     // member functions
     public:
         explicit inline MouseContext();
         explicit inline MouseContext(const vec2d &position, const MouseButton button);
+        explicit inline MouseContext(const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn);
+        explicit inline MouseContext(const eventable::mouse_context_t &context, const vec2d             &off);
 
     // member data
     public:
@@ -184,6 +222,22 @@ namespace plugin
     position(position_),
     button  (button_)
     {}
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline MouseContext::MouseContext(const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn):
+    position(context.pos),
+    button  (convert_host_btn(btn))
+    {}
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline MouseContext::MouseContext(const eventable::mouse_context_t &context, const vec2d &off):
+    position(context.pos),
+    button  (MouseButton::Left)
+    {
+        (void) off;
+    }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -213,6 +267,13 @@ namespace plugin
 
     struct EventManagerI
     {
+    // static
+    public:
+        static EventType             convert_host_event(const eventable::EVENT_TYPE &host_event);
+        static eventable::EVENT_TYPE     get_host_event(const EventType             &plugin_event);
+
+    // virtual
+    public:
         virtual void register_object  (EventProcessableI *object)   = 0;
         virtual void set_priority     (EventType, uint8_t priority) = 0;
         virtual void unregister_object(EventProcessableI *object)   = 0;

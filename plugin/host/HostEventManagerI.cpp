@@ -9,30 +9,17 @@ namespace host
 {
     void HostEventManagerI::register_object(EventProcessableI *object)
     {
-        eventable_proxy object_proxy = eventable_proxy(object);
-        event_manager.register_child(object_proxy);
+        event_manager.register_child(eventable_proxy(object));
     }
 
     //--------------------------------------------------------------------------------------------------
 
-    void HostEventManagerI::set_priority(EventType plugin_type, uint8_t priority)
+    void HostEventManagerI::set_priority(EventType plugin_event, uint8_t priority)
     {
-        eventable::EVENT_TYPE host_type = eventable::EVENT_TYPE_UNKNOWN;
-        switch (plugin_type)
-        {
-            case plugin::EventType::MousePress  : host_type = eventable::EVENT_MOUSE_PRESS  ; break;
-            case plugin::EventType::MouseRelease: host_type = eventable::EVENT_MOUSE_RELEASE; break;
-            case plugin::EventType::MouseMove   : host_type = eventable::EVENT_MOUSE_MOVE   ; break;
-            case plugin::EventType::KeyPress    : host_type = eventable::EVENT_KEY_PRESS    ; break;
-            case plugin::EventType::KeyRelease  : host_type = eventable::EVENT_KEY_RELEASE  ; break;
+        eventable::EVENT_TYPE host_event = plugin::EventManagerI::get_host_event(plugin_event);
+        if (host_event == eventable::EVENT_TYPE_UNKNOWN) return;
 
-            case plugin::EventType::Clock       : LOG_WARNING("Clock events are not supported\n");
-
-            case plugin::EventType::NumOfEvents :
-            default                             : break;
-        }
-
-        event_manager.set_event_priority(priority, host_type);
+        event_manager.set_event_priority(priority, host_event);
     }
 
     //--------------------------------------------------------------------------------------------------

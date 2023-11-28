@@ -19,9 +19,9 @@ namespace host
 
     // virtual
     public:
-        virtual void register_object  (EventProcessableI *object)        override;
-        virtual void set_priority     (EventType type, uint8_t priority) override;
-        virtual void unregister_object(EventProcessableI *object)        override;
+        virtual void register_object  (EventProcessableI *object)         override;
+        virtual void set_priority     (EventType event, uint8_t priority) override;
+        virtual void unregister_object(EventProcessableI *object)         override;
 
     // member data
     private:
