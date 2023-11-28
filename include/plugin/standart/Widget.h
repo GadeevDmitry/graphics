@@ -14,7 +14,7 @@ namespace plugin
         virtual void     unregister_subwidget(WidgetI* object) = 0;
 
         virtual vec2d    get_size            ()                = 0;
-        virtual vec2d    set_size            (vec2d size)      = 0;
+        virtual void     set_size            (vec2d size)      = 0;
 
         virtual vec2d    get_pos             ()                = 0;
         virtual void     set_pos             (vec2d pos)       = 0;
