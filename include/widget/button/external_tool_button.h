@@ -44,8 +44,8 @@ class external_tool_button_t: public label_button_t
 {
 // member functions
 public:
-    explicit inline external_tool_button_t(widget_controller_t &controller,                               const char *tool_name, tool_t *tool = nullptr);
-    explicit inline external_tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const char *tool_name, tool_t *tool = nullptr);
+    explicit inline external_tool_button_t(widget_controller_t &controller,                               const char *tool_name, ToolI *tool = nullptr);
+    explicit inline external_tool_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const char *tool_name, ToolI *tool = nullptr);
 
 // virtual
 protected:
@@ -53,19 +53,19 @@ protected:
 
 // member data
 public:
-    tool_t *tool;
+    ToolI *tool;
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline external_tool_button_t::external_tool_button_t(widget_controller_t &controller_, const char *tool_name, tool_t *tool_):
+inline external_tool_button_t::external_tool_button_t(widget_controller_t &controller_, const char *tool_name, ToolI *tool_):
 label_button_t(controller_, tool_name, 20),
 tool          (tool_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-inline external_tool_button_t::external_tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *tool_name, tool_t *tool_):
+inline external_tool_button_t::external_tool_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *tool_name, ToolI *tool_):
 label_button_t(controller_, enclosing_, tool_name, 20),
 tool          (tool_)
 {}

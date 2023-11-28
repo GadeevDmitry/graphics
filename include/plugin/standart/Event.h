@@ -201,7 +201,7 @@ namespace plugin
         explicit inline MouseContext();
         explicit inline MouseContext(const vec2d &position, const MouseButton button);
         explicit inline MouseContext(const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn);
-        explicit inline MouseContext(const eventable::mouse_context_t &context, const vec2d             &off);
+        explicit inline MouseContext(const eventable::mouse_context_t &context, const vec2d             &off = vec2d(0, 0));
 
     // member data
     public:

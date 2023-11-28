@@ -4,13 +4,11 @@
 
 //==================================================================================================
 
-void shape_tool_t::paint_on_mouse_press(render_texture_t &perm, render_texture_t &temp, const color_t &color,
-                                        const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn)
+void shape_tool_t::paint_on_press(RenderTargetI *perm, RenderTargetI *temp, MouseContext local_context, Color color)
 {
-    (void) btn;
     (void) perm;
 
-    start  = local_context.pos;
+    start  = local_context.position;
     last   = start;
 
     draw_temp(temp, color);
@@ -18,27 +16,24 @@ void shape_tool_t::paint_on_mouse_press(render_texture_t &perm, render_texture_t
 
 //--------------------------------------------------------------------------------------------------
 
-void shape_tool_t::paint_on_mouse_release(render_texture_t &perm, render_texture_t &temp, const color_t &color,
-                                          const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn)
+void shape_tool_t::paint_on_release(RenderTargetI *perm, RenderTargetI *temp, MouseContext local_context, Color color)
 {
-    (void) btn;
-    (void) color;
     (void) local_context;
+    (void) color;
 
-    texture_t temp_texture = temp.get_texture();
-    perm.draw_texture(temp_texture, vec2d(0, 0), temp_texture.get_size());
+    plugin::Texture *temp_texture = temp->get_texture();
+    perm->draw_texture(vec2d(0, 0), vec2d((double) temp_texture->width, (double) temp_texture->height), temp_texture);
 
-    deactivate(perm, temp, color, local_context);
+    deactivate(perm, temp, local_context, color);
+    delete temp_texture;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void shape_tool_t::paint_on_mouse_move(render_texture_t &perm, render_texture_t &temp, const color_t &color,
-                                       const eventable::mouse_context_t &local_context, const vec2d &off)
+void shape_tool_t::paint_on_move(RenderTargetI *perm, RenderTargetI *temp, MouseContext local_context, Color color)
 {
     (void) perm;
-    (void) local_context;
 
-    last += off;
+    last = local_context.position;
     draw_temp(temp, color);
 }

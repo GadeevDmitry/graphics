@@ -56,8 +56,8 @@ void external_tool_menu_t::register_buttons()
 
 //--------------------------------------------------------------------------------------------------
 
-void external_tool_menu_t::set_tools(tool_t *fill  , tool_t *rectnagle, tool_t *ellipse, tool_t *polyline,
-                                     tool_t *pencil, tool_t *line     , tool_t *rubber , tool_t *spline)
+void external_tool_menu_t::set_tools(ToolI *fill  , ToolI *rectnagle, ToolI *ellipse, ToolI *polyline,
+                                     ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline)
 {
     btn_fill     ->tool = fill;
     btn_rectangle->tool = rectnagle;

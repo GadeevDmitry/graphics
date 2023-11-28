@@ -20,8 +20,8 @@ public:
     explicit toolbar_window_t(window_controller_t &controller,                               tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
     explicit toolbar_window_t(window_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
 
-    void        set_tools     (tool_t *fill  , tool_t *rectangle, tool_t *ellipse, tool_t *polyline,
-                               tool_t *pencil, tool_t *line     , tool_t *rubber , tool_t *spline);
+    void        set_tools     (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
+                               ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
     void inline create        (const rectangle_t &enclosing);
 private:
     void        create_buttons();

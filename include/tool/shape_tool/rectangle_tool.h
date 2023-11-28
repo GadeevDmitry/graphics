@@ -13,7 +13,7 @@ public:
 
 // virtual
 protected:
-    virtual void draw_temp(render_texture_t &temp, const color_t &color) override;
+    virtual void draw_temp(RenderTargetI *temp, Color color) override;
 };
 
 //--------------------------------------------------------------------------------------------------

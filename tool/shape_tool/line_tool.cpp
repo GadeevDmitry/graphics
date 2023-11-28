@@ -4,8 +4,8 @@
 
 //==================================================================================================
 
-void line_tool_t::draw_temp(render_texture_t &temp, const color_t &color)
+void line_tool_t::draw_temp(RenderTargetI *temp, Color color)
 {
-    temp.clear(color_t::Transparent);
-    temp.draw_line(segment_t(start, last), color);
+    temp->clear();
+    temp->draw_line(start, last, color);
 }

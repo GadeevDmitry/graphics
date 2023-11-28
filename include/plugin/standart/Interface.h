@@ -10,9 +10,24 @@ namespace plugin
     template<class T>
     struct Array
     {
+    // member functions
+    public:
+        explicit inline Array(const uint64_t &size, T *data);
+
+    // member data
+    public:
         uint64_t size;
         T       *data;
     };
+
+    //--------------------------------------------------------------------------------------------------
+
+    template<class T> inline Array<T>::Array(const uint64_t &size_, T *data_):
+    size(size_),
+    data(data_)
+    {}
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     enum class InterfaceType
     {

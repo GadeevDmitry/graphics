@@ -19,9 +19,9 @@ namespace host
     {
         render_texture.draw_rectangle(
             rectangle_t(pos, pos + size),
+            color_t::Transparent,
             color.get_host_color(),
-            color.get_host_color(),
-            0);
+            1);
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -48,7 +48,9 @@ namespace host
 
     void HostRenderTargetI::draw_texture(vec2d pos, vec2d size, const Texture *texture)
     {
-        texture_t temp_texture(image_t((unsigned) size.x, (unsigned) size.y, (const char *) texture->pixels));
+        image_t   temp_image  ((unsigned) size.x, (unsigned) size.y, (const char *) texture->pixels);
+        texture_t temp_texture(temp_image);
+
         render_texture.draw_texture(temp_texture, pos, size);
     }
 

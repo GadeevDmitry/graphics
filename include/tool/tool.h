@@ -1,24 +1,30 @@
 #ifndef TOOL_H
 #define TOOL_H
 
+#include "plugin/standart/Tool.h"
 #include "event/eventable.h"
 #include "graphic/render_texture.h"
 
 //==================================================================================================
 
-class tool_t
+using plugin::RenderTargetI;
+using plugin::MouseContext;
+using plugin::Color;
+
+class tool_t: public plugin::ToolI
 {
 // member functions
 public:
-             inline  tool_t();
-    virtual  inline ~tool_t() {}
+            inline  tool_t();
+    virtual inline ~tool_t() {}
 
 // virtual
-public:
-    virtual void inline deactivate     (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context);
-    virtual void paint_on_mouse_press  (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual void paint_on_mouse_release(render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn) = 0;
-    virtual void paint_on_mouse_move   (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const vec2d             &off) = 0;
+    virtual plugin::Array<const char *> inline get_param_names()                             override;
+    virtual plugin::Array<double>       inline get_params     ()                             override;
+    virtual void                        inline set_params     (plugin::Array<double> params) override;
+
+    virtual const plugin::Texture inline *get_icon() override;
+    virtual void inline deactivate(RenderTargetI *perm, RenderTargetI *temp, MouseContext local_context, Color color) override;
 
 // member data
 protected:
@@ -35,12 +41,40 @@ last ()
 
 //--------------------------------------------------------------------------------------------------
 
-inline void tool_t::deactivate(render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context)
+inline plugin::Array<const char *> tool_t::get_param_names()
+{
+    return plugin::Array<const char *>(0, nullptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline plugin::Array<double> tool_t::get_params()
+{
+    return plugin::Array<double>(0, nullptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void tool_t::set_params(plugin::Array<double> params)
+{
+    (void) params;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline const plugin::Texture *tool_t::get_icon()
+{
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void tool_t::deactivate(RenderTargetI *perm, RenderTargetI *temp, MouseContext local_context, Color color)
 {
     (void) perm;
     (void) temp;
-    (void) color;
     (void) local_context;
+    (void) color;
 }
 
 #endif // TOOL_H

@@ -1,6 +1,7 @@
 #ifndef PLUGIN_RENDER_H
 #define PLUGIN_RENDER_H
 
+#include <string.h>
 #include "graphic/color.h"
 #include "geometry/vec2d.h"
 
@@ -75,7 +76,8 @@ namespace plugin
     {
     // member functions
     public:
-        explicit inline Texture(uint64_t height, uint64_t width, Color *pixels);
+        explicit inline  Texture(uint64_t width, uint64_t height, Color *pixels);
+                 inline ~Texture();
 
     // member data
     public:
@@ -86,11 +88,20 @@ namespace plugin
 
     //--------------------------------------------------------------------------------------------------
 
-    inline Texture::Texture(uint64_t height_, uint64_t width_, Color *pixels_):
+    inline Texture::Texture(uint64_t width_, uint64_t height_, Color *pixels_):
     height(height_),
     width (width_),
-    pixels(pixels_)
-    {}
+    pixels(new Color[width_ * height_])
+    {
+        memcpy(pixels, pixels_, width_ * height_ * sizeof(Color));
+    }
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline Texture::~Texture()
+    {
+        delete[] pixels;
+    }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

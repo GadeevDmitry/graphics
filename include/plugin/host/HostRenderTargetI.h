@@ -60,7 +60,7 @@ namespace host
 
     inline void HostRenderTargetI::clear()
     {
-        render_texture.clear();
+        render_texture.clear(color_t::Transparent);
     }
 }
 
