@@ -27,6 +27,8 @@ void shape_tool_t::paint_on_mouse_release(render_texture_t &perm, render_texture
 
     texture_t temp_texture = temp.get_texture();
     perm.draw_texture(temp_texture, vec2d(0, 0), temp_texture.get_size());
+
+    deactivate(perm, temp, color, local_context);
 }
 
 //--------------------------------------------------------------------------------------------------

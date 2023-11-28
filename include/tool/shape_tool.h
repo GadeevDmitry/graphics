@@ -13,6 +13,7 @@ public:
 
 // virtual
 public:
+    virtual void inline deactivate     (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context)                               override;
     virtual void paint_on_mouse_press  (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual void paint_on_mouse_release(render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual void paint_on_mouse_move   (render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context, const vec2d             &off) override;
@@ -26,5 +27,16 @@ protected:
 inline shape_tool_t::shape_tool_t():
 tool_t()
 {}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void shape_tool_t::deactivate(render_texture_t &perm, render_texture_t &temp, const color_t &color, const eventable::mouse_context_t &local_context)
+{
+    (void) perm;
+    (void) color;
+    (void) local_context;
+
+    temp.clear(color_t::Transparent);
+}
 
 #endif // SHAPE_TOOL_H
