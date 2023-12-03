@@ -13,7 +13,7 @@ public:
 
 // virtual
 public:
-    virtual void apply(render_texture_t &perm) override;
+    virtual void apply(RenderTargetI *perm) override;
 
 // member data
 private:
