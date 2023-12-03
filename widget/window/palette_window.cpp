@@ -20,8 +20,8 @@ btn_black         (new palette_button_t(buttons_controller, palette_button_t::BL
 
 //==================================================================================================
 
-palette_window_t::palette_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
-window_t                (controller_, color_, wnd_name),
+palette_window_t::palette_window_t(tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (color_, wnd_name),
 palette_window_data_init(tool_manager)
 {
     register_buttons();
@@ -29,8 +29,8 @@ palette_window_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-palette_window_t::palette_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
-window_t                (controller_, color_, wnd_name),
+palette_window_t::palette_window_t(const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (color_, wnd_name),
 palette_window_data_init(tool_manager)
 {
     register_buttons();

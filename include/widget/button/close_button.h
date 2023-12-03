@@ -42,6 +42,7 @@ public:
 
 // static
 public:
+    static close_button_controller_t close_button_controller;
     static void load_textures();
 private:
     static texture_t   BUTTON_TEXTURES[];
@@ -49,8 +50,8 @@ private:
 
 // member functions
 public:
-    explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
-    explicit inline close_button_t(widget_controller_t &controller, widget_t &to_close, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_t &to_close,                               const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
+    explicit inline close_button_t(widget_t &to_close, const rectangle_t &enclosing, const BUTTON_TEXTURE_NAME_TYPE &texture = RED);
 
 // virtual
 protected:
@@ -63,8 +64,8 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_),
+inline close_button_t::close_button_t(widget_t &to_close_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(close_button_controller),
 to_close        (to_close_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);
@@ -74,8 +75,8 @@ to_close        (to_close_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline close_button_t::close_button_t(widget_controller_t &controller_, widget_t &to_close_, const rectangle_t &enclosing_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
-texture_button_t(controller_, enclosing_),
+inline close_button_t::close_button_t(widget_t &to_close_, const rectangle_t &enclosing_, const BUTTON_TEXTURE_NAME_TYPE &texture_):
+texture_button_t(close_button_controller, enclosing_),
 to_close        (to_close_)
 {
     LOG_VERIFY(texture_ > BUTTON_TEXTURE_NAME_TYPE_UNKNOWN, ;);

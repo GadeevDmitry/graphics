@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "widget/window.h"
 #include "menu/external_palette_menu.h"
 
 //==================================================================================================
@@ -9,19 +10,19 @@ const size_t external_palette_menu_t::palette_btns_num = 6;
 
 //==================================================================================================
 
-#define palette_menu_data_init(tool_manager)                                                        \
-buttons_controller(tool_manager),                                                                   \
-btn_white         (new external_palette_button_t(buttons_controller, "White" , color_t::White )),   \
-btn_blue          (new external_palette_button_t(buttons_controller, "Blue"  , color_t::Blue  )),   \
-btn_red           (new external_palette_button_t(buttons_controller, "Red"   , color_t::Red   )),   \
-btn_orange        (new external_palette_button_t(buttons_controller, "Orange", color_t::Orange)),   \
-btn_green         (new external_palette_button_t(buttons_controller, "Green" , color_t::Green )),   \
-btn_black         (new external_palette_button_t(buttons_controller, "Black" , color_t::Black ))
+#define palette_menu_data_init(tool_manager)                                                \
+btn_controller(tool_manager),                                                               \
+btn_white     (new external_palette_button_t(btn_controller, "White" , color_t::White )),   \
+btn_blue      (new external_palette_button_t(btn_controller, "Blue"  , color_t::Blue  )),   \
+btn_red       (new external_palette_button_t(btn_controller, "Red"   , color_t::Red   )),   \
+btn_orange    (new external_palette_button_t(btn_controller, "Orange", color_t::Orange)),   \
+btn_green     (new external_palette_button_t(btn_controller, "Green" , color_t::Green )),   \
+btn_black     (new external_palette_button_t(btn_controller, "Black" , color_t::Black ))
 
 //==================================================================================================
 
-external_palette_menu_t::external_palette_menu_t(widget_controller_t &controller_, tool_manager_t &tool_manager):
-menu_t(controller_, color_t::White, true),
+external_palette_menu_t::external_palette_menu_t(tool_manager_t &tool_manager):
+menu_t(window_t::window_controller, color_t::White, true),
 palette_menu_data_init(tool_manager)
 {
     register_buttons();
@@ -29,8 +30,8 @@ palette_menu_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-external_palette_menu_t::external_palette_menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager):
-menu_t(controller_, color_t::White, true),
+external_palette_menu_t::external_palette_menu_t(const rectangle_t &enclosing_, tool_manager_t &tool_manager):
+menu_t(window_t::window_controller, color_t::White, true),
 palette_menu_data_init(tool_manager)
 {
     register_buttons();

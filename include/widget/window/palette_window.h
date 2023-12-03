@@ -17,8 +17,8 @@ public:
 
 // member functions
 public:
-    explicit palette_window_t(window_controller_t &controller,                               tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
-    explicit palette_window_t(window_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
+    explicit palette_window_t(                              tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
+    explicit palette_window_t(const rectangle_t &enclosing, tool_manager_t &tool_manager, const color_t &color, const char *wnd_name);
 
     void inline create        (const rectangle_t &enclosing);
 private:
@@ -27,7 +27,7 @@ private:
 
 // virtual
 protected:
-    void inline dump_class_name() const override;
+    virtual void inline dump_class_name() const override;
 
 // member data
 private:

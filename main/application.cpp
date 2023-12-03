@@ -38,11 +38,10 @@ tool_manager     (&line_tool, color_t::Black),
 brightness_filter(),
 filter_manager   (),
 
-window_controller(),
-canvas_window    (new  canvas_window_t(window_controller, tool_manager  , filter_manager, window_t::Dark_theme , "Canvas" )),
-palette_window   (new palette_window_t(window_controller, tool_manager                  , window_t::Light_theme, "Palette")),
-toolbar_window   (new toolbar_window_t(window_controller, tool_manager                  , window_t::Blue_theme , "Toolbar")),
-main_window      (new    main_window_t(window_controller, tool_manager  , filter_manager, window_t::Red_theme  , "Main"   )),
+canvas_window    (new  canvas_window_t(               tool_manager, filter_manager, window_t::Dark_theme , "Canvas" )),
+palette_window   (new palette_window_t(               tool_manager                , window_t::Light_theme, "Palette")),
+toolbar_window   (new toolbar_window_t(               tool_manager                , window_t::Blue_theme , "Toolbar")),
+main_window      (new    main_window_t(event_manager, tool_manager, filter_manager, window_t::Red_theme  , "Main"   )),
 
 desktop          (rectangle_t(vec2d(0, 0), wnd_size))
 {
@@ -87,7 +86,7 @@ void application_t::create()
         main_window   ->enclosing.ru_corner   - vec2d(30, 30)
     ));
 
-    desktop.init_regions();
+    desktop.recalc_regions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,7 +119,7 @@ void application_t::show(sf::RenderWindow &sfml_wnd, render_texture_t &rend_tex)
 
 void application_t::process(sf::RenderWindow &sfml_wnd, render_texture_t &rend_tex)
 {
-    render(sfml_wnd, rend_tex);
+    render_initial(sfml_wnd, rend_tex);
     while (sfml_wnd.isOpen())
     {
         sf::Event event;
@@ -132,31 +131,41 @@ void application_t::process(sf::RenderWindow &sfml_wnd, render_texture_t &rend_t
                 sfml_wnd.close();
             }
 
-            bool rerender = false;
             switch (event.type)
             {
+                case sf::Event::KeyPressed:
+                {
+                    event_manager.process_key_press_event
+                        (eventable::key_context_t::convert_sfml_key(event.key.code));
+                } break;
+
+                case sf::Event::KeyReleased:
+                {
+                    event_manager.process_key_release_event
+                        (eventable::key_context_t::convert_sfml_key(event.key.code));
+                } break;
+
                 case sf::Event::MouseButtonPressed:
                 {
-                    rerender = event_manager.process_mouse_press_event
-                                (eventable::mouse_context_t::convert_sfml_btn(event.mouseButton.button));
+                    event_manager.process_mouse_press_event
+                        (eventable::mouse_context_t::convert_sfml_btn(event.mouseButton.button));
                 } break;
 
                 case sf::Event::MouseButtonReleased:
                 {
-                    rerender = event_manager.process_mouse_release_event
-                                (eventable::mouse_context_t::convert_sfml_btn(event.mouseButton.button));
+                    event_manager.process_mouse_release_event
+                        (eventable::mouse_context_t::convert_sfml_btn(event.mouseButton.button));
                 } break;
 
                 case sf::Event::MouseMoved:
                 {
-                    rerender = event_manager.process_mouse_move_event
-                                (eventable::mouse_context_t::convert_sfml_pos(recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition())));
+                    event_manager.process_mouse_move_event
+                        (eventable::mouse_context_t::convert_sfml_pos(recalc_mouse_pos(sfml_wnd, sf::Mouse::getPosition())));
                 } break;
 
                 default: break;
             }
 
-            if (!rerender) continue;
             render(sfml_wnd, rend_tex);
         }
     }
@@ -177,6 +186,18 @@ void application_t::graphic_dump(render_texture_t &render_tex) const
 {
     desktop.graphic_dump(render_tex);
     render_tex.display();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void application_t::render_initial(sf::RenderWindow &sfml_wnd, render_texture_t &render_tex)
+{
+    desktop.render_initial(render_tex);
+    render_tex.display();
+
+    sf::Sprite spr(render_tex.get_sfml_texture());
+    sfml_wnd.draw(spr);
+    sfml_wnd.display();
 }
 
 //--------------------------------------------------------------------------------------------------

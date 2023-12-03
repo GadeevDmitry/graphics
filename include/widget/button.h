@@ -15,7 +15,7 @@ public:
 
 // virtual
 public:
-    virtual bool inline on_key_press    (const key_context_t   &context, const KEY_TYPE          &key) override;
+    virtual bool        on_key_press    (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool inline on_key_release  (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool        on_mouse_press  (const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
     virtual bool inline on_mouse_release(const mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn) override;
@@ -41,14 +41,6 @@ inline button_t::button_t(widget_controller_t &controller_, const rectangle_t &e
 widget_t  (enclosing_),
 controller(controller_)
 {}
-
-//--------------------------------------------------------------------------------------------------
-
-inline bool button_t::on_key_press(const key_context_t &context, const KEY_TYPE &key)
-{
-    LOG_VERIFY(active == nullptr, false);
-    return controller.on_key_press(this, context, key);
-}
 
 //--------------------------------------------------------------------------------------------------
 

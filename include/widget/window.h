@@ -37,10 +37,12 @@ public:
 
     static const double header_menu_height;
 
+    static window_controller_t window_controller;
+
 // member functions
 public:
-    explicit window_t(widget_controller_t &controller,                               const color_t &color, const char *wnd_name);
-    explicit window_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &color, const char *wnd_name);
+    explicit window_t(                              const color_t &color, const char *wnd_name);
+    explicit window_t(const rectangle_t &enclosing, const color_t &color, const char *wnd_name);
 
     bool inline register_subwindow(window_t *window);
     void inline create            (const rectangle_t &enclosing);
@@ -49,12 +51,11 @@ private:
 
 // virtual
 protected:
-    void inline dump_class_name() const override;
+    virtual void inline dump_class_name() const override;
 
 // member data
 private:
-    window_header_menu_controller_t header_menu_controller;
-    window_header_menu_t           *header_menu;
+    window_header_menu_t *header_menu;
 };
 
 //--------------------------------------------------------------------------------------------------

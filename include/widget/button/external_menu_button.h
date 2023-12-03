@@ -28,10 +28,14 @@ inline bool external_menu_button_controller_t::on_mouse_release(widget_t *handle
 
 class external_menu_button_t: public label_button_t
 {
+// static
+public:
+    static external_menu_button_controller_t external_menu_button_controller;
+
 // member functions
 public:
-    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu,                               const char *btn_name);
-    explicit external_menu_button_t(widget_controller_t &controller, menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name);
+    explicit external_menu_button_t(menu_t &external_menu,                               const char *btn_name);
+    explicit external_menu_button_t(menu_t &external_menu, const rectangle_t &enclosing, const char *btn_name);
 
 // virtual
 public:

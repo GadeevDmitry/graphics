@@ -7,37 +7,26 @@
 
 //==================================================================================================
 
-class window_t;
-
 class window_header_menu_controller_t: public widget_controller_t
 {
-// member functions
-public:
-    explicit inline window_header_menu_controller_t(window_t &to_move);
-
 // virtual
 public:
     virtual bool on_mouse_move(widget_t *handle, const eventable::mouse_context_t &context, const vec2d &off) override;
-
-// member data
-private:
-    window_t &to_move;
 };
-
-//--------------------------------------------------------------------------------------------------
-
-inline window_header_menu_controller_t::window_header_menu_controller_t(window_t &to_move_):
-to_move(to_move_)
-{}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+class window_t;
 class window_header_menu_t: public menu_t
 {
+// static
+public:
+    static window_header_menu_controller_t window_header_menu_controller;
+
 // member functions
 public:
-    explicit window_header_menu_t(window_header_menu_controller_t &controller,                               window_t &wnd, const char *wnd_name);
-    explicit window_header_menu_t(window_header_menu_controller_t &controller, const rectangle_t &enclosing, window_t &wnd, const char *wnd_name);
+    explicit window_header_menu_t(                              window_t &wnd, const char *wnd_name);
+    explicit window_header_menu_t(const rectangle_t &enclosing, window_t &wnd, const char *wnd_name);
 
     void inline create            (const rectangle_t &enclosing);
 private:
@@ -50,9 +39,12 @@ protected:
 
 // member data
 private:
-    close_button_controller_t close_btn_controller;
-    close_button_t            close_btn;
-    label_t                   window_name;
+    close_button_t close_btn;
+    window_t      &window;
+    label_t        window_name;
+
+// friends
+    friend window_header_menu_controller_t;
 };
 
 //--------------------------------------------------------------------------------------------------

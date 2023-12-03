@@ -7,30 +7,28 @@ const double main_window_menu_t::main_menu_btn_width = 60;
 
 //==================================================================================================
 
-main_window_menu_t::main_window_menu_t(window_controller_t &controller_, filter_manager_t &filter_manager, tool_manager_t &tool_manager):
-menu_t                         (controller_, color_t::White),
-external_menu_button_controller(),
-filter_menu                    (controller_, filter_manager),
-tool_menu                      (controller_, tool_manager  ),
-palette_menu                   (controller_, tool_manager  ),
-filter_btn                     (external_menu_button_controller, filter_menu , "Filters"),
-tool_btn                       (external_menu_button_controller, tool_menu   , "Tools"  ),
-palette_btn                    (external_menu_button_controller, palette_menu, "Colors" )
+main_window_menu_t::main_window_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, tool_manager_t &tool_manager):
+menu_t      (window_t::window_controller, color_t::White),
+filter_menu (root, event_manager, filter_manager),
+tool_menu   (tool_manager  ),
+palette_menu(tool_manager  ),
+filter_btn  (filter_menu , "Filters"),
+tool_btn    (tool_menu   , "Tools"  ),
+palette_btn (palette_menu, "Colors" )
 {
     register_buttons();
 }
 
 //--------------------------------------------------------------------------------------------------
 
-main_window_menu_t::main_window_menu_t(window_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager, tool_manager_t &tool_manager):
-menu_t                         (controller_, color_t::White),
-external_menu_button_controller(),
-filter_menu                    (controller_, filter_manager),
-tool_menu                      (controller_, tool_manager  ),
-palette_menu                   (controller_, tool_manager  ),
-filter_btn                     (external_menu_button_controller, filter_menu , "Filters"),
-tool_btn                       (external_menu_button_controller, tool_menu   , "Tools"  ),
-palette_btn                    (external_menu_button_controller, palette_menu, "Colors" )
+main_window_menu_t::main_window_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, tool_manager_t &tool_manager, const rectangle_t &enclosing_):
+menu_t      (window_t::window_controller, color_t::White),
+filter_menu (root, event_manager, filter_manager),
+tool_menu   (tool_manager  ),
+palette_menu(tool_manager  ),
+filter_btn  (filter_menu , "Filters"),
+tool_btn    (tool_menu   , "Tools"  ),
+palette_btn (palette_menu, "Colors" )
 {
     register_buttons();
     create(enclosing_);

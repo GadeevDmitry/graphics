@@ -3,10 +3,10 @@
 
 //==================================================================================================
 
-#define label_data_init(name, char_size)                                                    \
-text        (&font_t::get_font_by_name(font_t::EDU_QLD), name, color_t::Black, char_size),  \
-text_rel_off(5, 5),                                                                         \
-background  (color_t::White),                                                               \
+#define label_data_init(string, char_size)                                                      \
+text        (&font_t::get_font_by_name(font_t::EDU_QLD), string, color_t::Black, char_size),    \
+text_rel_off(5, 5),                                                                             \
+background  (color_t::White),                                                                   \
 texture     ()
 
 //==================================================================================================
@@ -25,16 +25,16 @@ label_data_init(nullptr, 30)
 
 //--------------------------------------------------------------------------------------------------
 
-label_t::label_t(const char *name, const size_t char_size):
+label_t::label_t(const char *string, const size_t char_size):
 widget_t(),
-label_data_init(name, char_size)
+label_data_init(string, char_size)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-label_t::label_t(const rectangle_t &enclosing_, const char *name, const size_t char_size):
+label_t::label_t(const rectangle_t &enclosing_, const char *string, const size_t char_size):
 widget_t(enclosing_),
-label_data_init(name, char_size)
+label_data_init(string, char_size)
 {}
 
 //--------------------------------------------------------------------------------------------------

@@ -12,7 +12,8 @@ namespace plugin
     {
     // member functions
     public:
-        explicit inline Array(const uint64_t &size, T *data);
+        explicit inline  Array(const uint64_t &size, T *data);
+                 inline ~Array();
 
     // member data
     public:
@@ -26,6 +27,13 @@ namespace plugin
     size(size_),
     data(data_)
     {}
+
+    //--------------------------------------------------------------------------------------------------
+
+    template<class T> inline Array<T>::~Array()
+    {
+        delete[] data;
+    }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

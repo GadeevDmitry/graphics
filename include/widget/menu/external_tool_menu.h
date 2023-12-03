@@ -16,8 +16,8 @@ public:
 
 // member functions
 public:
-    explicit external_tool_menu_t(widget_controller_t &controller,                               tool_manager_t &tool_manager);
-    explicit external_tool_menu_t(widget_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager);
+    explicit external_tool_menu_t(                              tool_manager_t &tool_manager);
+    explicit external_tool_menu_t(const rectangle_t &enclosing, tool_manager_t &tool_manager);
 
     void        set_tools(ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                           ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
@@ -32,7 +32,7 @@ protected:
 
 // member data
 private:
-    external_tool_button_controller_t buttons_controller;
+    external_tool_button_controller_t btn_controller;
     external_tool_button_t           *btn_fill;
     external_tool_button_t           *btn_rectangle;
     external_tool_button_t           *btn_ellipse;

@@ -13,14 +13,14 @@ public:
     explicit inline desktop_t(                              const color_t &background = color_t::Black);
     explicit inline desktop_t(const rectangle_t &enclosing, const color_t &background = color_t::Black);
 
-    bool inline register_window    (window_t *window);
-    void inline init_regions       ();
+    bool inline register_window(window_t *window);
+    void        render_initial (render_texture_t &wnd);
 private:
     bool        refresh_after_event();
 
 // virtual
 public:
-    virtual void inline render          (render_texture_t &wnd)                                        override;
+    virtual void        render          (render_texture_t &wnd)                                        override;
     virtual void inline recalc_regions  ()                                                             override;
     virtual bool        on_key_press    (const key_context_t   &context, const KEY_TYPE          &key) override;
     virtual bool        on_key_release  (const key_context_t   &context, const KEY_TYPE          &key) override;
@@ -58,25 +58,10 @@ inline bool desktop_t::register_window(window_t *window)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void desktop_t::init_regions()
-{
-    recalc_regions();
-}
-
-//--------------------------------------------------------------------------------------------------
-
 inline void desktop_t::recalc_regions()
 {
     reset_regions();
     subwidgets_recalc_regions();
-}
-
-//--------------------------------------------------------------------------------------------------
-
-inline void desktop_t::render(render_texture_t &wnd)
-{
-    wnd.draw_rectangle(background, own_visible);
-    subwidgets_render(wnd);
 }
 
 //--------------------------------------------------------------------------------------------------

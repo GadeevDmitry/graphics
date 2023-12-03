@@ -28,6 +28,32 @@ event_manager_t::~event_manager_t()
 
 //--------------------------------------------------------------------------------------------------
 
+bool event_manager_t::unregister_child(const eventable_proxy &child)
+{
+    eventable_proxy *object = (eventable_proxy *) list_front(&childs);
+    eventable_proxy *fict   = (eventable_proxy *) list_fict (&childs);
+
+    for (size_t cnt = 0; object != fict; ++cnt)
+    {
+        if ((child.is_internal && object->is_internal) &&
+            (child.internal == object->internal))
+        {
+            return list_erase(&childs, cnt);
+        }
+        if ((!child.is_internal && !object->is_internal) &&
+            (child.external == object->external))
+        {
+            return list_erase(&childs, cnt);
+        }
+
+        object = (eventable_proxy *) list_next(object);
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 

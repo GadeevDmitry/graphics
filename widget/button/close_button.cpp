@@ -3,6 +3,8 @@
 
 //==================================================================================================
 
+close_button_controller_t close_button_t::close_button_controller;
+
 const char *close_button_t::BUTTON_TEXTURES_FILES[] =
 {
     "assets/textures/button/red_close.png",

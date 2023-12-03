@@ -13,6 +13,8 @@ const color_t window_t::Red_theme    ( 0.533 , 0     , 0     );
 
 const double  window_t::header_menu_height = 50;
 
+window_controller_t window_t::window_controller;
+
 //==================================================================================================
 
 bool window_controller_t::on_mouse_press(widget_t *handle, const eventable::mouse_context_t &context, const MOUSE_BUTTON_TYPE &btn)
@@ -28,20 +30,18 @@ bool window_controller_t::on_mouse_press(widget_t *handle, const eventable::mous
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-window_t::window_t(widget_controller_t &controller_, const color_t &color_, const char *wnd_name):
-menu_t                (controller_, color_, true),
-header_menu_controller(*this),
-header_menu           (new window_header_menu_t(header_menu_controller, *this, wnd_name))
+window_t::window_t(const color_t &color_, const char *wnd_name):
+menu_t     (window_controller, color_, true),
+header_menu(new window_header_menu_t(*this, wnd_name))
 {
     register_subwidget(widget_proxy_t(header_menu));
 }
 
 //--------------------------------------------------------------------------------------------------
 
-window_t::window_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &color_, const char *wnd_name):
-menu_t                (controller_, color_, true),
-header_menu_controller(*this),
-header_menu           (new window_header_menu_t(header_menu_controller, *this, wnd_name))
+window_t::window_t(const rectangle_t &enclosing_, const color_t &color_, const char *wnd_name):
+menu_t     (window_controller, color_, true),
+header_menu(new window_header_menu_t(*this, wnd_name))
 {
     register_subwidget(widget_proxy_t(header_menu));
     create(enclosing_);

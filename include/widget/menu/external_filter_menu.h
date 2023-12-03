@@ -2,7 +2,7 @@
 #define EXTERNAL_FILTER_MENU_H
 
 #include "widget/menu.h"
-#include "widget/button/filter_button.h"
+#include "widget/button/external_filter_button.h"
 
 //==================================================================================================
 
@@ -16,8 +16,8 @@ public:
 
 // member functions
 public:
-    explicit external_filter_menu_t(widget_controller_t &controller,                               filter_manager_t &filter_manager);
-    explicit external_filter_menu_t(widget_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager);
+    explicit external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager);
+    explicit external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, const rectangle_t &enclosing);
 
     void inline set_filters(FilterI *brightness);
     void inline create     (const rectangle_t &enclosing);
@@ -31,8 +31,8 @@ protected:
 
 // member data
 private:
-    filter_button_controller_t buttons_controller;
-    filter_button_t           *btn_brightness;
+    external_filter_button_controller_t btn_controller;
+    external_filter_button_t           *btn_brightness;
 };
 
 //--------------------------------------------------------------------------------------------------

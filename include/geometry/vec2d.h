@@ -22,6 +22,8 @@ public:
     bool           is_valid         () const;
     void           dump             () const;
 
+    vec2d  inline &floor            ();
+
     vec2d          get_rotation     (const double degree) const;
     vec2d  inline &rotate           (const double degree);
 
@@ -84,6 +86,13 @@ inline vec2d::~vec2d()
 {
     x = NAN;
     y = NAN;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline vec2d &vec2d::floor()
+{
+    return (*this) = vec2d(std::floor(x), std::floor(y));
 }
 
 //--------------------------------------------------------------------------------------------------

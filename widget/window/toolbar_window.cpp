@@ -22,8 +22,8 @@ btn_spline        (new tool_button_t(buttons_controller, tool_button_t::SPLINE_O
 
 //==================================================================================================
 
-toolbar_window_t::toolbar_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
-window_t                (controller_, color_, wnd_name),
+toolbar_window_t::toolbar_window_t(tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (color_, wnd_name),
 toolbar_window_data_init(tool_manager)
 {
     register_buttons();
@@ -31,8 +31,8 @@ toolbar_window_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-toolbar_window_t::toolbar_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
-window_t                (controller_, color_, wnd_name),
+toolbar_window_t::toolbar_window_t(const rectangle_t &enclosing_, tool_manager_t &tool_manager, const color_t &color_, const char *wnd_name):
+window_t                (color_, wnd_name),
 toolbar_window_data_init(tool_manager)
 {
     register_buttons();

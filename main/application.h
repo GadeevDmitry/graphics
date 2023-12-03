@@ -37,8 +37,9 @@ public:
     void graphic_dump(                            render_texture_t &render_tex) const;
     void process     (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
 private:
-    void render (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
-    void create ();
+    void render_initial(sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
+    void render        (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
+    void create        ();
 
 // member data
 private:
@@ -52,7 +53,6 @@ private:
     brightness_filter_t brightness_filter;
     filter_manager_t    filter_manager;
 
-    window_controller_t window_controller;
     canvas_window_t     *canvas_window;
     palette_window_t    *palette_window;
     toolbar_window_t    *toolbar_window;

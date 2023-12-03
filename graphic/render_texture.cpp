@@ -71,10 +71,10 @@ void render_texture_t::draw_texture(const texture_t &texture, const rectangle_t 
 
 void render_texture_t::draw_text(const text_t &text, const vec2d &pos)
 {
-    sf::Text sf_text(text.text, text.font->data, (unsigned int) text.character_size);
+    sf::Text sf_text(text.string, text.font->data, (unsigned int) text.character_size);
 
     sf_text.setFont         (text.font->data);
-    sf_text.setString       (text.text);
+    sf_text.setString       (text.string);
     sf_text.setPosition     ((float) pos.x, (float) pos.y);
     sf_text.setFillColor    (text.color.get_sfml_color());
     sf_text.setCharacterSize((unsigned int) text.character_size);
@@ -231,6 +231,26 @@ void render_texture_t::draw_rectangle(const rectangle_t &abs, const color_t &fil
     rectangle.setOutlineThickness((float) out_thickness);
 
     data.draw(rectangle);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void render_texture_t::draw_rectangle(const rectangle_t &abs, const color_t &fill_col, const clipping_region_t &reg)
+{
+    const list &areas = reg.get_areas();
+
+    rectangle_t *front = (rectangle_t *) list_front(&areas);
+    rectangle_t *fict  = (rectangle_t *) list_fict (&areas);
+
+    for (rectangle_t *area = front; area != fict;
+         area = (rectangle_t *) list_next(area))
+    {
+        rectangle_t intersection = abs;
+        if (intersect_rectangle_rectangle(intersection, *area))
+        {
+            draw_rectangle(intersection, fill_col, fill_col, 0);
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

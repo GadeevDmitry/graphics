@@ -4,24 +4,29 @@
 
 //==================================================================================================
 
+window_header_menu_controller_t window_header_menu_t::window_header_menu_controller;
+
+//==================================================================================================
+
 bool window_header_menu_controller_t::on_mouse_move(widget_t *handle, const eventable::mouse_context_t &context, const vec2d &off)
 {
     (void) handle;
     (void) context;
 
-    to_move.move(off);
-    to_move.status = widget_t::WIDGET_ACTIVATED;
-    to_move.update_ancestral_status(widget_t::WIDGET_ACTIVATED);
+    window_header_menu_t *window_header_menu = (window_header_menu_t *) handle;
+    window_header_menu->window.move(off);
+    window_header_menu->window.status = widget_t::WIDGET_ACTIVATED;
+    window_header_menu->window.update_ancestral_status(widget_t::WIDGET_ACTIVATED);
 
     return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &controller, window_t &wnd, const char *wnd_name):
-menu_t              (controller, color_t::White),
-close_btn_controller(),
-close_btn           (close_btn_controller, wnd, close_button_t::GREEN),
+window_header_menu_t::window_header_menu_t(window_t &wnd, const char *wnd_name):
+menu_t              (window_header_menu_controller, color_t::White),
+close_btn           (wnd, close_button_t::GREEN),
+window              (wnd),
 window_name         (wnd_name, 30)
 {
     register_subwidget(widget_proxy_t(&window_name));
@@ -30,10 +35,10 @@ window_name         (wnd_name, 30)
 
 //--------------------------------------------------------------------------------------------------
 
-window_header_menu_t::window_header_menu_t(window_header_menu_controller_t &controller, const rectangle_t &enclosing_, window_t &wnd, const char *wnd_name):
-menu_t              (controller, color_t::White),
-close_btn_controller(),
-close_btn           (close_btn_controller, wnd, close_button_t::GREEN),
+window_header_menu_t::window_header_menu_t(const rectangle_t &enclosing_, window_t &wnd, const char *wnd_name):
+menu_t              (window_header_menu_controller, color_t::White),
+close_btn           (wnd, close_button_t::GREEN),
+window              (wnd),
 window_name         (wnd_name, 30)
 {
     register_subwidget(widget_proxy_t(&window_name));

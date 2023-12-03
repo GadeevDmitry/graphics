@@ -16,10 +16,10 @@ public:
 
 // member functions
 public:
-    explicit external_palette_menu_t(widget_controller_t &controller,                               tool_manager_t &tool_manager);
-    explicit external_palette_menu_t(widget_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager);
+    explicit external_palette_menu_t(                              tool_manager_t &tool_manager);
+    explicit external_palette_menu_t(const rectangle_t &enclosing, tool_manager_t &tool_manager);
 
-    void inline create   (const rectangle_t &enclosing);
+    void inline create(const rectangle_t &enclosing);
 private:
     void        create_buttons();
     void      register_buttons();
@@ -30,7 +30,7 @@ protected:
 
 // member data
 private:
-    external_palette_button_controller_t buttons_controller;
+    external_palette_button_controller_t btn_controller;
     external_palette_button_t           *btn_white;
     external_palette_button_t           *btn_blue;
     external_palette_button_t           *btn_red;

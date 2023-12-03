@@ -52,8 +52,8 @@ public:
 
 // member functions
 public:
-    explicit inline canvas_t(widget_controller_t &controller);
-    explicit inline canvas_t(widget_controller_t &controller, const rectangle_t &enclosing, const color_t &background = color_t::White);
+    explicit inline canvas_t(canvas_controller_t &controller);
+    explicit inline canvas_t(canvas_controller_t &controller, const rectangle_t &enclosing, const color_t &background = color_t::White);
 
     void inline create         (const rectangle_t &enclosing, const color_t &background = color_t::White);
 private:
@@ -76,7 +76,7 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 
-inline canvas_t::canvas_t(widget_controller_t &controller_):
+inline canvas_t::canvas_t(canvas_controller_t &controller_):
 button_t  (controller_),
 perm      (),
 temp      ()
@@ -84,7 +84,7 @@ temp      ()
 
 //--------------------------------------------------------------------------------------------------
 
-inline canvas_t::canvas_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const color_t &background):
+inline canvas_t::canvas_t(canvas_controller_t &controller_, const rectangle_t &enclosing_, const color_t &background):
 button_t  (controller_, enclosing_),
 perm      (),
 temp      ()

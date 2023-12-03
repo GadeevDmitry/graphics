@@ -26,20 +26,7 @@ namespace host
 
     void HostEventManagerI::unregister_object(EventProcessableI *object)
     {
-        eventable_proxy *child = (eventable_proxy *) list_front(&event_manager.childs);
-        eventable_proxy *fict  = (eventable_proxy *) list_fict (&event_manager.childs);
-
-        for (size_t cnt = 0; child != fict; ++cnt)
-        {
-            if (!child->is_internal && object == child->external)
-            {
-                list_erase(&event_manager.childs, cnt);
-                return;
-            }
-
-            child = (eventable_proxy *) list_next(child);
-        }
-
-        LOG_ERROR("attempt to delete an unregistered object\n");
+        if (!event_manager.unregister_child(eventable_proxy(object)))
+            LOG_ERROR("attempt to delete an unregistered object\n");
     }
 }

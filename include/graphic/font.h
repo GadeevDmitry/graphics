@@ -1,6 +1,7 @@
 #ifndef FONT_H
 #define FONT_H
 
+#include "geometry/vec2d.h"
 #include "data_structs/include/log.h"
 #include <SFML/Graphics.hpp>
 
@@ -38,8 +39,9 @@ public:
     explicit inline font_t(const sf::Font &data);
     explicit inline font_t(const char *filename);
 
-    const sf::Font inline &get_sfml_font () const;
     bool           inline  load_from_file(const char *filename);
+    const sf::Font inline &get_sfml_font () const;
+    unsigned               get_char_size (const char requested, const size_t char_size) const;
 
 // member data
 private:
@@ -81,16 +83,16 @@ data()
 
 //--------------------------------------------------------------------------------------------------
 
-inline const sf::Font &font_t::get_sfml_font() const
+inline bool font_t::load_from_file(const char *filename)
 {
-    return data;
+    return data.loadFromFile(filename);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline bool font_t::load_from_file(const char *filename)
+inline const sf::Font &font_t::get_sfml_font() const
 {
-    return data.loadFromFile(filename);
+    return data;
 }
 
 #endif // FONT_H

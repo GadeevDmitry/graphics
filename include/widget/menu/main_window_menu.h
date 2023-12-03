@@ -17,8 +17,8 @@ private:
 
 // member functions
 public:
-    explicit main_window_menu_t(window_controller_t &controller,                               filter_manager_t &filter_manager, tool_manager_t &tool_manager);
-    explicit main_window_menu_t(window_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager, tool_manager_t &tool_manager);
+    explicit main_window_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, tool_manager_t &tool_manager);
+    explicit main_window_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, tool_manager_t &tool_manager, const rectangle_t &enclosing);
 
     void inline create        (const rectangle_t &enclosing);
     void inline set_filters   (FilterI *brightness);
@@ -36,8 +36,6 @@ protected:
 
 // member data
 private:
-    external_menu_button_controller_t external_menu_button_controller;
-
     external_filter_menu_t  filter_menu;
     external_tool_menu_t    tool_menu;
     external_palette_menu_t palette_menu;

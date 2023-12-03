@@ -3,8 +3,8 @@
 
 //==================================================================================================
 
-canvas_window_t::canvas_window_t(window_controller_t &controller_, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
-window_t         (controller_, color_, wnd_name),
+canvas_window_t::canvas_window_t(tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
+window_t         (color_, wnd_name),
 canvas_controller(tool_manager, filter_manager),
 canvas           (new canvas_t(canvas_controller))
 {
@@ -13,8 +13,8 @@ canvas           (new canvas_t(canvas_controller))
 
 //--------------------------------------------------------------------------------------------------
 
-canvas_window_t::canvas_window_t(window_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
-window_t         (controller_, color_, wnd_name),
+canvas_window_t::canvas_window_t(const rectangle_t &enclosing_, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color_, const char *wnd_name):
+window_t         (color_, wnd_name),
 canvas_controller(tool_manager, filter_manager),
 canvas           (new canvas_t(canvas_controller))
 {

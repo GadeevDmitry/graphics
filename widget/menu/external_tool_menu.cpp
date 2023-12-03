@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "widget/window.h"
 #include "menu/external_tool_menu.h"
 
 //==================================================================================================
@@ -9,21 +10,21 @@ const size_t external_tool_menu_t::tool_btns_num = 8;
 
 //==================================================================================================
 
-#define tool_menu_data_init(tool_manager)                                  \
-buttons_controller(tool_manager),                                          \
-btn_fill          (new external_tool_button_t(buttons_controller, "Fill"     )),    \
-btn_rectangle     (new external_tool_button_t(buttons_controller, "Rectangle")),    \
-btn_ellipse       (new external_tool_button_t(buttons_controller, "Ellipse"  )),    \
-btn_polyline      (new external_tool_button_t(buttons_controller, "Polyline" )),    \
-btn_pencil        (new external_tool_button_t(buttons_controller, "Pencil"   )),    \
-btn_line          (new external_tool_button_t(buttons_controller, "Line"     )),    \
-btn_rubber        (new external_tool_button_t(buttons_controller, "Rubber"   )),    \
-btn_spline        (new external_tool_button_t(buttons_controller, "Spline"   ))
+#define tool_menu_data_init(tool_manager)                                   \
+btn_controller(tool_manager),                                               \
+btn_fill      (new external_tool_button_t(btn_controller, "Fill"     )),    \
+btn_rectangle (new external_tool_button_t(btn_controller, "Rectangle")),    \
+btn_ellipse   (new external_tool_button_t(btn_controller, "Ellipse"  )),    \
+btn_polyline  (new external_tool_button_t(btn_controller, "Polyline" )),    \
+btn_pencil    (new external_tool_button_t(btn_controller, "Pencil"   )),    \
+btn_line      (new external_tool_button_t(btn_controller, "Line"     )),    \
+btn_rubber    (new external_tool_button_t(btn_controller, "Rubber"   )),    \
+btn_spline    (new external_tool_button_t(btn_controller, "Spline"   ))
 
 //==================================================================================================
 
-external_tool_menu_t::external_tool_menu_t(widget_controller_t &controller_, tool_manager_t &tool_manager):
-menu_t(controller_, color_t::White, true),
+external_tool_menu_t::external_tool_menu_t(tool_manager_t &tool_manager):
+menu_t(window_t::window_controller, color_t::White, true),
 tool_menu_data_init(tool_manager)
 {
     register_buttons();
@@ -31,8 +32,8 @@ tool_menu_data_init(tool_manager)
 
 //--------------------------------------------------------------------------------------------------
 
-external_tool_menu_t::external_tool_menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, tool_manager_t &tool_manager):
-menu_t(controller_, color_t::White, true),
+external_tool_menu_t::external_tool_menu_t(const rectangle_t &enclosing_, tool_manager_t &tool_manager):
+menu_t(window_t::window_controller, color_t::White, true),
 tool_menu_data_init(tool_manager)
 {
     register_buttons();

@@ -9,24 +9,24 @@ const size_t external_filter_menu_t::filter_btns_num = 1;
 
 //==================================================================================================
 
-#define filter_menu_data_init(filter_manager)        \
-buttons_controller(filter_manager),                  \
-btn_brightness    (new filter_button_t(buttons_controller, "Brightness"))
+#define filter_menu_data_init(root, event_manager, filter_manager)          \
+btn_controller(root, event_manager, filter_manager),                        \
+btn_brightness(new external_filter_button_t(btn_controller, "Brightness"))
 
 //==================================================================================================
 
-external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, filter_manager_t &filter_manager):
-menu_t               (controller_, color_t::White, true),
-filter_menu_data_init(filter_manager)
+external_filter_menu_t::external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager):
+menu_t               (window_t::window_controller, color_t::White, true),
+filter_menu_data_init(root, event_manager, filter_manager)
 {
     register_buttons();
 }
 
 //--------------------------------------------------------------------------------------------------
 
-external_filter_menu_t::external_filter_menu_t(widget_controller_t &controller_, const rectangle_t &enclosing_, filter_manager_t &filter_manager):
-menu_t               (controller_, color_t::White, true),
-filter_menu_data_init(filter_manager)
+external_filter_menu_t::external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, const rectangle_t &enclosing_):
+menu_t               (window_t::window_controller, color_t::White, true),
+filter_menu_data_init(root, event_manager, filter_manager)
 {
     register_buttons();
     create(enclosing_);
@@ -61,7 +61,7 @@ void external_filter_menu_t::create_buttons()
     {
         LOG_ASSERT(cnt_btn->is_internal);
 
-        filter_button_t *cnt_filter_btn = (filter_button_t *) cnt_btn->internal;
+        external_filter_button_t *cnt_filter_btn = (external_filter_button_t *) cnt_btn->internal;
 
         cnt_filter_btn->enclosing = rectangle_t(
             enclosing.ld_corner + filter_btn_off,

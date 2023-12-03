@@ -19,8 +19,8 @@ public:
 
 // member functions
 public:
-    explicit main_window_t(window_controller_t &controller,                               tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
-    explicit main_window_t(window_controller_t &controller, const rectangle_t &enclosing, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
+    explicit main_window_t(                              event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
+    explicit main_window_t(const rectangle_t &enclosing, event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
 
     void inline set_filters(FilterI *brightness);
     void inline set_tools  (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,

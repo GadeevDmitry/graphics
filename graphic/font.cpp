@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "graphic/font.h"
+#include "font.h"
 
 //==================================================================================================
 
@@ -39,4 +39,16 @@ const font_t &font_t::get_font_by_name(const FONT_NAME_TYPE &name)
     }
 
     return FONTS[name];
+}
+
+//--------------------------------------------------------------------------------------------------
+
+unsigned font_t::get_char_size(const char requested, const size_t char_size) const
+{
+    if (requested >= 'A' && requested <= 'Z') return (unsigned) data.getGlyph(0x41 + requested - 'A', char_size, false).advance;
+    if (requested >= 'a' && requested <= 'z') return (unsigned) data.getGlyph(0x61 + requested - 'a', char_size, false).advance;
+    if (requested >= '0' && requested <= '9') return (unsigned) data.getGlyph(0x30 + requested - '0', char_size, false).advance;
+    if (requested == '.')                     return (unsigned) data.getGlyph(0x2E                  , char_size, false).advance;
+
+    return 0;
 }

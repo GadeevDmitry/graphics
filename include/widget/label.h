@@ -12,8 +12,8 @@ class label_t: public widget_t
 public:
              label_t();
     explicit label_t(const rectangle_t &enclosing);
-    explicit label_t(                              const char *name, const size_t char_size);
-    explicit label_t(const rectangle_t &enclosing, const char *name, const size_t char_size);
+    explicit label_t(                              const char *string, const size_t char_size);
+    explicit label_t(const rectangle_t &enclosing, const char *string, const size_t char_size);
 
     void create_texture();
 
