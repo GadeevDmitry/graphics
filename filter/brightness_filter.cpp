@@ -21,4 +21,5 @@ void brightness_filter_t::apply(RenderTargetI *perm)
 
     perm->draw_texture(
         vec2d(0, 0), vec2d((double) perm_texture->width, (double) perm_texture->height), perm_texture);
+    delete perm_texture;
 }

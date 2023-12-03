@@ -1,7 +1,7 @@
 #ifndef FILTER_BUTTON_H
 #define FILTER_BUTTON_H
 
-#include "widget/button/label_button.h"
+#include "label_button.h"
 #include "filter/filter_manager.h"
 
 //==================================================================================================
@@ -44,8 +44,8 @@ class filter_button_t: public label_button_t
 {
 // member functions
 public:
-    explicit filter_button_t(widget_controller_t &controller,                               const char *filter_name, filter_t *filter = nullptr);
-    explicit filter_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const char *filter_name, filter_t *filter = nullptr);
+    explicit filter_button_t(widget_controller_t &controller,                               const char *filter_name, FilterI *filter = nullptr);
+    explicit filter_button_t(widget_controller_t &controller, const rectangle_t &enclosing, const char *filter_name, FilterI *filter = nullptr);
 
 // virtual
 protected:
@@ -53,7 +53,7 @@ protected:
 
 // member data
 public:
-    filter_t *filter;
+    FilterI *filter;
 };
 
 //--------------------------------------------------------------------------------------------------

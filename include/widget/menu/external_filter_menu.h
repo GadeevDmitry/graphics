@@ -19,7 +19,7 @@ public:
     explicit external_filter_menu_t(widget_controller_t &controller,                               filter_manager_t &filter_manager);
     explicit external_filter_menu_t(widget_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager);
 
-    void inline set_filters(filter_t *brightness);
+    void inline set_filters(FilterI *brightness);
     void inline create     (const rectangle_t &enclosing);
 private:
     void        create_buttons();
@@ -37,7 +37,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 
-inline void external_filter_menu_t::set_filters(filter_t *brightness)
+inline void external_filter_menu_t::set_filters(FilterI *brightness)
 {
     btn_brightness->filter = brightness;
 }

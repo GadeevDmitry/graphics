@@ -20,14 +20,14 @@ bool filter_button_controller_t::on_mouse_press(widget_t *handle, const eventabl
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-filter_button_t::filter_button_t(widget_controller_t &controller_, const char *filter_name, filter_t *filter_):
+filter_button_t::filter_button_t(widget_controller_t &controller_, const char *filter_name, FilterI *filter_):
 label_button_t(controller_, filter_name, 20),
 filter        (filter_)
 {}
 
 //--------------------------------------------------------------------------------------------------
 
-filter_button_t::filter_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *filter_name, filter_t *filter_):
+filter_button_t::filter_button_t(widget_controller_t &controller_, const rectangle_t &enclosing_, const char *filter_name, FilterI *filter_):
 label_button_t(controller_, enclosing_, filter_name, 20),
 filter        (filter_)
 {}

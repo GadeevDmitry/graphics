@@ -21,7 +21,7 @@ public:
     explicit main_window_menu_t(window_controller_t &controller, const rectangle_t &enclosing, filter_manager_t &filter_manager, tool_manager_t &tool_manager);
 
     void inline create        (const rectangle_t &enclosing);
-    void inline set_filters   (filter_t *brightness);
+    void inline set_filters   (FilterI *brightness);
     void inline set_tools     (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                                ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
 private:
@@ -57,7 +57,7 @@ inline void main_window_menu_t::create(const rectangle_t &enclosing_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void main_window_menu_t::set_filters(filter_t *brightness)
+inline void main_window_menu_t::set_filters(FilterI *brightness)
 {
     filter_menu.set_filters(brightness);
 }
