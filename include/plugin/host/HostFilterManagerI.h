@@ -1,5 +1,5 @@
-#ifndef PLUGIN_HOST_FILTER_MANAGER_H
-#define PLUGIN_HOST_FILTER_MANAGER_H
+#ifndef PLUGIN_HOST_FILTER_MANAGER_I_H
+#define PLUGIN_HOST_FILTER_MANAGER_I_H
 
 #include "plugin/standart/Filter.h"
 #include "filter/filter_manager.h"
@@ -58,4 +58,4 @@ namespace host
     }
 };
 
-#endif // PLUGIN_HOST_FILTER_MANAGER_H
+#endif // PLUGIN_HOST_FILTER_MANAGER_I_H
