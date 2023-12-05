@@ -7,6 +7,11 @@
 
 //==================================================================================================
 
+namespace host
+{
+    class HostWidgetI;
+}
+
 class widget_container_t: public widget_t
 {
 // member functions
@@ -47,6 +52,9 @@ protected:
 // member data
 protected:
     list subwidgets;
+
+// friends
+    friend host::HostWidgetI;
 };
 
 //--------------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #define PLUGIN_HOST_WIDGET_I_H
 
 #include "plugin/standart/Widget.h"
-#include "widget/window/main_window.h"
+#include "widget/widget_container.h"
 
 //==================================================================================================
 
@@ -16,7 +16,7 @@ namespace host
     {
     // member functions
     public:
-        explicit inline HostWidgetI(main_window_t &root);
+        explicit inline HostWidgetI(widget_container_t &root);
 
     // virtual
     public:
@@ -55,12 +55,12 @@ namespace host
 
     // member data
     private:
-        main_window_t &root;
+        widget_container_t &root;
     };
 
     //--------------------------------------------------------------------------------------------------
 
-    inline HostWidgetI::HostWidgetI(main_window_t &root_):
+    inline HostWidgetI::HostWidgetI(widget_container_t &root_):
     root(root_)
     {}
 
