@@ -11,6 +11,7 @@ static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf:
 
 const char *application_t::SO_FILES[] =
 {
+    "plugin_examples/brush_tool.so",
     "plugin_examples/fill_tool.so"
 };
 
@@ -114,12 +115,12 @@ void application_t::load_plugin(const char *so_file)
     if (plug->type == plugin::InterfaceType::Filter)
     {
         FilterI *plugin_filter = (FilterI *) plug->get_interface();
-        main_window->add_filter(plugin_filter, so_file);
+        main_window->add_filter(plugin_filter, plug->name);
     }
     else
     {
         ToolI *plugin_tool = (ToolI *) plug->get_interface();
-        main_window->add_tool(plugin_tool, so_file);
+        main_window->add_tool(plugin_tool, plug->name);
     }
 }
 

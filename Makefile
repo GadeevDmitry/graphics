@@ -1,6 +1,6 @@
 CC := g++
 CFLAGS_DEBUG   := -D _DEBUG -ggdb3 -std=c++20 -O0 -Wall -fcheck-new -fsized-deallocation -fstack-protector -fstrict-overflow -fno-omit-frame-pointer -fPIE -fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr -pie -Wlarger-than=8192 -Wstack-usage=8192
-CFLAGS_RELEASE := -D NDEBUG -D NVERIFY -D NLOG -std=c++20 -O2
+CFLAGS_RELEASE := -Wl,--export-dynamic -fPIE -D NDEBUG -D NVERIFY -std=c++20 -O2
 
 ifeq ($(mode), debug)
 CFLAGS := $(CFLAGS_DEBUG)

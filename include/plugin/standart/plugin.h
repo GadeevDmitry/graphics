@@ -16,7 +16,7 @@ namespace plugin
         InterfaceType type;
 
         virtual Interface *get_interface() = 0;
-        virtual           ~Plugin       () = 0;
+        virtual           ~Plugin       () {}
     };
 }
 

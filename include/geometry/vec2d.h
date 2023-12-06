@@ -17,7 +17,6 @@ public:
 public:
              inline  vec2d();
     explicit inline  vec2d(const double x, const double y);
-             inline ~vec2d();
 
     bool           is_valid         () const;
     void           dump             () const;
@@ -79,14 +78,6 @@ inline vec2d::vec2d(const double x_, const double y_):
 x(x_),
 y(y_)
 {}
-
-//--------------------------------------------------------------------------------------------------
-
-inline vec2d::~vec2d()
-{
-    x = NAN;
-    y = NAN;
-}
 
 //--------------------------------------------------------------------------------------------------
 
