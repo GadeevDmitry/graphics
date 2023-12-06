@@ -1,13 +1,18 @@
 #include <stdio.h>
-#include "application.h"
+#include <dlfcn.h>
 
-#include "widget/button/tool_button.h"
-#include "widget/button/close_button.h"
-#include "widget/button/palette_button.h"
+#include "application.h"
 
 //==================================================================================================
 
 static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf::Vector2i &mouse_pos);
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+const char *application_t::SO_FILES[] =
+{
+    "plugin_examples/fill_tool.so"
+};
 
 //==================================================================================================
 
@@ -43,7 +48,19 @@ palette_window   (new palette_window_t(               tool_manager              
 toolbar_window   (new toolbar_window_t(               tool_manager                , window_t::Blue_theme , "Toolbar")),
 main_window      (new    main_window_t(event_manager, tool_manager, filter_manager, window_t::Red_theme  , "Main"   )),
 
-desktop          (rectangle_t(vec2d(0, 0), wnd_size))
+desktop          (rectangle_t(vec2d(0, 0), wnd_size)),
+
+plugin_app       ()
+{
+    init_host();
+    create();
+
+    init_plugins();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void application_t::init_host()
 {
     event_manager.register_child(eventable_proxy(&desktop));
 
@@ -63,8 +80,47 @@ desktop          (rectangle_t(vec2d(0, 0), wnd_size))
     main_window->register_subwindow(toolbar_window);
 
     desktop.register_window(main_window);
+}
 
-    create();
+//--------------------------------------------------------------------------------------------------
+
+void application_t::init_plugins()
+{
+    plugin_app.create(*main_window, event_manager, tool_manager, filter_manager);
+
+    for (size_t cnt = 0; cnt * sizeof(char *) < sizeof(SO_FILES); ++cnt)
+        load_plugin(SO_FILES[cnt]);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void application_t::load_plugin(const char *so_file)
+{
+    void *handle = dlopen(so_file, RTLD_NOW | RTLD_LOCAL);
+    if (!handle)
+    {
+        LOG_ERROR("CAN'T OPEN PLUGIN \"%s\": %s\n", so_file, dlerror());
+        return;
+    }
+
+    plugin::Plugin *(*init_func) (plugin::App *app) = (plugin::Plugin *(*) (plugin::App *app)) dlsym(handle, "getInstance");
+    if (!init_func)
+    {
+        LOG_ERROR("CAN'T FIND \"getInstance\": %s\n", dlerror());
+    }
+
+    plugin::Plugin *plug = init_func(&plugin_app);
+
+    if (plug->type == plugin::InterfaceType::Filter)
+    {
+        FilterI *plugin_filter = (FilterI *) plug->get_interface();
+        main_window->add_filter(plugin_filter, so_file);
+    }
+    else
+    {
+        ToolI *plugin_tool = (ToolI *) plug->get_interface();
+        main_window->add_tool(plugin_tool, so_file);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

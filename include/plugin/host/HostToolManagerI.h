@@ -17,7 +17,8 @@ namespace host
     {
     // member functions
     public:
-        explicit inline HostToolManagerI(tool_manager_t &tool_manager);
+        explicit inline  HostToolManagerI(tool_manager_t &tool_manager);
+        virtual  inline ~HostToolManagerI() {}
 
     // virtual
     public:

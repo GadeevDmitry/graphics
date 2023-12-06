@@ -15,7 +15,8 @@ namespace host
     {
     // member functions
     public:
-        explicit inline HostFilterManagerI(filter_manager_t &filter_manager);
+        explicit inline  HostFilterManagerI(filter_manager_t &filter_manager);
+        virtual  inline ~HostFilterManagerI() {}
 
     // virtual
     public:

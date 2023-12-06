@@ -15,7 +15,8 @@ namespace host
     {
     // member functions
     public:
-        explicit inline HostEventManagerI(event_manager_t &event_manager);
+        explicit inline  HostEventManagerI(event_manager_t &event_manager);
+        virtual  inline ~HostEventManagerI() {}
 
     // virtual
     public:

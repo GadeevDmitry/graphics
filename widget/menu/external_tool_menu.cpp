@@ -104,3 +104,16 @@ void external_tool_menu_t::create_buttons()
         cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+
+void external_tool_menu_t::add_tool(ToolI *tool, const char *tool_name)
+{
+    external_tool_button_t *tool_btn = new external_tool_button_t(btn_controller, tool_name, tool);
+
+    tool_btn->enclosing = rectangle_t(enclosing.lu_corner(), tool_btn_size.x, tool_btn_size.y);
+    enclosing.ru_corner = tool_btn->enclosing.ru_corner;
+
+    tool_btn->create_texture();
+    register_subwidget(widget_proxy_t(tool_btn));
+}

@@ -24,6 +24,9 @@ public:
     void inline set_filters   (FilterI *brightness);
     void inline set_tools     (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                                ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
+
+    void inline add_filter    (FilterI *filter, const char *filter_name);
+    void inline add_tool      (ToolI   *tool  , const char *  tool_name);
 private:
     void        create_buttons();
     void      register_buttons();
@@ -66,6 +69,20 @@ inline void main_window_menu_t::set_tools(ToolI *fill  , ToolI *rectangle, ToolI
                                           ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline)
 {
     tool_menu.set_tools(fill, rectangle, ellipse, polyline, pencil, line, rubber, spline);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_menu_t::add_filter(FilterI *filter, const char *filter_name)
+{
+    filter_menu.add_filter(filter, filter_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_menu_t::add_tool(ToolI *tool, const char *tool_name)
+{
+    tool_menu.add_tool(tool, tool_name);
 }
 
 //--------------------------------------------------------------------------------------------------

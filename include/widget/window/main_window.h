@@ -20,6 +20,10 @@ public:
     void inline set_filters(FilterI *brightness);
     void inline set_tools  (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                             ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
+
+    void inline add_filter (FilterI *filter, const char *filter_name);
+    void inline add_tool   (ToolI   *tool  , const char *  tool_name);
+
     void        create     (const rectangle_t &enclosing);
 
 // virtual
@@ -44,6 +48,20 @@ inline void main_window_t::set_tools(ToolI *fill  , ToolI *rectangle, ToolI *ell
                                      ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline)
 {
     main_menu->set_tools(fill, rectangle, ellipse, polyline, pencil, line, rubber, spline);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::add_filter(FilterI *filter, const char *filter_name)
+{
+    main_menu->add_filter(filter, filter_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::add_tool(ToolI *tool, const char *tool_name)
+{
+    main_menu->add_tool(tool, tool_name);
 }
 
 //--------------------------------------------------------------------------------------------------

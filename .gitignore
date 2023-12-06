@@ -1,8 +1,7 @@
-build/
-SFML/
-unit_tests/
-examples/ideal_gas
 .cache/
 .clangd
-compile_commands.json
+SFML/
+build/
+plugin_examples/
 log.html
+compile_commands.json

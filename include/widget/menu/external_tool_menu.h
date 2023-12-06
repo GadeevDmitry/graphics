@@ -22,6 +22,7 @@ public:
     void        set_tools(ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                           ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
     void inline create   (const rectangle_t &enclosing);
+    void        add_tool (ToolI *tool, const char *tool_name);
 private:
     void        create_buttons();
     void      register_buttons();

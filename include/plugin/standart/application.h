@@ -21,11 +21,26 @@ namespace plugin
 
     struct App
     {
+    // member functions
+    public:
+        inline App();
+
+    // member data
+    public:
         GuiI           *root;
         EventManagerI  *event_manager;
         ToolManagerI   *tool_manager;
         FilterManagerI *filter_manager;
     };
+
+    //--------------------------------------------------------------------------------------------------
+
+    inline App::App():
+    root          (nullptr),
+    event_manager (nullptr),
+    tool_manager  (nullptr),
+    filter_manager(nullptr)
+    {}
 }
 
 #endif // PLUGIN_APPLICATION_H

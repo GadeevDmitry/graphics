@@ -74,3 +74,16 @@ void external_filter_menu_t::create_buttons()
         cnt_btn = (widget_proxy_t *) list_next(cnt_btn);
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+
+void external_filter_menu_t::add_filter(FilterI *filter, const char *filter_name)
+{
+    external_filter_button_t *filter_btn = new external_filter_button_t(btn_controller, filter_name, filter);
+
+    filter_btn->enclosing = rectangle_t(enclosing.lu_corner(), filter_btn_size.x, filter_btn_size.y);
+    enclosing.ru_corner   = filter_btn->enclosing.ru_corner;
+
+    filter_btn->create_texture();
+    register_subwidget(widget_proxy_t(filter_btn));
+}

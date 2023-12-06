@@ -21,6 +21,7 @@ public:
 
     void inline set_filters(FilterI *brightness);
     void inline create     (const rectangle_t &enclosing);
+    void        add_filter (FilterI *filter, const char *filter_name);
 private:
     void        create_buttons();
     void      register_buttons();

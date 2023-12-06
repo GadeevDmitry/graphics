@@ -17,6 +17,14 @@
 #include "widget/window/palette_window.h"
 #include "widget/window/toolbar_window.h"
 
+#include "plugin/standart/plugin.h"
+
+#include "plugin/host/HostApp.h"
+#include "plugin/host/HostGuiI.h"
+#include "plugin/host/HostToolManagerI.h"
+#include "plugin/host/HostEventManagerI.h"
+#include "plugin/host/HostFilterManagerI.h"
+
 #include <SFML/Graphics.hpp>
 
 //==================================================================================================
@@ -29,6 +37,9 @@ public:
     static void load_fonts   ();
     static void show         (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
 
+private:
+    static const char *SO_FILES[];
+
 // member functions
 public:
     explicit application_t(const vec2d &wnd_size);
@@ -37,6 +48,10 @@ public:
     void graphic_dump(                            render_texture_t &render_tex) const;
     void process     (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
 private:
+    void init_host     ();
+    void init_plugins  ();
+    void load_plugin   (const char *so_file);
+
     void render_initial(sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
     void render        (sf::RenderWindow &sfml_wnd, render_texture_t &render_tex);
     void create        ();
@@ -59,6 +74,8 @@ private:
     main_window_t       *main_window;
 
     desktop_t           desktop;
+
+    host::HostApp       plugin_app;
 };
 
 #endif // APPLICATION_H

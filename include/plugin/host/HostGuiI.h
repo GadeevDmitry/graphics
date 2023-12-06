@@ -18,7 +18,8 @@ namespace host
     {
     // member functions
     public:
-        explicit inline HostGuiI(widget_container_t &root);
+        explicit inline  HostGuiI(widget_container_t &root);
+        virtual  inline ~HostGuiI() {}
 
     // virtual
     public:
