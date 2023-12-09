@@ -1,5 +1,5 @@
 BUILD_DIR   ?= build/
-ROOT_PREFIX ?= ../../
+ROOT_PREFIX ?= ../../../
 
 PREFIX   := $(ROOT_PREFIX)event/
 INCLUDES := -I$(ROOT_PREFIX) -I$(ROOT_PREFIX)include/ -I$(ROOT_PREFIX)include/event/

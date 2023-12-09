@@ -11,12 +11,13 @@ static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf:
 
 const char *application_t::SO_FILES[] =
 {
-    "plugin/examples/filters/fill.so",
-    "plugin/examples/filters/monochrome.so",
+    "plugin_examples/so/filter_fill.so",
+    "plugin_examples/so/filter_monochrome.so",
+    "plugin_examples/so/filter_russian.so",
 
-    "plugin/examples/tools/brush.so",
-    "plugin/examples/tools/fill.so",
-    "plugin/examples/tools/spray.so",
+    "plugin_examples/so/tool_brush.so",
+    "plugin_examples/so/tool_fill.so",
+    "plugin_examples/so/tool_spray.so",
 };
 
 //==================================================================================================
@@ -113,6 +114,7 @@ void application_t::load_plugin(const char *so_file)
     if (!init_func)
     {
         LOG_ERROR("CAN'T FIND \"getInstance\": %s\n", dlerror());
+        return;
     }
 
     plugin::Plugin *plug = init_func(&plugin_app);

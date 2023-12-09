@@ -82,9 +82,7 @@ void canvas_t::create_textures(const color_t &background)
     perm.create((unsigned) enclosing.get_size().x, (unsigned) enclosing.get_size().y);
     temp.create((unsigned) enclosing.get_size().x, (unsigned) enclosing.get_size().y);
 
-    static texture_t perm_image("../../../Загрузки/baki.jpg");
     perm.clear(color_t::White);
-    perm.draw_texture(perm_image, vec2d(0, 0), perm_image.get_size());
     temp.clear(color_t::Transparent);
 }
 

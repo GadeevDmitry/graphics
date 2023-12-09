@@ -67,7 +67,6 @@ void window_header_menu_t::create_close_btn()
 void window_header_menu_t::create_window_name()
 {
     rectangle_t menu_enclosing = enclosing;
-    vec2d       menu_size      = menu_enclosing.get_size();
 
     window_name.enclosing = rectangle_t(
         menu_enclosing.ld_corner,

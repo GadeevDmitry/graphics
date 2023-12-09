@@ -28,6 +28,7 @@ bool apply_button_controller_t::on_mouse_press(widget_t *handle, const eventable
     }
 
     param_wnd.filter->set_params(plugin::Array<double>(param_num, param_new_values));
+    delete[] param_new_values;
 
     param_wnd.status = widget_t::WIDGET_CLOSED;
     param_wnd.update_ancestral_status(widget_t::WIDGET_ACTIVATED);
