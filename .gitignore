@@ -2,6 +2,5 @@
 .clangd
 SFML/
 build/
-plugin_examples/
 log.html
 compile_commands.json

@@ -36,9 +36,7 @@ brightness(10)
 
 inline plugin::Array<const char *> brightness_filter_t::get_param_names()
 {
-    const char **param_names = new const char *[1];
-    param_names[0] = "[1 - 255] brightness";
-
+    static const char *param_names[1] = {"[1 - 255] brightness"};
     return plugin::Array<const char *>(1, param_names);
 }
 
@@ -46,7 +44,7 @@ inline plugin::Array<const char *> brightness_filter_t::get_param_names()
 
 inline plugin::Array<double> brightness_filter_t::get_params()
 {
-    double *params = new double[1];
+    static double params[1] = {};
     params[0] = brightness;
 
     return plugin::Array<double>(1, params);

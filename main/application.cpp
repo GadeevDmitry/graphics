@@ -11,8 +11,12 @@ static sf::Vector2i recalc_mouse_pos(const sf::RenderWindow &sfml_wnd, const sf:
 
 const char *application_t::SO_FILES[] =
 {
-    "plugin_examples/brush_tool.so",
-    "plugin_examples/fill_tool.so"
+    "plugin/examples/filters/fill.so",
+    "plugin/examples/filters/monochrome.so",
+
+    "plugin/examples/tools/brush.so",
+    "plugin/examples/tools/fill.so",
+    "plugin/examples/tools/spray.so",
 };
 
 //==================================================================================================
