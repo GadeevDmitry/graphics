@@ -3,15 +3,16 @@
 
 //==================================================================================================
 
-const vec2d  external_filter_menu_t::filter_menu_size(100, 30);
+const vec2d  external_filter_menu_t::filter_menu_size(100, 60);
 const vec2d  external_filter_menu_t::filter_btn_size (100, 30);
-const size_t external_filter_menu_t::filter_btns_num = 1;
+const size_t external_filter_menu_t::filter_btns_num = 2;
 
 //==================================================================================================
 
 #define filter_menu_data_init(root, event_manager, filter_manager)          \
 btn_controller(root, event_manager, filter_manager),                        \
-btn_brightness(new external_filter_button_t(btn_controller, "Brightness"))
+btn_brightness(new external_filter_button_t(btn_controller, "Brightness")), \
+btn_russian   (new external_filter_button_t(btn_controller, "Russian"))
 
 //==================================================================================================
 
@@ -37,6 +38,7 @@ filter_menu_data_init(root, event_manager, filter_manager)
 void external_filter_menu_t::register_buttons()
 {
     // reverse order for right create_buttons() work
+    register_subwidget(widget_proxy_t(btn_russian));
     register_subwidget(widget_proxy_t(btn_brightness));
 }
 

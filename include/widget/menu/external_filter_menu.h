@@ -19,7 +19,7 @@ public:
     explicit external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager);
     explicit external_filter_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, const rectangle_t &enclosing);
 
-    void inline set_filters(FilterI *brightness);
+    void inline set_filters(FilterI *brightness, FilterI *russian);
     void inline create     (const rectangle_t &enclosing);
     void        add_filter (FilterI *filter, const char *filter_name);
 private:
@@ -34,13 +34,15 @@ protected:
 private:
     external_filter_button_controller_t btn_controller;
     external_filter_button_t           *btn_brightness;
+    external_filter_button_t           *btn_russian;
 };
 
 //--------------------------------------------------------------------------------------------------
 
-inline void external_filter_menu_t::set_filters(FilterI *brightness)
+inline void external_filter_menu_t::set_filters(FilterI *brightness, FilterI *russian)
 {
     btn_brightness->filter = brightness;
+    btn_russian   ->filter = russian;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ public:
     explicit main_window_menu_t(widget_container_t &root, event_manager_t &event_manager, filter_manager_t &filter_manager, tool_manager_t &tool_manager, const rectangle_t &enclosing);
 
     void inline create        (const rectangle_t &enclosing);
-    void inline set_filters   (FilterI *brightness);
+    void inline set_filters   (FilterI *brightness, FilterI *russian);
     void inline set_tools     (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                                ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
 
@@ -58,9 +58,9 @@ inline void main_window_menu_t::create(const rectangle_t &enclosing_)
 
 //--------------------------------------------------------------------------------------------------
 
-inline void main_window_menu_t::set_filters(FilterI *brightness)
+inline void main_window_menu_t::set_filters(FilterI *brightness, FilterI *russian)
 {
-    filter_menu.set_filters(brightness);
+    filter_menu.set_filters(brightness, russian);
 }
 
 //--------------------------------------------------------------------------------------------------

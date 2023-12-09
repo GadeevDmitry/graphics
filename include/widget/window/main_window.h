@@ -17,7 +17,7 @@ public:
     explicit main_window_t(                              event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
     explicit main_window_t(const rectangle_t &enclosing, event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
 
-    void inline set_filters(FilterI *brightness);
+    void inline set_filters(FilterI *brightness, FilterI *russian);
     void inline set_tools  (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
                             ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
 
@@ -37,9 +37,9 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 
-inline void main_window_t::set_filters(FilterI *brightness)
+inline void main_window_t::set_filters(FilterI *brightness, FilterI *russian)
 {
-    main_menu->set_filters(brightness);
+    main_menu->set_filters(brightness, russian);
 }
 
 //--------------------------------------------------------------------------------------------------

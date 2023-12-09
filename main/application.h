@@ -10,6 +10,7 @@
 
 #include "filter/filter_manager.h"
 #include "filter/brightness_filter.h"
+#include "filter/russia_filter.h"
 
 #include "widget/desktop.h"
 #include "widget/window/main_window.h"
@@ -66,6 +67,7 @@ private:
     tool_manager_t      tool_manager;
 
     brightness_filter_t brightness_filter;
+    russia_filter_t     russia_filter;
     filter_manager_t    filter_manager;
 
     canvas_window_t     *canvas_window;

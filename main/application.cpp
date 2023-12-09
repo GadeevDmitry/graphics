@@ -46,6 +46,7 @@ rectangle_tool   (),
 tool_manager     (&line_tool, color_t::Black),
 
 brightness_filter(),
+russia_filter    (),
 filter_manager   (),
 
 canvas_window    (new  canvas_window_t(               tool_manager, filter_manager, window_t::Dark_theme , "Canvas" )),
@@ -70,7 +71,7 @@ void application_t::init_host()
     event_manager.register_child(eventable_proxy(&desktop));
 
     main_window->set_filters(
-        &brightness_filter);
+        &brightness_filter, &russia_filter);
 
     main_window->set_tools(
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
