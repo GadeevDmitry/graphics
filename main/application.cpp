@@ -78,9 +78,7 @@ void application_t::init_host()
         nullptr, &rectangle_tool, &ellipse_tool, nullptr,
         nullptr, &line_tool     , nullptr      , nullptr);
 
-    toolbar_window->set_tools(
-        nullptr, &rectangle_tool, &ellipse_tool, nullptr,
-        nullptr, &line_tool     , nullptr      , nullptr);
+    toolbar_window->set_tools(&rectangle_tool, &ellipse_tool);
 
     main_window->register_subwindow(canvas_window);
     main_window->register_subwindow(palette_window);
@@ -128,6 +126,7 @@ void application_t::load_plugin(const char *so_file)
     {
         ToolI *plugin_tool = (ToolI *) plug->get_interface();
         main_window->register_tool(plugin_tool, plug->name);
+        toolbar_window->  add_tool(plugin_tool, plug->name);
     }
 }
 
