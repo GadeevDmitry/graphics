@@ -20,7 +20,8 @@ public:
     explicit inline  widget_container_t(const rectangle_t &enclosing, const bool to_delete = false);
              inline ~widget_container_t();
 
-    bool register_subwidget       (const widget_proxy_t &subwidget);
+    bool   register_subwidget     (const widget_proxy_t &subwidget);
+    bool unregister_subwidget     (const widget_proxy_t &subwidget);
 protected:
     void subwidgets_move          (const vec2d &offset);
     void subwidgets_dump          () const;

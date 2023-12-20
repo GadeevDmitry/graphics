@@ -19,6 +19,13 @@ bool widget_container_t::register_subwidget(const widget_proxy_t &subwidget)
 
 //--------------------------------------------------------------------------------------------------
 
+bool widget_container_t::unregister_subwidget(const widget_proxy_t &subwidget)
+{
+    return list_erase(&subwidgets, &subwidget);
+}
+
+//--------------------------------------------------------------------------------------------------
+
 void widget_container_t::subwidgets_move(const vec2d &offset)
 {
     if (subwidgets.size == 0) return;
@@ -80,6 +87,8 @@ bool widget_container_t::subwidgets_update_struct()
     widget_proxy_t *fict  = (widget_proxy_t *) list_fict (&subwidgets);
     size_t          ind   = 0;
 
+    bool is_true = false;
+
     for (widget_proxy_t *cnt = front; cnt != fict;
          cnt = (widget_proxy_t *) list_next(cnt))
     {
@@ -88,20 +97,22 @@ bool widget_container_t::subwidgets_update_struct()
             case WIDGET_OPENED   : break;
 
             case WIDGET_CLOSED   : list_erase(&subwidgets, ind);
-                                   return true;
+                                   is_true = true;
+                                   break;
 
             case WIDGET_ACTIVATED: LOG_ASSERT(cnt->is_internal);
 
                                    list_replace(&subwidgets, cnt, ind, 0);
                                    cnt->internal->status = WIDGET_OPENED;
                                    cnt->internal->update_struct();
-                                   return true;
+                                   is_true = true;
+                                   break;
             default: break;
         }
         ++ind;
     }
 
-    return false;
+    return is_true;
 }
 
 //--------------------------------------------------------------------------------------------------

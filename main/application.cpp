@@ -13,7 +13,7 @@ const char *application_t::SO_FILES[] =
 {
     "plugin_examples/so/filter_fill.so",
     "plugin_examples/so/filter_monochrome.so",
-    "plugin_examples/so/filter_russian.so",
+//  "plugin_examples/so/filter_russian.so",
 
     "plugin_examples/so/tool_brush.so",
     "plugin_examples/so/tool_fill.so",
@@ -122,12 +122,12 @@ void application_t::load_plugin(const char *so_file)
     if (plug->type == plugin::InterfaceType::Filter)
     {
         FilterI *plugin_filter = (FilterI *) plug->get_interface();
-        main_window->add_filter(plugin_filter, plug->name);
+        main_window->register_filter(plugin_filter, plug->name);
     }
     else
     {
         ToolI *plugin_tool = (ToolI *) plug->get_interface();
-        main_window->add_tool(plugin_tool, plug->name);
+        main_window->register_tool(plugin_tool, plug->name);
     }
 }
 
@@ -149,6 +149,8 @@ void application_t::create()
         toolbar_window->enclosing.rd_corner() + vec2d(30, 30),
         main_window   ->enclosing.ru_corner   - vec2d(30, 30)
     ));
+
+    main_window->register_canvas(canvas_window, "Canvas");
 
     desktop.recalc_regions();
 }

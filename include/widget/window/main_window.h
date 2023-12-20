@@ -17,14 +17,16 @@ public:
     explicit main_window_t(                              event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
     explicit main_window_t(const rectangle_t &enclosing, event_manager_t &event_manager, tool_manager_t &tool_manager, filter_manager_t &filter_manager, const color_t &color, const char *wnd_name);
 
-    void inline set_filters(FilterI *brightness, FilterI *russian);
-    void inline set_tools  (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
-                            ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
+    void inline   set_filters    (FilterI *brightness, FilterI *russian);
+    void inline   set_tools      (ToolI *fill  , ToolI *rectangle, ToolI *ellipse, ToolI *polyline,
+                                  ToolI *pencil, ToolI *line     , ToolI *rubber , ToolI *spline);
 
-    void inline add_filter (FilterI *filter, const char *filter_name);
-    void inline add_tool   (ToolI   *tool  , const char *  tool_name);
+    void inline   register_filter(FilterI         *filter    , const char *filter_name);
+    void inline   register_tool  (ToolI           *tool      , const char *  tool_name);
+    void inline   register_canvas(canvas_window_t *canvas_wnd, const char *canvas_name);
+    void inline unregister_canvas(canvas_window_t *canvas_wnd);
 
-    void        create     (const rectangle_t &enclosing);
+    void          create         (const rectangle_t &enclosing);
 
 // virtual
 protected:
@@ -52,16 +54,30 @@ inline void main_window_t::set_tools(ToolI *fill  , ToolI *rectangle, ToolI *ell
 
 //--------------------------------------------------------------------------------------------------
 
-inline void main_window_t::add_filter(FilterI *filter, const char *filter_name)
+inline void main_window_t::register_filter(FilterI *filter, const char *filter_name)
 {
-    main_menu->add_filter(filter, filter_name);
+    main_menu->register_filter(filter, filter_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-inline void main_window_t::add_tool(ToolI *tool, const char *tool_name)
+inline void main_window_t::register_tool(ToolI *tool, const char *tool_name)
 {
-    main_menu->add_tool(tool, tool_name);
+    main_menu->register_tool(tool, tool_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::register_canvas(canvas_window_t *canvas_wnd, const char *canvas_name)
+{
+    main_menu->register_canvas(canvas_wnd, canvas_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+inline void main_window_t::unregister_canvas(canvas_window_t *canvas_wnd)
+{
+    main_menu->unregister_canvas(canvas_wnd);
 }
 
 //--------------------------------------------------------------------------------------------------
